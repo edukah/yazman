@@ -1,0 +1,68 @@
+{
+  "name": "yazman",
+  "version": "1.0.0",
+  "description": "✨ A modern, modular rich text editor (WYSIWYG) with comprehensive formatting options, undo/redo history, and extensible architecture. 📝 Supports inline, block, and embedded content with customizable toolbar and plugins. 🚀 Lightweight, powerful, and developer-friendly!",
+  "type": "module",
+  "main": "dist/yazman.min.js",
+  "style": "dist/yazman.min.css",
+  "sass": "src/scss/main.scss",
+  "scripts": {
+    "dev": "webpack serve --config config/webpack.dev.js",
+    "prod": "webpack --config config/webpack.prod.js",
+    "build": "npm run clean && webpack --config config/webpack.prod.js",
+    "watch": "webpack --config config/webpack.dev.js --watch",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "wysiwyg",
+    "rich-text-editor",
+    "text-editor",
+    "content-editable",
+    "editor",
+    "html-editor",
+    "javascript-editor",
+    "formatting",
+    "modular",
+    "extensible",
+    "undo-redo",
+    "clipboard",
+    "autosave",
+    "toolbar",
+    "content-management",
+    "document-editor",
+    "web-editor"
+  ],
+  "author": "edukah",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edukah/yazman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edukah/yazman/issues"
+  },
+  "homepage": "https://github.com/edukah/yazman#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@eslint/js": "^9.23.0",
+    "babel-loader": "^10.0.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.23.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-webpack-plugin": "^5.0.0",
+    "globals": "^16.0.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "rimraf": "^5.0.1",
+    "sass": "^1.86.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  }
+}
