@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yazman – WYSIWYG Editor</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/script.js"></script>
+  <!-- --- -->
+  <link rel="stylesheet" href="assets/yazman.min.css">
+  <script src="assets/yazman.min.js"></script>
+</head>
+
+<body>
+<script>if(sessionStorage.getItem("dark-mode"))document.body.classList.add("dark-mode")</script>
+  <header>
+    <nav class="top-navbar">
+      <div class="nav-container">
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="https://github.com/edukah/yazman" target="_blank">GitHub</a></li>
+        </ul>
+        <div class="dark-mode-button-container">
+          <div class="mode-toggle-switch" onclick="toggleMode()"></div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="content-container">
+      <div class="content-header">
+        <h1>Yazman</h1>
+        <p>A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.</p>
+      </div>
+
+      <div class="feature-highlights">
+        <div class="feature-card">
+          <div>0 KB</div>
+          <h3>Zero Dependencies</h3>
+          <p>Pure vanilla JavaScript, no external libraries</p>
+        </div>
+        <div class="feature-card">
+          <div>~170 KB</div>
+          <h3>Lightweight</h3>
+          <p>Minified bundle, ready for production</p>
+        </div>
+        <div class="feature-card">
+          <div>&lt;/&gt;</div>
+          <h3>Modular</h3>
+          <p>Extensible format and module system</p>
+        </div>
+      </div>
+
+      <div class="content">
+        <h2>Full Editor</h2>
+        <p>All formats enabled: headings, bold, italic, lists, blockquote, code block, hyperlink, and images.</p>
+        <div id="editor-full"></div>
+      </div>
+
+      <div class="content">
+        <h2>Minimal Editor</h2>
+        <p>Custom toolbar with only basic formatting options.</p>
+        <div id="editor-minimal"></div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>Yazman &copy; <span id="currentYear"></span> | MIT License</p>
+  </footer>
+  <script>
+    // Full editor with sample content
+    const fullEditor = new Yazman(document.getElementById('editor-full'), {
+      placeholder: 'Start typing...'
+    });
+
+    document.getElementById('editor-full').querySelector('[contenteditable]').innerHTML =
+      '<h2>Yazman Editor</h2>' +
+      '<p>A <strong>modular</strong> WYSIWYG editor with <em>zero dependencies</em>.</p>' +
+      '<p>Supports <strong><em>bold italic</em></strong>, <a href="https://github.com/edukah/yazman">hyperlinks</a>, <sub>subscript</sub> and <sup>superscript</sup> text.</p>' +
+      '<h3>Features</h3>' +
+      '<ul><li>Undo / Redo with Ctrl+Z / Ctrl+Shift+Z</li><li>Clipboard paste handling</li><li>Auto-save with page unload prevention</li></ul>' +
+      '<blockquote>Zero dependencies. Pure vanilla JavaScript.</blockquote>' +
+      '<pre>const editor = new Yazman(element, {\n  placeholder: "Start typing..."\n});</pre>' +
+      '<p>Try editing this content or applying formats from the toolbar above.</p>';
+
+    fullEditor.update();
+
+    // Minimal editor with limited toolbar
+    new Yazman(document.getElementById('editor-minimal'), {
+      placeholder: 'Type something...',
+      toolbar: [
+        ['bold', 'italic'],
+        ['hyperlink']
+      ]
+    });
+  </script>
+</body>
+
+</html>

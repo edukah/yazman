@@ -1,0 +1,86 @@
+{
+  "name": "yazman",
+  "version": "1.0.0",
+  "description": "A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.",
+  "type": "module",
+  "main": "dist/yazman.min.js",
+  "module": "dist/yazman.esm.js",
+  "types": "dist/yazman.d.ts",
+  "files": [
+    "dist/",
+    "src/js/",
+    "src/scss/",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "sass": "./src/scss/main.scss",
+      "style": "./dist/yazman.min.css",
+      "default": "./dist/yazman.esm.js"
+    },
+    "./js/*": "./src/js/*",
+    "./scss/*": "./src/scss/*"
+  },
+  "style": "dist/yazman.min.css",
+  "sass": "src/scss/main.scss",
+  "scripts": {
+    "dev": "webpack serve --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "release": "npm run build && mkdir -p docs/assets && cp --remove-destination -r dist/. docs/assets",
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch"
+  },
+  "keywords": [
+    "wysiwyg",
+    "rich-text-editor",
+    "text-editor",
+    "content-editable",
+    "editor",
+    "html-editor",
+    "javascript-editor",
+    "formatting",
+    "modular",
+    "extensible",
+    "undo-redo",
+    "clipboard",
+    "autosave",
+    "toolbar",
+    "content-management",
+    "document-editor",
+    "web-editor"
+  ],
+  "author": "edukah",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edukah/yazman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edukah/yazman/issues"
+  },
+  "homepage": "https://edukah.github.io/yazman/",
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@eslint/js": "^10.0.1",
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@web/test-runner": "^0.20.2",
+    "babel-loader": "^10.1.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.4",
+    "eslint": "^10.0.3",
+    "eslint-plugin-import-x": "^4.16.2",
+    "eslint-plugin-n": "^17.24.0",
+    "eslint-webpack-plugin": "^5.0.3",
+    "globals": "^17.4.0",
+    "mini-css-extract-plugin": "^2.10.1",
+    "sass": "^1.98.0",
+    "sass-loader": "^16.0.7",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.3",
+    "webpack-merge": "^6.0.1"
+  }
+}
