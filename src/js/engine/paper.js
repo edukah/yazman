@@ -248,6 +248,7 @@ class Paper {
         children.push(child);
       }
       // Buraya bak
+      
       return false;
     }));
 

@@ -129,14 +129,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Composer
-composer.phar
-/vendor/
-
-# PHP Public
-public/include/composer
-
 # Customized
-/package-lock.json
-/.gelistirme_notlari.md
+# Documentation files (exclude all except README.md)
+*.md
+!README.md
+.htaccess
 /archive

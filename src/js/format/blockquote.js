@@ -29,6 +29,7 @@ class Blockquote extends Block {
       }
 
       event.preventDefault();
+      
       return false;
     }
   }

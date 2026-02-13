@@ -1,10 +1,10 @@
 import Range from './range.js';
-// import Event from './event.js';
+// import Event from '../core/event.js';
 
 class Selection {
   constructor (editor) {
     this.editor = editor;
-    this.ws = window.getSelection();
+    this.ws = globalThis.getSelection();
 
     // this.update();
 
@@ -12,7 +12,7 @@ class Selection {
   }
 
   /* update() {
-    // this.ws = window.getSelection();
+    // this.ws = globalThis.getSelection();
 
     this.rangeMap = new WeakMap();
 

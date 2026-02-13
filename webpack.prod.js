@@ -1,17 +1,11 @@
-// webpack.prod.js (cleaned and converted to ESM)
-
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import common from './webpack.common.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const entry = {
-  'minyatur.min.js': path.join(common.context, 'src/js/index.js'),
-  'minyatur.min.junk': path.join(common.context, 'src/scss/main.scss')
+  'yazman.min.js': path.join(common.context, 'src/js/index.js'),
+  'yazman.min.junk': path.join(common.context, 'src/scss/main.scss')
 };
 
 export default merge(common, {
@@ -22,7 +16,7 @@ export default merge(common, {
     filename: '[name]',
     chunkFormat: false,
     library: {
-      name: 'Yazman',
+      name: 'Yazman', 
       type: 'umd',
       export: 'default'
     },
@@ -32,13 +26,16 @@ export default merge(common, {
     minimize: true,
     minimizer: [
       new TerserPlugin({
+        extractComments: false, 
         terserOptions: {
           compress: {
             drop_console: true
-          }
+          },
+          format: {
+            comments: false, 
+          },
         }
       })
     ]
   }
 });
-

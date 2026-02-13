@@ -2,7 +2,7 @@ class Text {
   constructor (editor, { text = null, domNode = null }) {
     this.editor = editor;
 
-    if (domNode instanceof window.Node && !(domNode instanceof window.Element)) {
+    if (domNode instanceof globalThis.Node && !(domNode instanceof globalThis.Element)) {
       this.domNode = domNode;
     } else {
       this.domNode = document.createTextNode(text);

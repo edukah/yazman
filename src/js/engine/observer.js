@@ -5,7 +5,7 @@ class Observer {
 
     this.allNonTextFormat = [...this.editor.CONTAINER_LEVEL_ELEMENT.values(), ...this.editor.BLOCK_LEVEL_ELEMENT.values(), ...this.editor.INLINE_ELEMENT.values(), ...this.editor.EMBED_ELEMENT.values()];
 
-    this.instance = new window.MutationObserver(this.callback.bind(this));
+    this.instance = new globalThis.MutationObserver(this.callback.bind(this));
     this.instance.observe(this.editor.root, Observer.config);
   }
 
@@ -55,7 +55,7 @@ class Observer {
 
       if (mutation.type === 'characterData') {
         if (mutation.target) {
-          if (mutation.target.nodeType === window.Node.TEXT_NODE && !mutation.target.__detail) {
+          if (mutation.target.nodeType === globalThis.Node.TEXT_NODE && !mutation.target.__detail) {
             new this.editor.TEXT_NODE(this.editor, { domNode: mutation.target });
           }
           this.changedElems.push(mutation.target);
@@ -119,7 +119,7 @@ class Observer {
     // console.log(domNode);
 
     if (!domNode.__detail) {
-      if (domNode.nodeType === window.Node.ELEMENT_NODE) {
+      if (domNode.nodeType === globalThis.Node.ELEMENT_NODE) {
         const FormatClassPrototype = this.allNonTextFormat.find((formatClassPrototype) => formatClassPrototype.tagName === domNode.tagName);
         // if (FormatClassPrototype) {
         //  new FormatClassPrototype(this.editor, { domNode: domNode });
@@ -159,7 +159,7 @@ class Observer {
             domNode.remove();
           }
         }
-      } else if (domNode.nodeType === window.Node.TEXT_NODE) {
+      } else if (domNode.nodeType === globalThis.Node.TEXT_NODE) {
         new this.editor.TEXT_NODE(this.editor, { domNode });
       } else {
         domNode.parentNode.removeChild(domNode);
@@ -180,7 +180,7 @@ class Observer {
     }
 
     if (!domNode.__detail) {
-      if (domNode.nodeType === window.Node.ELEMENT_NODE) {
+      if (domNode.nodeType === globalThis.Node.ELEMENT_NODE) {
         const FormatClassPrototype = this.allNonTextFormat.find((formatClassPrototype) => formatClassPrototype.tagName === domNode.tagName);
 
         // if (FormatClassPrototype) {
@@ -210,7 +210,7 @@ class Observer {
           domNode.parentNode.insertBefore(newDom, domNode.nextElementSibling);
           domNode.parentNode.removeChild(domNode);
         }
-      } else if (domNode.nodeType === window.Node.TEXT_NODE) {
+      } else if (domNode.nodeType === globalThis.Node.TEXT_NODE) {
         new this.editor.TEXT_NODE(this.editor, { domNode: domNode });
       } else {
         domNode.parentNode.removeChild(domNode);

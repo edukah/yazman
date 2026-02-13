@@ -19,7 +19,7 @@ const TEXT_CHANGE_EVENT = [
   'paste'
 ];
 
-const SHORTKEY = /Mac/i.test(window.navigator.platform) ? 'metaKey' : 'ctrlKey';
+const SHORTKEY = /Mac/i.test(globalThis.navigator.platform) ? 'metaKey' : 'ctrlKey';
 // const SHORTKEY = /Mac/i.test(navigator.platform) ? 'metaKey' : 'ctrlKey';
 
 class Event {

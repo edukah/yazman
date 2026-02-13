@@ -40,12 +40,12 @@ class History {
     }
 
     // değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
-    const historyTimeoutID = window.setTimeout(() => {
+    const historyTimeoutID = globalThis.setTimeout(() => {
       this.record();
     }, this.counterTiming);
 
     if (this.editor.registry.get('historyTimeoutID')) {
-      window.clearTimeout(this.editor.registry.get('historyTimeoutID'));
+      globalThis.clearTimeout(this.editor.registry.get('historyTimeoutID'));
     }
 
     this.editor.registry.set('historyTimeoutID', historyTimeoutID);
@@ -62,7 +62,7 @@ class History {
     this.editor.registry.set('historyCounter', 0);
 
     if (this.editor.registry.get('historyTimeoutID')) {
-      window.clearTimeout(this.editor.registry.get('historyTimeoutID'));
+      globalThis.clearTimeout(this.editor.registry.get('historyTimeoutID'));
     }
   }
 

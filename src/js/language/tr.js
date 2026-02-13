@@ -7,7 +7,7 @@ const lang = {
   contentImageAltAttribute: 'Burada da minik bir görsel var.',
   contentFigcaptionPlaceholder: 'varsa, görsele dair bir açıklama...',
   unsavedChangesConfirm: 'Sayfada kaydedilmemiş değişiklikler var gibi gözüküyor. Yine de sayfa terk edilsin mi?',
-  keepReading: 'Devamını Göster <i class="fa-solid fa-arrow-down"></i>',
+  keepReading: 'Devamını Göster <i class="ph-bold ph-arrow-down"></i>',
   notEmptyField: 'Bu alan boş bırakılamaz',
   errorLoadingWithDots: 'yüklenemedi...',
   errorReAttemptingDots: 'bir hata oldu, tekrar deniyor...',

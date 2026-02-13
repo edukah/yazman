@@ -27,8 +27,8 @@ Language.words = new Map();
 
 Language.load(defaultWords);
 
-if (window.lang != null) {
-  Language.load(window.lang);
+if (globalThis.LANG_DATA != null) {
+  Language.load(globalThis.LANG_DATA);
 }
 
 export default Language;

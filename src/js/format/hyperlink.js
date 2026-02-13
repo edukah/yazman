@@ -89,7 +89,7 @@ class Hyperlink extends Inline {
       const label = document.createElement('label');
 
       const title = document.createElement('span');
-      title.classList.add('fc-5-600');
+      title.classList.add('fsi-14 fwe-semibold');
       title.innerText = inputDataObj.title;
       label.appendChild(title);
 
@@ -107,7 +107,7 @@ class Hyperlink extends Inline {
     buttonContainer.style.marginTop = '10px';
     formContainer.appendChild(buttonContainer);
 
-    const buttonData = [{ type: 'submit', className: 'bttn bttn-sm bttn-borderless clr-th-base fc-5-600-os yazman-modal-close', value: 'İPTAL', onclick: () => editor.dialog.closeModal() }, { type: 'submit', className: 'bttn bttn-sm clr-text-white bg-th-base fc-5-600-os', value: 'DEVAM', onclick: () => this.toolbarFormListener(editor) }];
+    const buttonData = [{ type: 'submit', className: 'bttn bttn--sm color-text-primary-base fsi-14 fwe-semibold yazman-modal-close', value: 'İPTAL', onclick: () => editor.dialog.closeModal() }, { type: 'submit', className: 'bttn bttn--sm bttn--primary fsi-14 fwe-semibold ffa-sans ', value: 'DEVAM', onclick: () => this.toolbarFormListener(editor) }];
     buttonData.forEach(buttonDataObj => {
       const button = document.createElement('input');
       Object.entries(buttonDataObj).forEach(([key, value]) => {

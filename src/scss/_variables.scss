@@ -1,0 +1,48 @@
+/* COLORS */
+/** Theme Colors **/
+$color-primary-light: rgba(84, 180, 203, 1);
+$color-primary-base: rgba(10, 150, 183, 1);
+$color-primary-dark: rgba(2, 91, 112, 1);
+
+$color-secondary-light: rgba(252, 238, 191, 1);
+$color-secondary-base: rgba(254, 163, 96, 1);
+$color-secondary-dark: rgba(241, 101, 29, 1);
+/** End of Theme Colors **/
+
+/** Other Variables **/
+$toolbar-active-button-lt: rgba(47, 96, 229, 1);
+$toolbar-active-button-dt: rgba(125, 155, 238, 1);
+/** End of other variabels **/
+
+$breakpoint-md: 667px;
+
+// Theme Colors
+:root {
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-base: #{$color-primary-base};
+  --color-primary-dark: #{$color-primary-dark};
+
+  body.dark-mode {
+    --color-primary-light: #{$color-primary-dark};
+    --color-primary-base: #{$color-primary-base};
+    --color-primary-dark: #{$color-primary-light};
+  }
+
+  --color-secondary-light: #{$color-secondary-light};
+  --color-secondary-base: #{$color-secondary-base};
+  --color-secondary-dark: #{$color-secondary-dark};
+
+  body.dark-mode {
+    --color-secondary-light: #{$color-secondary-dark};
+    --color-secondary-base: #{$color-secondary-base};
+    --color-secondary-dark: #{$color-secondary-light};
+  }
+
+  --toolbar-active-button: #{$toolbar-active-button-lt};
+
+  body.dark-mode {
+    --toolbar-active-button: #{$toolbar-active-button-dt};
+  }
+
+  --toolbar-height: 52px;
+}

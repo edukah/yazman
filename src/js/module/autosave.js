@@ -21,11 +21,11 @@ class Autosave {
     this.saved = true;
     this.processing = false;
     this.counter = 0;
-    window.__yazman.autosavePreventUnload = false;
+    globalThis.__yazman.autosavePreventUnload = false;
 
-    /* window.onbeforeunload = (event) => {
+    /* globalThis.onbeforeunload = (event) => {
       if (!this.saved) {
-        event = event || window.event;
+        event = event || globalThis.event;
 
         event.preventDefault();
         event.returnValue = '';
@@ -34,13 +34,13 @@ class Autosave {
       }
     }; */
     if (this.preventUnload) {
-      window.__yazman.autosavePreventUnload = true;
-      window.addEventListener('beforeunload', (event) => {
-        if (!this.saved && window.__yazman.autosavePreventUnload && !this.editor.isEmpty(false)) {
-          window.__yazman.autosavePreventUnload = false;
-          window.setTimeout(() => { window.__yazman.autosavePreventUnload = true; }, 2000);
+      globalThis.__yazman.autosavePreventUnload = true;
+      globalThis.addEventListener('beforeunload', (event) => {
+        if (!this.saved && globalThis.__yazman.autosavePreventUnload && !this.editor.isEmpty(false)) {
+          globalThis.__yazman.autosavePreventUnload = false;
+          globalThis.setTimeout(() => { globalThis.__yazman.autosavePreventUnload = true; }, 2000);
 
-          event = event || window.event;
+          event = event || globalThis.event;
 
           event.preventDefault();
           event.returnValue = '';
@@ -52,7 +52,7 @@ class Autosave {
   }
 
   setGlobalUnLoad (value = true) {
-    window.__yazman.autosavePreventUnload = Boolean(value);
+    globalThis.__yazman.autosavePreventUnload = Boolean(value);
   }
 
   setBlock (value = false) {
@@ -71,7 +71,7 @@ class Autosave {
       this.editor.registry.set('autosaveCounter', 0);
 
       if (this.editor.registry.get('autosaveTimeoutID')) {
-        window.clearTimeout(this.editor.registry.get('autosaveTimeoutID'));
+        globalThis.clearTimeout(this.editor.registry.get('autosaveTimeoutID'));
         this.editor.registry.delete('autosaveTimeoutID');
       }
     } else {
@@ -80,7 +80,7 @@ class Autosave {
 
     // değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
     if (!this.editor.registry.has('autosaveTimeoutID')) {
-      const autosaveTimeoutID = window.setTimeout(() => {
+      const autosaveTimeoutID = globalThis.setTimeout(() => {
         this.adaptor();
 
         this.saved = true;

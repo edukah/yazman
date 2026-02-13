@@ -61,14 +61,14 @@ class Toolbar {
     // this.addDevelomentButton();
     this.editor.container.insertBefore(this.container, null);
 
-    window.addEventListener('resize', this.scrollArrowControl.bind(this));
-    window.addEventListener('load', this.scrollArrowControl.bind(this));
+    globalThis.addEventListener('resize', this.scrollArrowControl.bind(this));
+    globalThis.addEventListener('load', this.scrollArrowControl.bind(this));
 
     return this;
   }
 
   scrollArrowControl () {
-    const containerDim = window.getComputedStyle(this.container, null);
+    const containerDim = globalThis.getComputedStyle(this.container, null);
     const containerBlankSpace = parseFloat(containerDim.getPropertyValue('margin-left')) + parseFloat(containerDim.getPropertyValue('margin-right')) + parseFloat(containerDim.getPropertyValue('padding-left')) + parseFloat(containerDim.getPropertyValue('padding-right'));
 
     /* console.log(this.container, 'scroll-width:', this.container.scrollWidth);

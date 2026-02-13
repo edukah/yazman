@@ -17,10 +17,11 @@ const formatSets = [];
 
 class Editor {
   constructor (container, config = {}, exampleContent = false) {
-    window.__yazman = {};
+    globalThis.__yazman = {};
 
-    if (!(container instanceof window.Element)) {
+    if (!(container instanceof globalThis.Element)) {
       console.warn('Please provide valid selector for Editor.');
+      
       return;
     }
 
@@ -213,9 +214,9 @@ class Editor {
     const editorbottomBorder = editorRects.y + editorRects.height;
     const editorTopBorder = editorRects.y;
 
-    const editorStyle = this.root.currentStyle || window.getComputedStyle(this.root);
-    const editorTopBlankSpace = window.parseInt(editorStyle.marginTop) + window.parseInt(editorStyle.paddingTop);
-    const editorBottomBlankSpace = window.parseInt(editorStyle.marginBottom) + window.parseInt(editorStyle.paddingBottom);
+    const editorStyle = this.root.currentStyle || globalThis.getComputedStyle(this.root);
+    const editorTopBlankSpace = globalThis.parseInt(editorStyle.marginTop) + globalThis.parseInt(editorStyle.paddingTop);
+    const editorBottomBlankSpace = globalThis.parseInt(editorStyle.marginBottom) + globalThis.parseInt(editorStyle.paddingBottom);
 
     /* console.log('editorTopBlankSpace', editorTopBlankSpace);
     console.log('editorBottomBlankSpace', editorBottomBlankSpace);
@@ -1228,9 +1229,9 @@ class Editor {
 
     const statusContainer = document.createElement('div');
     statusContainer.classList.add('yazman-status');
-    statusContainer.classList.add('fc-5-600');
+    statusContainer.classList.add('fsi-14 fwe-semibold');
 
-    if (typeof content === 'object' && content instanceof window.HTMLElement) {
+    if (typeof content === 'object' && content instanceof globalThis.HTMLElement) {
       statusContainer.appendChild(content);
     } else {
       const statusText = document.createElement('span');
@@ -1241,7 +1242,7 @@ class Editor {
 
     this.container.appendChild(statusContainer);
 
-    window.setTimeout(() => {
+    globalThis.setTimeout(() => {
       this.container.removeChild(statusContainer);
     }, expire);
   }
@@ -1253,6 +1254,7 @@ class Editor {
     } catch (e) {
       return false;
     }
+    
     return parent.contains(descendant);
   }
 }

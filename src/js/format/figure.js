@@ -245,7 +245,7 @@ class FigureImage extends BlockEmbed {
       return image;
     };
 
-    // const link = window.prompt('Resim Linkini Girin');
+    // const link = globalThis.prompt('Resim Linkini Girin');
     const caretPos = editor.selection.getMemCaretPosition();
     editor.selection.setMemCaretPosition([caretPos[0], caretPos[0]]);
 
