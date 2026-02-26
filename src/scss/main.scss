@@ -27,7 +27,7 @@
   white-space: pre-wrap;
   word-wrap: break-word;
   word-break: break-word;
-  color: var(--color-text-dark-primary);
+  color: var(--color-text-dark-1);
 }
 
 .wysiwyg .yazman {
@@ -130,7 +130,7 @@
 }
 
 .yazman.blank::before {
-  color: var(--color-text-dark-secondary);
+  color: var(--color-text-dark-2);
   content: attr(data-yazman-placeholder);
   font-style: italic;
   pointer-events: none;
@@ -268,14 +268,14 @@
   position: relative;
   font-size: 0.88em;
   text-align: center;
-  color: var(--color-text-dark-secondary);
+  color: var(--color-text-dark-2);
 }
 
 .yazman figcaption.no-content::before {
   content: attr(data-yazman-placeholder);
   font-style: italic;
   cursor: text;
-  color: var(--color-text-dark-hint);
+  color: var(--color-text-dark-3);
   pointer-events: none;
 }
 
@@ -307,7 +307,7 @@
 
 .yazman pre {
   background-color: var(--color-bg-grey-dark-700);
-  color: var(--color-text-light-primary);
+  color: var(--color-text-light-1);
   overflow-x: auto;
 }
 
@@ -345,7 +345,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
-  color: var(--color-text-dark-hint);
+  color: var(--color-text-dark-3);
   content: '\2770';
 }
 
@@ -355,13 +355,13 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
-  color: var(--color-text-dark-hint);
+  color: var(--color-text-dark-3);
   content: '\2771';
 }
 
 body.yazman-toolbar.onScroll::before,
 body.yazman-toolbar.onScroll::after {
-  color: var(--color-text-light-hint);
+  color: var(--color-text-light-3);
 }
 
 .yazman-toolbar .button-container {
@@ -390,7 +390,7 @@ body.yazman-toolbar.onScroll::after {
 }
 
 .yazman-toolbar .button-group span svg {
-  fill: var(--color-text-dark-primary);
+  fill: var(--color-text-dark-1);
 }
 
 .yazman-toolbar .button-group span.active svg {
@@ -446,7 +446,7 @@ body.yazman-toolbar.onScroll::after {
 }
 
 .yazman-status * {
-  color: var(--color-text-dark-secondary);
+  color: var(--color-text-dark-2);
 }
 
 /* YAZMAN STATUS */
