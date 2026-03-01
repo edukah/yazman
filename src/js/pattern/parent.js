@@ -2,7 +2,7 @@ class Parent {
   constructor (editor, { tagName = 'p', domNode = null } = {}) {
     this.editor = editor;
 
-    if (domNode instanceof Object) {
+    if (domNode instanceof globalThis.Node) {
       this.domNode = domNode;
     } else {
       this.domNode = document.createElement(tagName);
@@ -108,7 +108,7 @@ class Parent {
   }
 
   getInnerLength (cached = false) {
-    if (cached && this.innerLength) {
+    if (cached && this.innerLength != null) {
       return this.innerLength;
     }
 
