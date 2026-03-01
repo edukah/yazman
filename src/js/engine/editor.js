@@ -10,6 +10,7 @@ import Clipboard from '../module/clipboard.js';
 import History from '../module/history.js';
 import Autosave from '../module/autosave.js';
 import Language from '../language/language.js';
+import manualData from './manual.json';
 // import Cursor from '../format/cursor.js';
 
 const RegistryInstance = new Registry();
@@ -1135,7 +1136,6 @@ class Editor {
         let borderEnd = end - (line.start + offsetLocation + child.length);
         borderEnd = (borderEnd < 0) ? end - (line.start + offsetLocation) : child.length;
 
-        console.log(borderStart, borderEnd);
 
         if (borderStart === false) {
           borderEnd = false;
@@ -1248,6 +1248,14 @@ class Editor {
         statusContainer.remove();
       }
     }, expire);
+  }
+
+  static manual () {
+    const lines = manualData.map(({ text, style }) => [`%c${text}\n`, style]);
+    const messages = lines.map(([text]) => text);
+    const styles = lines.flatMap(([_, style]) => style || '');
+
+    console.log(messages.join(''), ...styles);
   }
 
   contains (parent, descendant) {

@@ -141,7 +141,6 @@ class Range {
       });
     }
 
-    console.log('oldStart:', oldStart);
 
     /* *-* */
     let end;
@@ -196,7 +195,6 @@ class Range {
       });
     }
 
-    console.log('oldEnd:', oldEnd);
 
     /* let reachStart = false;
     let reachEnd = false; */
