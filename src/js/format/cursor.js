@@ -89,6 +89,7 @@ class Cursor extends Inline {
       rootParent.domNode.parentNode.removeChild(rootParent.domNode);
 
       event.preventDefault();
+
       return false;
     }
   }

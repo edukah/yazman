@@ -28,6 +28,7 @@ class Toolbar {
 
         if (!this.editor.registry.has('format/' + button)) {
           console.error('Format that inside toolbarFormat not found in registered formats... ' + button);
+
           return;
         }
 

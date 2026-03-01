@@ -148,6 +148,7 @@ class Text {
       }
 
       event.preventDefault();
+
       return false;
     }
   }

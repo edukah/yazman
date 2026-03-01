@@ -31,6 +31,7 @@ class Preformatted extends Block {
         if (this.end + 1 === value) {
           return value - 1;
         }
+
         return value;
       }));
       // console.log('2:', caretPos);
@@ -46,6 +47,7 @@ class Preformatted extends Block {
         if (this.end === value) {
           return value - 1;
         }
+
         return value;
       }));
     }
@@ -281,6 +283,7 @@ class Preformatted extends Block {
         editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(value => value + '\n'.length + 1));
 
         event.preventDefault();
+
         return false;
       }
 
@@ -297,6 +300,7 @@ class Preformatted extends Block {
       /* SON */
 
       event.preventDefault();
+
       return false;
     }
   }
@@ -320,6 +324,7 @@ class Preformatted extends Block {
     /* SON */
 
     event.preventDefault();
+
     return false;
   }
 }

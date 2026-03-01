@@ -157,6 +157,7 @@ class FigureImage extends BlockEmbed {
         line.parent.domNode.remove();
 
         event.preventDefault();
+
         return false;
       }
     });
@@ -184,6 +185,7 @@ class FigureImage extends BlockEmbed {
       }
 
       event.preventDefault();
+
       return false;
     }
   }
@@ -200,6 +202,7 @@ class FigureImage extends BlockEmbed {
           editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(v => lines[0].start - 1));
 
           event.preventDefault();
+
           return false;
         }
       }
@@ -210,6 +213,7 @@ class FigureImage extends BlockEmbed {
           editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(v => lines[0].end + 1));
 
           event.preventDefault();
+
           return false;
         }
       }
@@ -323,6 +327,7 @@ class Figcaption extends Block {
     if (lines[0] instanceof Figcaption) {
       if (lines[0].start === endIndex) {
         event.preventDefault();
+
         return false;
       }
       /* if (lines.length > 1 && lines[0].end === startIndex - 1) {
@@ -361,6 +366,7 @@ class Figcaption extends Block {
       editor.selection.setMemCaretPosition([lines[0].end + 1, lines[0].end + 1]);
 
       event.preventDefault();
+
       return false;
     }
   }
