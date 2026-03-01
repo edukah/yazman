@@ -97,6 +97,16 @@ editor.update();
 editor.status('Saved!', 3000);
 ```
 
+## Console Help
+
+You can access a built-in console reference using:
+
+```js
+Yazman.help();
+```
+
+This will display a styled, interactive configuration guide in the browser console.
+
 ## Development
 
 ```bash

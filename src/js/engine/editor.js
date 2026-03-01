@@ -10,7 +10,7 @@ import Clipboard from '../module/clipboard.js';
 import History from '../module/history.js';
 import Autosave from '../module/autosave.js';
 import Language from '../language/language.js';
-import manualData from './manual.json';
+import helpData from '../docs/help.json';
 // import Cursor from '../format/cursor.js';
 
 const RegistryInstance = new Registry();
@@ -1250,8 +1250,8 @@ class Editor {
     }, expire);
   }
 
-  static manual () {
-    const lines = manualData.map(({ text, style }) => [`%c${text}\n`, style]);
+  static help () {
+    const lines = helpData.map(({ text, style }) => [`%c${text}\n`, style]);
     const messages = lines.map(([text]) => text);
     const styles = lines.flatMap(([_, style]) => style || '');
 

@@ -40,7 +40,7 @@ export default merge(common, {
     filename: '[name]',
     path: path.join(common.context, 'dev'),
     library: {
-      name: 'Yazman',
+      name: 'yazman',
       type: 'umd',
       export: 'default'
     },
