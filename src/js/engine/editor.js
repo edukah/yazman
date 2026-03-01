@@ -1223,13 +1223,14 @@ class Editor {
   }
 
   status (content = '', expire = 6000) {
-    if (this.container.querySelector('yazman-status')) {
-      this.container.querySelector('yazman-status').remove();
+    const existingStatus = this.container.querySelector('.yazman-status');
+    if (existingStatus) {
+      existingStatus.remove();
     }
 
     const statusContainer = document.createElement('div');
     statusContainer.classList.add('yazman-status');
-    statusContainer.classList.add('fsi-14 fwe-semibold');
+    statusContainer.classList.add('fsi-14', 'fwe-semibold');
 
     if (typeof content === 'object' && content instanceof globalThis.HTMLElement) {
       statusContainer.appendChild(content);
@@ -1243,7 +1244,9 @@ class Editor {
     this.container.appendChild(statusContainer);
 
     globalThis.setTimeout(() => {
-      this.container.removeChild(statusContainer);
+      if (statusContainer.parentNode) {
+        statusContainer.remove();
+      }
     }, expire);
   }
 

@@ -212,8 +212,7 @@ class Paper {
     const line = this.getLine(index);
 
     if (!line) {
-      /* console.trace(this.lines);
-      debugger; */
+      return null;
     }
 
     const child = line.children.find((child) => {
@@ -371,9 +370,9 @@ class Paper {
   /* ************** to paper end ************************************** */
 
   optimize (domNode) {
-    domNode.normalize();
-
     if (!domNode || domNode.__detail == null) return;
+
+    domNode.normalize();
 
     if (domNode.childNodes) {
       Array.from(domNode.childNodes).forEach((child) => {
@@ -385,9 +384,9 @@ class Paper {
   }
 
   update (domNode) {
-    domNode.normalize();
-
     if (!domNode || domNode.__detail == null) return;
+
+    domNode.normalize();
 
     if (domNode.childNodes) {
       Array.from(domNode.childNodes).forEach((child) => {
@@ -399,12 +398,14 @@ class Paper {
   }
 
   remove (elem) {
-    if (!elem.domNode || elem.domNode.__detail == null) return;
+    if (!elem || !elem.domNode || elem.domNode.__detail == null) return;
 
-    elem.__detail.remove();
+    elem.domNode.__detail.remove();
   }
 
   getLength () {
+    if (!this.lines.length) return 0;
+
     const lastLineEnd = this.lines[this.lines.length - 1].end;
     /* let length = 0;
 

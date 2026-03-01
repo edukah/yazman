@@ -88,9 +88,9 @@ class Text {
     this.updateText(textContent);
   }
 
-  getText (start = this.domNode.__detail.start, end = this.domNode.__detail.start) {
-    const startRel = Math.abs(start - this.domNode.__detail.start);
-    const endRel = Math.abs(this.domNode.__detail.end - end);
+  getText (start = this.domNode.__detail.start, end = this.domNode.__detail.end) {
+    const startRel = start - this.domNode.__detail.start;
+    const endRel = end - this.domNode.__detail.start;
 
     return this.domNode.__detail.textContent.slice(startRel, endRel);
   }
