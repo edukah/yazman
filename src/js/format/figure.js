@@ -9,7 +9,7 @@ class Figure extends Container {
   optimize () {
     this.domNode.normalize();
 
-    if (this.domNode.previousSibling) {
+    if (this.domNode.previousSibling && this.domNode.previousSibling.__detail) {
       const isChild = Figure.requiredChildren.some((FormatClass) => {
         return this.domNode.previousSibling.__detail instanceof FormatClass;
       });
@@ -21,7 +21,7 @@ class Figure extends Container {
     }
 
     // console.log(this.domNode.nextSibling);
-    if (this.domNode.nextSibling) {
+    if (this.domNode.nextSibling && this.domNode.nextSibling.__detail) {
       const isChild = Figure.requiredChildren.some((FormatClass) => {
         return this.domNode.nextSibling.__detail instanceof FormatClass;
       });
@@ -32,7 +32,7 @@ class Figure extends Container {
       }
     }
 
-    this.domNode.childNodes.forEach((child) => {
+    Array.from(this.domNode.childNodes).forEach((child) => {
       const isAllowedChildren = Figure.allowedChildren.some((FormatClass) => {
         return (child.__detail instanceof FormatClass);
       });
