@@ -38,7 +38,6 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
             configFile: path.join(context, 'babel.config.js')
           }
         }
