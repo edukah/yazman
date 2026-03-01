@@ -10,7 +10,7 @@ const SELECTION_CHANGE_EVENT = [
   'mouseup',
   // 'mousedown',
   // 'touchend',
-  'onselect'
+  'select'
 ];
 
 const TEXT_CHANGE_EVENT = [
@@ -172,7 +172,7 @@ class Event {
   }
 
   add (eventData) {
-    const uniqueKey = Math.floor(Math.random() * 100000);
+    const uniqueKey = Event._nextKey = (Event._nextKey || 0) + 1;
 
     this.eventForTrigger.set(uniqueKey, eventData);
 
