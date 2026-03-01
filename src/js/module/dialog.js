@@ -16,7 +16,7 @@ class Dialog {
       this.editor.container.classList.add('shadow');
     }
 
-    const modal = document.createElement('modal');
+    const modal = document.createElement('div');
     modal.classList.add('yazman-modal');
     modal.appendChild(modalInnerDom);
 

@@ -62,7 +62,7 @@ class Cursor extends Inline {
       if (caretEnd >= this.domNode.__detail.start) {
         this.editor.selection.setMemCaretPosition(caretPosition.map(value => value - 1));
       } else {
-        this.editor.selection.setMemCaretPosition(caretPosition.map(value => value));
+        this.editor.selection.setMemCaretPosition(caretPosition);
       }
 
       this.editor.deleteContent(this.domNode.__detail.start, this.domNode.__detail.end);

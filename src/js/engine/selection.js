@@ -215,7 +215,7 @@ class Selection {
 
       if (!this.editor.variables.get('caretPositionRecursiveToken')) {
         // console.trace('here');
-        this.editor.variables.delete('caretPosition', caretPosition);
+        this.editor.variables.delete('caretPosition');
       } else {
         this.editor.variables.set('caretPositionRecursiveToken', 0);
       }

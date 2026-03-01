@@ -52,10 +52,12 @@ class Hyperlink extends Inline {
   }
 
   static urlValidate (url) {
-    const regex = new RegExp(`^(http[s]?://){0,1}(www.){0,1}[a-zA-Z0-9.-]+.[a-zA-Z]{2,5}[.]{0,1}`);  
+    const regex = new RegExp(`^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}\\.?`);
     if (!regex.test(url)) {
       return false;
     }
+
+    return true;
   }
 
   static toolbarListener (event, editor) {
@@ -89,7 +91,7 @@ class Hyperlink extends Inline {
       const label = document.createElement('label');
 
       const title = document.createElement('span');
-      title.classList.add('fsi-14 fwe-semibold');
+      title.classList.add('fsi-14', 'fwe-semibold');
       title.innerText = inputDataObj.title;
       label.appendChild(title);
 

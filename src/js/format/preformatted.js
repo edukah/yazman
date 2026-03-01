@@ -155,9 +155,9 @@ class Preformatted extends Block {
     const newLines = rangeText.split('\n').map(v => {
       const beforeLength = v.length;
       v = v.trim();
-      const afterLenght = v.length;
+      const afterLength = v.length;
 
-      lengthDiff += beforeLength - afterLenght;
+      lengthDiff += beforeLength - afterLength;
 
       return v;
     });

@@ -10,7 +10,7 @@ class Clipboard {
       const body = document.body;
       console.log(parsedHtml); */
 
-      const paragraphArray = text.trim().replace('\r\n', '\n').split('\n').filter(v => v.trim().length);
+      const paragraphArray = text.trim().replace(/\r\n/g, '\n').split('\n').filter(v => v.trim().length);
 
       const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
       if (!this.editor.selection.isCollapsed()) {

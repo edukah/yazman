@@ -164,7 +164,7 @@ class Paper {
           textContent = textContent.slice(0, end - child.start);
         }
 
-        const paragraphArray = textContent.replace('\r\n', '\n').split('\n');
+        const paragraphArray = textContent.replace(/\r\n/g, '\n').split('\n');
         paragraphArray.forEach((textContent, index) => {
           if (line instanceof this.editor.registry.get('format/preformatted') && !textContent.length) {
             textContent = '\n';
