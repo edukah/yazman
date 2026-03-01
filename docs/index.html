@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yazman – Wysiwyg Editor</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
   <link rel="stylesheet" href="assets/yazman.min.css">
   <script type="text/javascript" src="assets/yazman.min.js"></script>
   <style>
@@ -42,7 +41,7 @@
     .slider-section {
       background: #ffffff;
       border: 1px solid #dfe6e9;
-      border-radius: var(--radius-md);
+      border-radius: 8px;
       padding: 1rem;
       margin-bottom: 2.5rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -58,7 +57,7 @@
     </div>
   </div>
   <script type="text/javascript">
-    new Yazman(document.getElementById('editor-example', {}));
+    new Yazman(document.getElementById('editor-example'), {});
   </script>
 </body>
 
