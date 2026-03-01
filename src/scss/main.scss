@@ -3,7 +3,6 @@
 .yazman-container {
   position: relative;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -156,7 +155,6 @@
   border-top: 5px solid var(--color-primary-base);
   width: 26px;
   height: 26px;
-  -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
 }
 
@@ -172,6 +170,11 @@
   transform: translate(-50%, 120%);
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /** End of Loading Styles **/
 
 /** Block Level Elements **/
@@ -184,7 +187,7 @@
 .yazman figure:first-child,
 .yazman blockquote:first-child,
 .yazman pre:first-child {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .yazman p,
@@ -232,7 +235,7 @@
 .yazman figure:last-child,
 .yazman blockquote:last-child,
 .yazman pre:last-child {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 /*** End of Block Level Elements Spacing ***/
@@ -325,18 +328,11 @@
   border-top: none;
   padding: 0 12px;
   font-size: 25px;
-  -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   display: grid;
-  -ms-display: grid;
-  /* Perde Yapmak için */
   z-index: 42;
   background-color: var(--color-grey-zero);
-  /* */
 }
 
 .yazman-toolbar.onScroll::before {
@@ -359,8 +355,8 @@
   content: '\2771';
 }
 
-body.yazman-toolbar.onScroll::before,
-body.yazman-toolbar.onScroll::after {
+body.dark-mode .yazman-toolbar.onScroll::before,
+body.dark-mode .yazman-toolbar.onScroll::after {
   color: var(--color-text-light-3);
 }
 
@@ -407,13 +403,13 @@ body.yazman-toolbar.onScroll::after {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 1);
   opacity: 0.7;
   z-index: 0;
 }
 
 .yazman-container.shadow .yazman {
-  overflow-y: none;
+  overflow-y: hidden;
 }
 
 .yazman-form {
@@ -437,10 +433,9 @@ body.yazman-toolbar.onScroll::after {
 .yazman-status {
   position: absolute;
   bottom: var(--toolbar-height);
-  right: 0px;
-  padding: 3px 0px;
+  right: 0;
+  padding: 3px 0;
   margin-right: 25px;
-  /* scrollbar witdh */
   z-index: 42;
   border: 1px solid transparent;
 }
