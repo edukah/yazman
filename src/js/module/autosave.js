@@ -85,6 +85,7 @@ class Autosave {
 
         this.saved = true;
         this.editor.registry.set('autosaveCounter', 0);
+        this.editor.registry.delete('autosaveTimeoutID');
       }, this.counterTiming);
 
       this.editor.registry.set('autosaveTimeoutID', autosaveTimeoutID);
@@ -92,10 +93,10 @@ class Autosave {
   }
 }
 
-Autosave.enable = false; // save after x miliseconds without action;
-Autosave.counterTiming = 36000; // save after x miliseconds without action;
-Autosave.saveCoefficient = 40; // save after x consecutive actions;
-Autosave.preventUnload = false; // save after x consecutive actions;
-Autosave.adaptor = () => {}; // save after x consecutive actions;
+Autosave.enable = false;
+Autosave.counterTiming = 36000;
+Autosave.saveCoefficient = 40;
+Autosave.preventUnload = false;
+Autosave.adaptor = () => {};
 
 export default Autosave;

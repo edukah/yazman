@@ -14,7 +14,7 @@ class History {
     // reverse geçmiş içerik
     // active güncel içerik
     // forward ileriki içerikler
-    this.data = { reverse: [], active: [], forward: [] };
+    this.data = { reverse: [], active: null, forward: [] };
 
     const keyboardEvent = [
       { type: 'keydown', keyCode: 90, shortKey: true, shiftKey: true, function: this.redo.bind(this) },
@@ -40,13 +40,13 @@ class History {
     }
 
     // değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
-    const historyTimeoutID = globalThis.setTimeout(() => {
-      this.record();
-    }, this.counterTiming);
-
     if (this.editor.registry.get('historyTimeoutID')) {
       globalThis.clearTimeout(this.editor.registry.get('historyTimeoutID'));
     }
+
+    const historyTimeoutID = globalThis.setTimeout(() => {
+      this.record();
+    }, this.counterTiming);
 
     this.editor.registry.set('historyTimeoutID', historyTimeoutID);
   }
