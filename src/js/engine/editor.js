@@ -18,7 +18,7 @@ const formatSets = [];
 
 class Editor {
   constructor (container, config = {}, exampleContent = false) {
-    globalThis.__yazman = {};
+    if (!globalThis.__yazman) globalThis.__yazman = {};
 
     if (!(container instanceof globalThis.Element)) {
       console.warn('Please provide valid selector for Editor.');
@@ -178,7 +178,7 @@ class Editor {
       this.root.style.borderColor = 'red';
 
       const eventKey = this.event.add({ type: ['keydown', 'input', 'paste'], function: () => this.isEmpty(insertWarning, message) });
-      this.registry.set('editorIsEmptyEventKey', eventKey);
+      this.variables.set('editorIsEmptyEventKey', eventKey);
     } else if (!result && this.root.hasAttribute('data-on-error')) {
       this.root.removeAttribute('data-yazman-placeholder');
       this.root.removeAttribute('data-on-error');
@@ -187,8 +187,8 @@ class Editor {
       }
       this.root.style.borderColor = '';
 
-      this.event.delete(this.registry.get('editorIsEmptyEventKey'));
-      this.registry.delete('editorIsEmptyEventKey');
+      this.event.delete(this.variables.get('editorIsEmptyEventKey'));
+      this.variables.delete('editorIsEmptyEventKey');
     }
 
     return result;
@@ -1194,7 +1194,7 @@ class Editor {
         secondBorderLine.domNode.parentNode.removeChild(secondBorderLine.domNode);
       }
       secondBorderLine.children.forEach(child => {
-        if (child.textContent != null && child.textContent.trim().length) {
+        if (child.textContent == null || child.textContent.length) {
           borderLines[0].children.push(child);
         }
       });

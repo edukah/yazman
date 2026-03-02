@@ -20,24 +20,20 @@ class Inline extends Parent {
   }
 
   optimize () {
-    if (this.domNode.nextSibling && this.domNode.nextSibling.__detail instanceof this.constructor) {
-      this.domNode.append(...this.domNode.nextSibling.childNodes);
-      /* this.domNode.childNodes.forEach((child) => {
-        this.editor.paper.optimiza(child);
-      }); */
+    const nextSibling = this.domNode.nextSibling;
+    if (nextSibling && nextSibling.__detail instanceof this.constructor) {
+      this.domNode.append(...nextSibling.childNodes);
       this.domNode.normalize();
       this.update();
 
-      this.domNode.parentNode.removeChild(this.domNode.nextSibling);
+      nextSibling.parentNode.removeChild(nextSibling);
     }
 
-    if (this.domNode.previousSibling && this.domNode.previousSibling.__detail instanceof this.constructor) {
-      this.domNode.previousSibling.append(...this.domNode.childNodes);
-      /* this.domNode.previousSibling.childNodes.forEach((child) => {
-        this.editor.paper.optimiza(child);
-      }); */
-      this.domNode.previousSibling.normalize();
-      this.domNode.previousSibling.__detail.update();
+    const prevSibling = this.domNode.previousSibling;
+    if (prevSibling && prevSibling.__detail instanceof this.constructor) {
+      prevSibling.append(...this.domNode.childNodes);
+      prevSibling.normalize();
+      prevSibling.__detail.update();
 
       this.domNode.parentNode.removeChild(this.domNode);
     }

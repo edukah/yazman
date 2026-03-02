@@ -18,6 +18,7 @@ class Hyperlink extends Inline {
 
     if (caretRange[0] === caretRange[1] && caretRange[0] === this.end) {
       const range = this.editor.selection.getNativeRange();
+      if (!range) return;
 
       let parent = range.startContainer;
 
@@ -52,7 +53,7 @@ class Hyperlink extends Inline {
   }
 
   static urlValidate (url) {
-    const regex = new RegExp(`^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}\\.?$`);
+    const regex = new RegExp(`^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}(/[^\\s]*)?$`);
     if (!regex.test(url)) {
       return false;
     }
