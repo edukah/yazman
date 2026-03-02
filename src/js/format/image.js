@@ -1,4 +1,4 @@
-import InlineEmbed from '../pattern/inline.js';
+import { InlineEmbed } from '../pattern/inline.js';
 
 class Image extends InlineEmbed {
   constructor (editor, { image = '#src_must_send', domNode = null }) {
