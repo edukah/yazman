@@ -563,14 +563,16 @@ Register a plugin. The function receives the editor instance and may return an o
 Yazman.plugin('word-count', (editor) => {
   const counter = document.createElement('span');
 
-  editor.on('text-change', () => {
+  const onChange = () => {
     counter.textContent = editor.getLength() + ' chars';
     editor.status(counter, 10000);
-  });
+  };
+
+  editor.on('text-change', onChange);
 
   return {
     destroy () {
-      editor.off('text-change');
+      editor.off('text-change', onChange);
     }
   };
 });
