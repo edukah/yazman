@@ -1,13 +1,7 @@
-// import { Message } from '../../common/dialog.js';
-
 class Dialog {
   constructor (editor) {
     this.editor = editor;
   }
-
-  /* insertMessage(messageObj) {
-    Message.insert(messageObj);
-  } */
 
   insertModal (modalInnerDom, { backcloth = true } = {}) {
     this.closeModal();

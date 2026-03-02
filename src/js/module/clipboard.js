@@ -5,11 +5,6 @@ class Clipboard {
     this.editor.root.addEventListener('paste', (event) => {
       const text = event.clipboardData.getData('text/plain');
 
-      /* const html = event.clipboardData.getData('text/html');
-      const doc = new globalThis.DOMParser().parseFromString(html, 'text/html');
-      const body = document.body;
-      console.log(parsedHtml); */
-
       const paragraphArray = text.trim().replace(/\r\n/g, '\n').split('\n').filter(v => v.trim().length);
 
       const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();

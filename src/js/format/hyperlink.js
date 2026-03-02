@@ -13,8 +13,6 @@ class Hyperlink extends Inline {
 
   optimize () {
     const caretRange = this.editor.selection.getMemCaretPosition();
-    // console.log('optimieze');
-    // console.trace(caretRange);
 
     if (caretRange[0] === caretRange[1] && caretRange[0] === this.end) {
       const range = this.editor.selection.getNativeRange();
@@ -30,8 +28,6 @@ class Hyperlink extends Inline {
 
       range.setStartAfter(parent);
       range.setEndAfter(parent);
-
-      // console.log(range);
 
       let child = range.startContainer.childNodes[(range.startOffset === 0) ? 0 : range.startOffset];
 

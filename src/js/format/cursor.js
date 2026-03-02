@@ -12,15 +12,10 @@ class Cursor extends Inline {
 
   optimize () {
     const caretPosition = this.editor.selection.getMemCaretPosition();
-    /* console.log(caretPosition);
-    console.log(this); */
     if (this.parent instanceof this.editor.registry.get('format/preformatted')) {
       // preformatted crusoru kendi içerisinde gömüyor.
       return;
     }
-    /* console.log(this.domNode.__detail.start);
-    console.log('1:', this.domNode.__detail.start === caretPosition[0]);
-    console.log('------'); */
 
     if (this.domNode.__detail.start === caretPosition[0]) {
       this.editor.selection.setMemCaretPosition(caretPosition.map(value => value + 1));
@@ -32,10 +27,6 @@ class Cursor extends Inline {
     const textContentFitered = this.domNode.textContent.replace(textContentRegEx, '');
     const textInstance = new this.editor.TEXT_NODE(this.editor, { text: textContentFitered });
 
-    /* console.log(this.editor.selection.getMemCaretPosition());
-    console.log(textContentFitered.length);
-    console.log('boolena mark 2: ', Boolean(textContentFitered.length));
-    console.log('------'); */
     if (textContentFitered.length) {
       this.domNode.parentNode.insertBefore(textInstance.domNode, this.domNode);
       textInstance.update();
@@ -43,20 +34,13 @@ class Cursor extends Inline {
       this.editor.selection.setMemCaretPosition(caretPosition.map(value => value + textContentFitered.length - 1));
       // trimliyiouz çünki spaceleri kendimiz ekliyoruz ve cusroun içinde bunu yaparsak cursor indexi problem yapıyor.
       // problemi görmek için trim()'i kaldır herhangi bir caret(collpased iken yani range 0) pozisyonunda inline biçim ver. space tuşuna bas.
-      // this.editor.selection.setMemCaretPosition(caretPosition.map(value => value + textContentFitered.trim().length - 1));
       this.domNode.parentNode.removeChild(this.domNode);
 
       return;
     }
 
-    // console.log(this.editor.selection.getMemCaretPosition());
-
     const caretEnd = this.editor.selection.getMemCaretPosition()[1];
     // Herşey tanımlı ise ve index cursorla alakalı değilse cursoru sildik.
-    /* console.log(this.domNode.parentNode);
-    console.log(caretEnd);
-    console.log(this);
-    console.log(caretEnd && this.domNode.__detail.end !== caretEnd); */
 
     if (caretEnd != null && this.domNode.__detail.end !== caretEnd) {
       if (caretEnd >= this.domNode.__detail.start) {
@@ -69,10 +53,6 @@ class Cursor extends Inline {
 
       this.editor.update();
     }
-
-    /* console.log(this.editor.selection.getMemCaretPosition());
-    console.trace();
-    console.log('___________---------------______________'); */
   }
 
   static leftArrowHandler (event, editor, { lines, startIndex, endIndex }) {
@@ -115,7 +95,6 @@ class Cursor extends Inline {
 Cursor.tagName = 'SPAN';
 Cursor.formatName = 'cursor';
 Cursor.EVENT = [{ type: 'keydown', keyCode: 37, function: Cursor.leftArrowHandler }, { type: 'keydown', keyCode: 13, function: Cursor.enterKeyHandler }];
-// Cursor.content = '\u200B'; // Zero width space
 Cursor.content = '\uFEFF'; // Zero width no break space
 
 export default Cursor;

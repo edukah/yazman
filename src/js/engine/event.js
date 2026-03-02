@@ -1,15 +1,9 @@
-// const eventForTrigger = new Map();
-
 const SELECTION_CHANGE_EVENT = [
   'keyup',
   'blur',
   'focus',
-  // 'selectstart',
-  // 'selectionchange',
   'click',
   'mouseup',
-  // 'mousedown',
-  // 'touchend',
   'select'
 ];
 
@@ -20,7 +14,6 @@ const TEXT_CHANGE_EVENT = [
 ];
 
 const SHORTKEY = /Mac/i.test(globalThis.navigator.platform) ? 'metaKey' : 'ctrlKey';
-// const SHORTKEY = /Mac/i.test(navigator.platform) ? 'metaKey' : 'ctrlKey';
 
 class Event {
   constructor (editor) {
@@ -37,8 +30,6 @@ class Event {
     };
     document.addEventListener('selectionchange', this._selectionChangeHandler);
 
-    // For unique we use new Set();
-    // const allEvent = [...new Set([...SELECTION_CHANGE_EVENT, ...TEXT_CHANGE_EVENT])];
     SELECTION_CHANGE_EVENT.forEach((eventName) => {
       const handler = (event) => this.selectionChange(event);
       this.editor.root.addEventListener(eventName, handler);
@@ -67,7 +58,7 @@ class Event {
   }
 
   textChange (event) {
-    // TRIGGER FORMAT EVENTS */
+    // TRIGGER FORMAT EVENTS
     const filteredTriggerEvent = [...this.eventForTrigger.values()].filter(this.useConditions(event));
 
     const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
@@ -76,43 +67,17 @@ class Event {
     filteredTriggerEvent.forEach(triggerEvent => triggerEvent.function(event, this.editor, { lines: rangeLines, startIndex, endIndex }));
     /* END OF FORMAT EVENTS */
 
-    // this.editor.observer.complete();
     this.editor.update();
     this.editor.emit('text-change');
-    /* if (event.type === 'input' || event.type === 'paste') {
-      this.editor.history.save();
-      this.editor.autosave.save();
-    } */
-
-    // this.update();
   }
 
   selectionChange (event) {
-    // console.log(event.type);
-    /* if (event.type === 'selectionchange' && !this.editor.root.contains(event.target.activeElement)) {
-      return;
-    } */
     const caretPos = this.editor.selection.getCaretPosition();
 
-    /* BLUR-FOCUS EVENT */
-    /* if (event.type === 'focus') {
-      const lines = this.editor.paper.getLines(...caretPos);
-
-      console.log(lines);
-
-      lines.forEach(line => {
-        this.editor.paper.optimize(line.domNode);
-      });
-    } */
-    /* END BLUR-FOCUS EVENT */
-
     /* INDEX BOUNDARY */
-    // console.log(event.type);
-    // console.log(event);
     this.editor.selection.setMemCaretPosition(caretPos, 'trusted');
-    // this.update();
 
-    // TRIGGER FORMAT EVENTS */
+    // TRIGGER FORMAT EVENTS
     const filteredTriggerEvent = [...this.eventForTrigger.values()].filter(this.useConditions(event));
 
     const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
@@ -121,46 +86,27 @@ class Event {
     filteredTriggerEvent.forEach(triggerEvent => triggerEvent.function(event, this.editor, { lines: rangeLines, startIndex, endIndex }));
     /* END OF FORMAT EVENTS */
 
-    // this.editor.observer.complete();
     this.editor.update();
 
     this.editor.emit('selection-change', { start: startIndex, end: endIndex });
     if (event.type === 'focus') this.editor.emit('focus');
     if (event.type === 'blur') this.editor.emit('blur');
-
-    // this.update();
-    // console.log('memCaretPos:', this.editor.selection.getMemCaretPosition());
-    // console.log('caretPos:', this.editor.selection.getCaretPosition());
-    // console.log('---------------');
   }
 
   update () {
-    // const newCaretRange = this.editor.selection.getCaretPosition();
     const newCaretRange = this.editor.selection.getMemCaretPosition();
     const oldCaretRange = this.editor.variables.get('rangeMem') || [0, 0];
-    /* console.log('old', oldCaretRange);
-    console.log('new', newCaretRange);
-    console.log('------------------'); */
     if (!newCaretRange.every((caretIndex, index) => oldCaretRange[index] === caretIndex)) {
-      // console.log(event, event.type);
-      // console.log(oldCaretRange);
-      // console.log(newCaretRange);
       // newlines'ın old linestan önce yapılması gerekiyor. oldda curusor var ise caret range değiştiğinden paragraf olarak önü ya da arkayı alabiliyor.
       const newLines = this.editor.paper.getLines(...newCaretRange);
       newLines.forEach(line => {
         this.editor.paper.optimize(line.domNode);
-        // this.editor.paper.update(line.domNode);
       });
 
       const oldLines = this.editor.paper.getLines(...oldCaretRange);
       oldLines.forEach(line => {
         this.editor.paper.optimize(line.domNode);
-        // this.editor.paper.update(line.domNode);
       });
-      // console.log('oldLines:', ...oldLines);
-      // console.log('newLines:', ...newLines);
-      // this.editor.observer.complete();
-      // this.editor.update();
     }
 
     const isEmpty = this.editor.isEmpty(false);

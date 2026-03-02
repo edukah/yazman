@@ -20,7 +20,6 @@ class Figure extends Container {
       }
     }
 
-    // console.log(this.domNode.nextSibling);
     if (this.domNode.nextSibling && this.domNode.nextSibling.__detail) {
       const isChild = Figure.requiredChildren.some((FormatClass) => {
         return this.domNode.nextSibling.__detail instanceof FormatClass;
@@ -57,10 +56,6 @@ class Figure extends Container {
       const formatDom = formatInstance.domNode;
 
       this.domNode.appendChild(formatDom);
-
-      // formatInstance.updata();
-      // formatInstance.optimiza();
-      // formatInstance.updata();
     });
   }
 }
@@ -82,7 +77,6 @@ class FigureImage extends BlockEmbed {
     if (alt) {
       this.domNode.setAttribute('alt', alt);
     }
-    // this.updata();
   }
 
   optimize () {
@@ -96,9 +90,6 @@ class FigureImage extends BlockEmbed {
 
       this.domNode.parentNode.insertBefore(formatDom, this.domNode.nextSibling);
       formatDom.appendChild(this.domNode);
-      // formatInstance.updata();
-      // formatInstance.optimiza();
-      // formatInstance.updata();
     }
   }
 
@@ -144,7 +135,6 @@ class FigureImage extends BlockEmbed {
   }
 
   static deleteHandler (event, editor, { lines, startIndex, endIndex }) {
-    // if (startIndex !== endIndex || (startIndex === endIndex && startIndex === 0)) return;
     if (!lines.length) return;
 
     lines.forEach(line => {
@@ -161,15 +151,6 @@ class FigureImage extends BlockEmbed {
         return false;
       }
     });
-
-    /* if (lines[0] instanceof FigureImage) {
-      lines[0].start
-      editor.selection.setMemCaretPosition([lines[0].start - 1, lines[0].start - 1]);
-      lines[0].domNode.parentNode.parentNode.removeChild(lines[0].domNode.parentNode);
-
-      event.preventDefault();
-      return false;
-    } */
   }
 
   static enterKeyHandler (event, editor, { lines, startIndex, endIndex }) {
@@ -193,10 +174,7 @@ class FigureImage extends BlockEmbed {
   static arrowKeyHandlerLR (event, editor, { lines, startIndex, endIndex }) {
     if (!lines.length) return;
 
-    // console.log(lines[0]);
-
     if (lines[0] instanceof FigureImage && startIndex === endIndex) {
-      // console.log(event.keyCode === 37 && lines[0].end === startIndex);
       if (event.keyCode === 37) {
         if (lines[0].end === startIndex) {
           editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(v => lines[0].start - 1));
@@ -207,7 +185,6 @@ class FigureImage extends BlockEmbed {
         }
       }
 
-      // console.log(event.keyCode === 39 && lines[0].start === startIndex);
       if (event.keyCode === 39) {
         if (lines[0].start === startIndex) {
           editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(v => lines[0].end + 1));
@@ -225,7 +202,6 @@ class FigureImage extends BlockEmbed {
       if (!editor.hasFocus()) editor.focus();
 
       let target = event.target;
-      // console.log(target);
       while (target && target.tagName !== 'SPAN') {
         target = target.parentNode;
       }
@@ -236,10 +212,7 @@ class FigureImage extends BlockEmbed {
       const format = {};
       format[formatName] = path;
 
-      // console.log([startIndex, endIndex]);
-
       editor.selection.setMemCaretPosition([startIndex, endIndex]);
-      // editor.deleteContent(startIndex, endIndex);
       const image = editor.insertNode({ format }, startIndex);
       editor.selection.setMemCaretPosition([startIndex + 3, startIndex + 3]);
 
@@ -249,7 +222,6 @@ class FigureImage extends BlockEmbed {
       return image;
     };
 
-    // const link = globalThis.prompt('Resim Linkini Girin');
     const caretPos = editor.selection.getMemCaretPosition();
     editor.selection.setMemCaretPosition([caretPos[0], caretPos[0]]);
 
@@ -330,20 +302,6 @@ class Figcaption extends Block {
 
         return false;
       }
-      /* if (lines.length > 1 && lines[0].end === startIndex - 1) {
-        editor.variables.set(, [lines[0].domNode.previousSibling.__detail.start, lines[0].domNode.previousSibling.__detail.start]);
-
-        if (lines[1].length <= 2 && !lines[1].domNode.textContent.length) {
-          lines[1].domNode.parentNode.removeChild(lines[1].domNode);
-        }
-
-        event.preventDefault();
-        return false;
-      } */
-
-      /* if (lines[0].length <= 2 && lines[0].children[0] instanceof editor.registry.get('format/break')) {
-        event.preventDefault();
-      } */
     }
   }
 

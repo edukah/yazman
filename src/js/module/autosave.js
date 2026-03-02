@@ -23,16 +23,6 @@ class Autosave {
     this.counter = 0;
     globalThis.__yazman.autosavePreventUnload = false;
 
-    /* globalThis.onbeforeunload = (event) => {
-      if (!this.saved) {
-        event = event || globalThis.event;
-
-        event.preventDefault();
-        event.returnValue = '';
-
-        return '';
-      }
-    }; */
     if (this.preventUnload) {
       globalThis.__yazman.autosavePreventUnload = true;
       globalThis.addEventListener('beforeunload', (event) => {

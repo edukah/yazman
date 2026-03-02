@@ -14,19 +14,14 @@ class Paper {
     const recursivePushFunction = (domElement) => {
       Array.from(domElement.childNodes).forEach((domElementChild) => {
         if (domElementChild.__detail instanceof this.editor.registry.get('pattern/container') && domElementChild.hasChildNodes()) {
-          // console.log('start: ', domElementChild.__detail.start, 'end: ', domElementChild.__detail.end, 'domNode: ', domElementChild, domElementChild.__detail);
           recursivePushFunction(domElementChild);
         } else if (domElementChild.__detail instanceof this.editor.registry.get('pattern/block')) {
-          // console.log('start: ', domElementChild.__detail.start, 'end: ', domElementChild.__detail.end, 'domNode: ', domElementChild, domElementChild.__detail);
           this.lines.push(domElementChild.__detail);
         }
       });
     };
 
     recursivePushFunction(this.editor.root);
-
-    // console.log(0, this.getLength());
-    // console.log(this.exportContent(0, this.getLength()));
   }
 
   initialize () {
@@ -103,14 +98,7 @@ class Paper {
           line.domNode.appendChild(parentFormat || textNode);
         }
       });
-      // debugger;
       // alttaki satırı kaydırınca preformattedte bozulmalar meydana geliyor. imleç en başta iken paragraf<>pre yaparsan imleç kayıyor. çünkü en başta crusor optimize yapıyor. remove fonksiyonu yapıldığında bu düzelir. ara satır sonunda paragraf<> pre yapıca imleç alta kayıyor. pre içerisinde son paragarfı ve sonraki paragrag olan paragrafı seçiğ pre<>paragraf yapınca end 1 kayıyor. bu alttaki hepsnin engelliyor.
-      /* if (line instanceof this.editor.registry.get('format/preformatted')) {
-        line.optimize();
-      }
-      this.update(line.domNode);
-      this.optimize(line.domNode);
-      this.update(line.domNode); */
     });
 
     this.editor.observer.complete();
@@ -157,7 +145,7 @@ class Paper {
         if (child.end <= start || child.start >= end) { // child komple  sınırın dışında kalırsa
           return;
         } else if (child.start >= start && child.end <= end) { // child sınırın içinde komple kalırsa
-          // textContent = child.textContent;
+          // textContent olduğu gibi kalır
         } else if (child.start <= start && child.end >= end) { // sınır child'in içinden başlar ve biterse
           textContent = textContent.slice(start - child.start, end - child.start);
         } else if (child.start <= start) { // sınır child'in içinden başlarsa
@@ -174,11 +162,6 @@ class Paper {
 
           const exportedChild = { textContent, format: child.format };
           exportedLine.children.push(exportedChild);
-
-          /* if (index !== paragraphArray.length - 1) {
-            const exportedLine = { textContent: '\n', format: line.format };
-            exportedLine.children.push(exportedLine);
-          } */
         });
       });
 
@@ -186,8 +169,6 @@ class Paper {
 
       return exportedContent;
     }, []);
-
-    // console.log(exportedContent);
 
     return exportedContent;
     // [{textContent: '\n', format: {paragraph: true}}, {textContent: 'asdas', format: {bold: true}}]
@@ -289,10 +270,6 @@ class Paper {
     // o rangenin arasında kalan elementleri filtreliyor.
     const linesInRange = this.getLines(start, end);
 
-    /* console.log(start, end);
-    console.log(linesInRange);
-    console.log('----------------'); */
-
     let blockFormat;
     let inlineFormat;
     linesInRange.forEach((line) => {
@@ -323,25 +300,6 @@ class Paper {
       }
 
       line.children.forEach((child) => {
-        // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
-        /* const isContainEmbed = Object.entries(child.format).some(([key, value]) => {
-          return this.editor.EMBED_ELEMENT.has(key);
-        });
-
-        if (isContainEmbed) {
-          return;
-        } */
-
-        /* console.log('---------------------');
-        console.log('logic: ' + ((child.end > start) && (child.start < end)) || ((line.start === child.start) && (child.start === start)));
-        console.log(child);
-        console.log(child.format);
-        console.log('line.start: ' + line.start);
-        console.log('child.start: ' + child.start);
-        console.log('child.end: ' + child.end);
-        console.log('start: ' + start);
-        console.log('end: ' + end); */
-
         if ((child.end > start && child.start < end) ||
           (line.start === child.start && child.start === start) ||
           child.end === end) {
@@ -406,11 +364,6 @@ class Paper {
     if (!this.lines.length) return 0;
 
     const lastLineEnd = this.lines[this.lines.length - 1].end;
-    /* let length = 0;
-
-    this.lines.forEach((line) => {
-      length += line.length;
-    }); */
 
     return lastLineEnd;
   }

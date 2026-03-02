@@ -1,7 +1,6 @@
 import Registry from './registry.js';
 import Paper from './paper.js';
 import Selection from './selection.js';
-// import Range from './range.js';
 import Event from './event.js';
 import Observer from './observer.js';
 import Toolbar from '../module/toolbar.js';
@@ -11,7 +10,6 @@ import History from '../module/history.js';
 import Autosave from '../module/autosave.js';
 import Language from '../language/language.js';
 import helpData from '../docs/help.json';
-// import Cursor from '../format/cursor.js';
 
 const RegistryInstance = new Registry();
 const formatSets = [];
@@ -100,7 +98,6 @@ class Editor {
     this.toolbar = new Toolbar(this, config.toolbar);
     this.variables = new Map();
     this.selection = new Selection(this);
-    // this.range = new Range(this);
     this.paper = new Paper(this);
     this.dialog = new Dialog(this);
     this.observer = new Observer(this);
@@ -153,7 +150,6 @@ class Editor {
   update () {
     this.observer.complete();
     this.paper.generate();
-    // this.selection.update();
 
     if (this.selection.changedCursorPosition()) {
       this.selection.setCaretPosition(this.selection.getMemCaretPosition());
@@ -165,25 +161,12 @@ class Editor {
     this.toolbar.update();
   }
 
-  // isEmpty(insertWarning = true, message = 'Boş bırakılamaz') {
   isEmpty (insertWarning = true, message = Language.get('notEmptyField')) {
     let result = false;
 
     if (this.root.childNodes.length <= 1) {
       result = this.paper.getLength() === 0;
     }
-    /* else if (this.root.childNodes.length <= 1 && this.root.childNodes[0].textContent.replace(Cursor.content, '').length === 0 && this.paper.getLength()) {
-         result = true;
-       } */
-
-    /* if (!result && this.root.childNodes.length <= 1 && !this.root.childNodes[0].textContent.replace(Cursor.content, '').length) {
-      result = !this.paper.getLines().some(line => {
-        return (line instanceof this.registry.get('pattern/inlineEmbed') || line instanceof this.registry.get('pattern/blockEmbed')) && line.getLength();
-      });
-    } */
-    /*  else if (!textTrim && this.root.textContent.length === 0) {
-          result = true;
-        } */
 
     if (result && insertWarning && !this.root.hasAttribute('data-on-error')) {
       if (this.root.hasAttribute('data-yazman-placeholder')) {
@@ -223,8 +206,6 @@ class Editor {
 
     if (!rects) return;
 
-    // console.log(rects);
-
     const rangeTopPosition = rects.y;
 
     const editorRects = this.root.getClientRects()[0];
@@ -235,32 +216,13 @@ class Editor {
     const editorTopBlankSpace = globalThis.parseInt(editorStyle.marginTop) + globalThis.parseInt(editorStyle.paddingTop);
     const editorBottomBlankSpace = globalThis.parseInt(editorStyle.marginBottom) + globalThis.parseInt(editorStyle.paddingBottom);
 
-    /* console.log('editorTopBlankSpace', editorTopBlankSpace);
-    console.log('editorBottomBlankSpace', editorBottomBlankSpace);
-
-    console.log('editorRects', this.root.getClientRects());
-    console.log('editorbottomBorder', editorbottomBorder);
-    console.log('editorTopBorder', editorTopBorder);
-    console.log('rangeTopPosition', rangeTopPosition);
-    console.log('editorStyle', editorStyle); */
-
     if (rangeTopPosition < editorTopBorder) {
-      // console.log('burada 1');
-
-      // console.log('scrollTop:', this.root.scrollTop);
-      // console.log('1', Math.abs(rangeTopPosition - editorTopBorder));
       this.root.scrollTop -= Math.abs(rangeTopPosition - editorTopBorder - editorTopBlankSpace);
-      // console.log(this.root.scrollTop);
     }
 
     if (rangeTopPosition > editorbottomBorder) {
-      // console.log('burada 2');
-      // console.log(this.root.scrollTop);
       this.root.scrollTop += Math.abs(rangeTopPosition - editorbottomBorder + rects.height + editorBottomBlankSpace);
-      // console.log(this.root.scrollTop);
     }
-
-    // console.log('----------------');
   }
 
   hasFocus () {
@@ -292,10 +254,6 @@ class Editor {
       return obj;
     }, {});
 
-    /* const blockFormatKey = Object.keys(format).find(key => {
-      return this.BLOCK_LEVEL_ELEMENT.has(key);
-    }); */
-
     const inlineFormat = Object.entries(format).reduce((obj, [key, value]) => {
       if (this.INLINE_ELEMENT.has(key)) obj[key] = value;
 
@@ -319,12 +277,10 @@ class Editor {
       index = onInsertResult.index;
       ({ blockFormat, inlineFormat } = onInsertResult.format);
     }
-    // debugger;
 
     if (Object.keys(blockFormat).length && generateBlock) {
       let referenceLine = currentLine;
 
-      // console.log(referenceLine);
       // Liste içerikte sondan önceki paragraflara resim ekleme sırasında resimleri listenin sonrasına eklediği için (referansı container alıyor) bunu buradan kaldırdık. ileride bi sorun çıkartır mı? neden referenceline yapmışısız şu an hatırlamadığım için bunu buraya not düşüyorum.
       // Hatırladım, imageden önce block değşikliği yaparken (preformatted => paragraph) paragrafı en sona ekliyordu.
       while (referenceLine.parent) {
@@ -346,8 +302,7 @@ class Editor {
 
       // Sadece BR var ise başlangıca ekliyor. currentLine.start !== currentLine.end bu koşulu ekledik bu yüzden.
       // preformatted onFormat reverse newLines yüzünden burayı iptal ettik. boşluk olunca boşluk en başta kalıyordu.
-      if (currentLine.start === index && currentLine.start !== currentLine.end) { /* && currentLine.start !== currentLine.end */
-        // console.log('burada');
+      if (currentLine.start === index && currentLine.start !== currentLine.end) {
         this.paper.lines.splice(this.paper.lines.indexOf(currentLine), 0, newLine);
         referenceLineDom.parentNode.insertBefore(newLineDom, referenceLineDom);
 
@@ -463,15 +418,10 @@ class Editor {
       return newChild;
     }
 
-    // save history {action: 'insert', caretIndex: [start, end], content: ['string', {object}] };
-
-    // save history {action: 'delete', caretIndex: [start, end], content: ['string', {object}] };
-
     return null;
   }
 
   format (start, end, format) {
-    // console.log(start, end, format);
     // format parametresini kayıtlı parametrelerin dışında kalanları çıkartıcak şekilde filtreliyor.
 
     // o rangenin arasında kalan elementleri filtreliyor.
@@ -488,33 +438,11 @@ class Editor {
 
     const blockedFormat = Object.entries(format).reduce((arr, [key, value]) => {
       if (this.FORMAT_SETS.has(key)) arr = arr.concat(this.FORMAT_SETS.get(key));
-      // if (this.FORMAT_SETS.has(key)) arr = arr.concat(key);
 
       return arr;
     }, []);
 
-    /* const blockFormat = {};
-    const inlineFormat = {};
-    let blockedFormat = [];
-    Object.entries(format).forEach(([key, value]) => {
-      if (this.BLOCK_LEVEL_ELEMENT.has(key)) {
-        blockFormat[key] = value;
-      }
-
-      if (this.INLINE_ELEMENT.has(key)) {
-        inlineFormat[key] = value;
-      }
-
-      if (this.FORMAT_SETS.has(key)) {
-        blockedFormat = blockedFormat.concat(this.FORMAT_SETS.get(key));
-      }
-    });
-
-    console.log(blockFormat, inlineFormat, blockedFormat);
-    console.log(...this.formatFilter(format)); */
-
     // elementin etkilenen kısımlarını tespit edit stillendiriyor.
-    // const range = this.selection.getRangeAt(0);
     linesInRange.forEach((line) => {
       // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
@@ -534,7 +462,6 @@ class Editor {
         return;
       }
       // getInRangeTextWithFormat line'ın textlerini parçalıyor. textler style'ına göre parçalanıyor. örneğin 'bu gece hava soğuk' tek parça gelirken 'bu gece <strong>hava</strong> soğuk' 3 parça halinde geliyor. parçalar array için obje halinde geliyor. [{'textContent': textcontent, 'format': ['bold', 'italic']}] gibi.
-      // const lineTextContentsWithFormat = this.getInRangeTextWithFormat(line);
 
       // yukarıdan gelen array döngüye sokuluyor.
       let offsetLocation = 0;
@@ -544,13 +471,6 @@ class Editor {
         const isEmbed = Object.keys(child.format).some(v => {
           return this.EMBED_ELEMENT.has(v);
         });
-
-        /* if (isContainEmbed || child.textContent == null) {
-          offsetLocation += child.length;
-          lineChildNodesWithNewFormat.push({ textContent: null, format: child.format });
-
-          return;
-        } */
 
         // tekrarlayan formatlar engelleniyor. birde zaten for olan format tekrar uygulanırsa onu siliyor.
         let newInlineFormat = { ...child.format, ...inlineFormat };
@@ -625,8 +545,6 @@ class Editor {
         if (cursorChildBorderControl || isChildCursor) {
           if (isChildCursor) {
             lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
-            // lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat, start: start, end: start + 1 });
-            // lineChildNodesWithNewFormat.push({ ...child, textContent: '', format: newInlineFormat });
           }
 
           // Önceki ya da sonraki eleman cursor değilse cursor ekliyoruz.
@@ -640,7 +558,6 @@ class Editor {
               }
 
               lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
-              // lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat, start: start, end: start + 1 });
 
               if (child.start === start) {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
@@ -653,7 +570,6 @@ class Editor {
 
               lineChildNodesWithNewFormat.push({ textContent: part1, format: child.format });
               lineChildNodesWithNewFormat.push({ textContent: part2, format: newInlineFormat });
-              // lineChildNodesWithNewFormat.push({ textContent: part2, format: newInlineFormat, start: start, end: start + 1 });
               lineChildNodesWithNewFormat.push({ textContent: part3, format: child.format });
             }
 
@@ -704,9 +620,6 @@ class Editor {
         offsetLocation += child.length;
       });
 
-      // console.log(lineChildNodesWithNewFormat);
-      // debugger;
-
       line.changeStatus = true;
       line.children = lineChildNodesWithNewFormat;
 
@@ -725,11 +638,6 @@ class Editor {
     });
 
     this.paper.initialize();
-    // console.log(...this.paper.lines);
-    // debugger;
-    // save history {action: 'format', caretIndex: [start, end], value: [oldFormat, newFormat] };
-    /* this.formatLine(start, end, format);
-    this.formatText(start, end, format); */
   }
 
   formatLine (start, end, format) {
@@ -742,14 +650,6 @@ class Editor {
       }
     });
 
-    // let { blockFormat, inlineFormat } = this.formatFilter(format);
-    /* const blockFormat = {};
-    Object.entries(format).forEach(([key, value]) => {
-      if (this.BLOCK_LEVEL_ELEMENT.has(key)) {
-        blockFormat[key] = value;
-      }
-    }); */
-
     let blockFormat = Object.entries(format).reduce((obj, [key, value]) => {
       if (Object.keys(obj).length) return obj;
 
@@ -759,7 +659,6 @@ class Editor {
     }, {});
 
     // elementin etkilenen kısımlarını tespit edit stillendiriyor.
-    // const range = this.selection.getRangeAt(0);
     linesInRange.forEach((line) => {
       // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
@@ -799,7 +698,6 @@ class Editor {
   }
 
   formatText (start, end, format) {
-    // console.log(start, end, format);
     // format parametresini kayıtlı parametrelerin dışında kalanları çıkartıcak şekilde filtreliyor.
 
     // o rangenin arasında kalan elementleri filtreliyor.
@@ -818,37 +716,13 @@ class Editor {
       return obj;
     }, {});
 
-    // let { inlineFormat } = this.formatFilter(format);
-
     const blockedFormat = Object.entries(format).reduce((arr, [key, value]) => {
       if (this.FORMAT_SETS.has(key)) arr = arr.concat(this.FORMAT_SETS.get(key));
-      // if (this.FORMAT_SETS.has(key)) arr = arr.concat(key);
 
       return arr;
     }, []);
 
-    /* const blockFormat = {};
-    const inlineFormat = {};
-    let blockedFormat = [];
-    Object.entries(format).forEach(([key, value]) => {
-      if (this.BLOCK_LEVEL_ELEMENT.has(key)) {
-        blockFormat[key] = value;
-      }
-
-      if (this.INLINE_ELEMENT.has(key)) {
-        inlineFormat[key] = value;
-      }
-
-      if (this.FORMAT_SETS.has(key)) {
-        blockedFormat = blockedFormat.concat(this.FORMAT_SETS.get(key));
-      }
-    });
-
-    console.log(blockFormat, inlineFormat, blockedFormat);
-    console.log(...this.formatFilter(format)); */
-
     // elementin etkilenen kısımlarını tespit edit stillendiriyor.
-    // const range = this.selection.getRangeAt(0);
     linesInRange.forEach((line) => {
       // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
@@ -868,7 +742,6 @@ class Editor {
         return;
       }
       // getInRangeTextWithFormat line'ın textlerini parçalıyor. textler style'ına göre parçalanıyor. örneğin 'bu gece hava soğuk' tek parça gelirken 'bu gece <strong>hava</strong> soğuk' 3 parça halinde geliyor. parçalar array için obje halinde geliyor. [{'textContent': textcontent, 'format': ['bold', 'italic']}] gibi.
-      // const lineTextContentsWithFormat = this.getInRangeTextWithFormat(line);
 
       // yukarıdan gelen array döngüye sokuluyor.
       let offsetLocation = 0;
@@ -878,13 +751,6 @@ class Editor {
         const isEmbed = Object.keys(child.format).some(v => {
           return this.EMBED_ELEMENT.has(v);
         });
-
-        /* if (isContainEmbed || child.textContent == null) {
-          offsetLocation += child.length;
-          lineChildNodesWithNewFormat.push({ textContent: null, format: child.format });
-
-          return;
-        } */
 
         // tekrarlayan formatlar engelleniyor. birde zaten for olan format tekrar uygulanırsa onu siliyor.
         let newInlineFormat = { ...child.format, ...inlineFormat };
@@ -959,8 +825,6 @@ class Editor {
         if (cursorChildBorderControl || isChildCursor) {
           if (isChildCursor) {
             lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
-            // lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat, start: start, end: start + 1 });
-            // lineChildNodesWithNewFormat.push({ ...child, textContent: '', format: newInlineFormat });
           }
 
           // Önceki ya da sonraki eleman cursor değilse cursor ekliyoruz.
@@ -974,7 +838,6 @@ class Editor {
               }
 
               lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
-              // lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat, start: start, end: start + 1 });
 
               if (child.start === start) {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
@@ -987,7 +850,6 @@ class Editor {
 
               lineChildNodesWithNewFormat.push({ textContent: part1, format: child.format });
               lineChildNodesWithNewFormat.push({ textContent: part2, format: newInlineFormat });
-              // lineChildNodesWithNewFormat.push({ textContent: part2, format: newInlineFormat, start: start, end: start + 1 });
               lineChildNodesWithNewFormat.push({ textContent: part3, format: child.format });
             }
 
@@ -1037,31 +899,9 @@ class Editor {
 
         offsetLocation += child.length;
       });
-
-      // console.log(lineChildNodesWithNewFormat);
-      // debugger;
-
-      /* line.changeStatus = true;
-      line.children = lineChildNodesWithNewFormat;
-
-      const newBlockFormat = { ...line.format, ...blockFormat };
-      Object.entries(newBlockFormat).forEach(([key, value]) => {
-        if (value === false || !this.BLOCK_LEVEL_ELEMENT.has(key)) {
-          delete newBlockFormat[key];
-        }
-
-        // line.format sıralamada ilk geldiğinden ve block formatta ilk gelen key alındığındığından, blockFormat var ise ve içersinden aynı style yoksa line.formatın stylını geçersiz kılıyoruz.
-        if (Object.keys(blockFormat).length && line.format[key] != null && blockFormat[key] == null) {
-          delete newBlockFormat[key];
-        }
-      });
-      line.format = newBlockFormat; */
     });
 
     this.paper.initialize();
-    // console.log(...this.paper.lines);
-    // debugger;
-    // save history {action: 'format', caretIndex: [start, end], value: [oldFormat, newFormat] };
   }
 
   deleteContent (start, end, cleanLine = false) {
@@ -1069,17 +909,9 @@ class Editor {
     const linesInRange = this.paper.getLines(start, end);
 
     const exportedContent = this.paper.exportContent(start, end);
-    // const removedElement = [];
-    /* console.log(start, end);
-    console.log(preserveBlock); */
-    // console.log(linesInRange);
-    // debugger;
 
-    // debugger;
     const borderLines = linesInRange.filter((line) => {
       // start !== line.start bu koşul en baştaki line'nin sadece çocuklarının silinmesini sağlıyor. eğer bütün lineleri kkomple silersek normal akışa ters oluyor.
-      // console.log('line.start: ', line.start, 'start: ', start, 'line.end: ', line.end, 'end: ', end);
-      // if (line.start >= start && line.end <= end && (start !== line.start || clean)) {
       if ((line.start > start && line.end <= end) || (line.start >= start && line.end < end) || (line.start >= start && line.end <= end && cleanLine)) {
         const lineIndex = this.paper.lines.indexOf(line);
 
@@ -1105,14 +937,11 @@ class Editor {
 
     borderLines.forEach((line) => {
       const remainingChildren = [];
-      // let offsetLocation = 0;
-      // debugger;
       line.children.forEach((child) => {
-        // debugger;
         if (child.end <= start || child.start >= end) { // child komple  sınırın dışında kalırsa
           remainingChildren.push(child);
         } else if (child.start >= start && child.end <= end) { // child sınırın içinde komple kalırsa
-          // child.domNode.parentNode.removeChild(child.domNode);
+          // siliniyor
         } else if (child.start <= start && child.end >= end) { // sınır child'in içinden başlar ve biterse
           const remainingText1 = child.textContent.slice(0, start - child.start);
           remainingChildren.push({ textContent: remainingText1, format: child.format });
@@ -1121,86 +950,23 @@ class Editor {
             const remainingText2 = child.textContent.slice(end - child.end);
             remainingChildren.push({ textContent: remainingText2, format: child.format });
           }
-
-          // child.domNode.parentNode.removeChild(child.domNode);
         } else if (child.start <= start) { // sınır child'in içinden başlarsa
           if (Math.abs(start - child.start)) {
             const remainingText = child.textContent.slice(0, start - child.start);
             remainingChildren.push({ textContent: remainingText, format: child.format });
           }
-
-          // child.domNode.parentNode.removeChild(child.domNode);
         } else if (child.end >= end) { // sınır child'in içinde sonlanırsa
           if (Math.abs(end - child.end)) {
             const remainingText2 = child.textContent.slice(end - child.end);
             remainingChildren.push({ textContent: remainingText2, format: child.format });
           }
-
-          // child.domNode.parentNode.removeChild(child.domNode);
         }
-        /* let borderStart = start - (line.start + offsetLocation + child.length);
-        borderStart = (borderStart < 0) ? start - (line.start + offsetLocation) : false;
-
-        if (borderStart < 0) {
-          if (end <= line.start + offsetLocation) {
-            borderStart = false;
-          } else {
-            borderStart = 0;
-          }
-        }
-
-        let borderEnd = end - (line.start + offsetLocation + child.length);
-        borderEnd = (borderEnd < 0) ? end - (line.start + offsetLocation) : child.length;
-
-
-        if (borderStart === false) {
-          borderEnd = false;
-        }
-
-        if (borderStart === false && borderEnd === false) {
-          remainingChildren.push(child);
-        }
-
-        if (borderStart === 0) {
-          if (borderEnd === child.length) {
-            child.domNode.parentNode.removeChild(child.domNode);
-          } else {
-            const remainingText = child.textContent.slice(borderEnd);
-            remainingChildren.push({ textContent: remainingText, format: child.format });
-
-            child.domNode.parentNode.removeChild(child.domNode);
-          }
-        }
-
-        if (borderStart > 0) {
-          if (borderEnd === child.length) {
-            const remainingText = child.textContent.slice(0, borderStart);
-            remainingChildren.push({ textContent: remainingText, format: child.format });
-
-            child.domNode.parentNode.removeChild(child.domNode);
-          } else {
-            const remainingText1 = child.textContent.slice(0, borderStart);
-            const remainingText2 = child.textContent.slice(borderEnd);
-
-            remainingChildren.push({ textContent: remainingText1, format: child.format });
-            remainingChildren.push({ textContent: remainingText2, format: child.format });
-
-            child.domNode.parentNode.removeChild(child.domNode);
-          }
-        }
-
-        offsetLocation += child.length; */
       });
 
       line.children = remainingChildren;
       line.changeStatus = true;
     });
 
-    /* if (borderLines.length === 2) {
-      this.formatText(end, end, borderLines[0].format);
-
-      const endLine = this.paper.getLine(end);
-    } */
     if (borderLines.length === 2) {
       const secondBorderLine = borderLines[1];
 
@@ -1218,26 +984,10 @@ class Editor {
       borderLines[0].changeStatus = true;
     }
 
-    /* console.log(borderLines);
-    debugger; */
-
     // line aralarındaki boşlukları kesiyor. lineları birleştiriyor.
-    /* if (borderLines[0] != null) {
-      borderLines[0].children = remainingChildren;
-      borderLines[0].changeStatus = true;
-    } */
-
-    /* if (borderLines[1] != null) {
-      borderLines[1].domNode.parentNode.removeChild(borderLines[1].domNode);
-    } */
-
-    // debugger;
 
     this.paper.initialize();
     this.history.save({ action: 'delete', caret: [start, end], content: exportedContent });
-
-    // save history {action: 'delete', caretIndex: [start, end], value: [{object}] };
-    // object means line
   }
 
   status (content = '', expire = 6000) {
@@ -1381,11 +1131,11 @@ class Editor {
   contains (parent, descendant) {
     try {
       // Firefox inserts inaccessible nodes around video elements
-      descendant.parentNode;  
+      descendant.parentNode;
     } catch (e) {
       return false;
     }
-    
+
     return parent.contains(descendant);
   }
 }
