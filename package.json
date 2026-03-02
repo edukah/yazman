@@ -4,9 +4,12 @@
   "description": "✨ A modern, modular rich text editor (WYSIWYG) with comprehensive formatting options, undo/redo history, and extensible architecture. 📝 Supports inline, block, and embedded content with customizable toolbar and plugins. 🚀 Lightweight, powerful, and developer-friendly!",
   "type": "module",
   "main": "dist/yazman.min.js",
+  "files": [
+    "dist/",
+    "src/scss/"
+  ],
   "exports": {
     ".": "./dist/yazman.min.js",
-    "./js/*": "./src/js/*",
     "./scss/*": "./src/scss/*",
     "./dist/*": "./dist/*"
   },
