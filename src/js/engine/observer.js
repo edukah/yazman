@@ -97,14 +97,11 @@ class Observer {
       if (lastTopParentElem.__detail && lastTopParentElem.__detail.prev) {
         lastTopParentElem.__detail.prev.update();
         lastTopParentElem.__detail.prev.optimize();
-        lastTopParentElem.__detail.prev.domNode.normalize();
-        /* if(!elem.__detail.prev) {
-          console.log(elem);
-          console.log(elem.__detail);
-          console.log(elem.__detail.prev);
-        } */
-        // optimize içerisinde (preformatted) nextSibling silinince burada hata veriyor.
-        if (lastTopParentElem.__detail.prev) lastTopParentElem.__detail.prev.update();
+        // optimize içerisinde (preformatted) nextSibling silinince prev kaybolabiliyor.
+        if (lastTopParentElem.__detail.prev) {
+          lastTopParentElem.__detail.prev.domNode.normalize();
+          lastTopParentElem.__detail.prev.update();
+        }
       }
       //
     });

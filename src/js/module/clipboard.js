@@ -17,12 +17,14 @@ class Clipboard {
         this.editor.deleteContent(startIndex, endIndex, true); // preformatted
       }
 
+      let totalLength = 0;
       paragraphArray.reverse().forEach(t => {
-        this.editor.insertNode({ textContent: t, format: { paragraph: true } }, startIndex); // preformatted
-        // this.editor.insertNode({ textContent: t, format: { paragraph: true }, preventBlock: false }, startIndex);
+        this.editor.insertNode({ textContent: t, format: { paragraph: true } }, startIndex);
+        totalLength += t.length + 1; // +1 for line break
       });
 
-      this.editor.selection.setMemCaretPosition([startIndex, startIndex]);
+      const endPos = startIndex + totalLength;
+      this.editor.selection.setMemCaretPosition([endPos, endPos]);
 
       event.preventDefault();
     });
