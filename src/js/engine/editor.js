@@ -259,7 +259,7 @@ class Editor {
     this.root.focus({ preventScroll });
 
     // editorScrollTopTanımlı değilse focus durumunda carete gitmiyor carete gitmesi için scrollToptan sonra scrollIntoView koyduk.
-    this.root.scrollTop = this.variables.get('editorScrollTopPosition');
+    this.root.scrollTop = this.variables.get('editorScrollTopPosition') || 0;
     this.scrollIntoView();
 
     if (this.variables.has('caretPositionFocusOn')) {
@@ -1186,13 +1186,15 @@ class Editor {
       const endLine = this.paper.getLine(end);
     } */
     if (borderLines.length === 2) {
+      const secondBorderLine = borderLines[1];
+
       this.formatText(start + 1, start + 1, borderLines[0].format);
 
-      const newLine = this.paper.getLine(end);
-      newLine.domNode.parentNode.removeChild(newLine.domNode);
-      newLine.children.forEach(child => {
-        // instanceof embed te olabilir.
-        if (child.textContent && child.textContent.trim().length) {
+      if (secondBorderLine.domNode.parentNode) {
+        secondBorderLine.domNode.parentNode.removeChild(secondBorderLine.domNode);
+      }
+      secondBorderLine.children.forEach(child => {
+        if (child.textContent != null && child.textContent.trim().length) {
           borderLines[0].children.push(child);
         }
       });

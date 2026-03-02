@@ -42,6 +42,8 @@ class Paper {
 
         if (this.editor.BLOCK_LEVEL_ELEMENT.has(lineFormatKeys[0] || 'paragraph')) {
           DomClass = this.editor.BLOCK_LEVEL_ELEMENT.get(lineFormatKeys[0] || 'paragraph');
+        } else {
+          DomClass = this.editor.BLOCK_LEVEL_ELEMENT.get('paragraph');
         }
 
         const formatInstance = new DomClass(this.editor, line.format);
@@ -148,7 +150,7 @@ class Paper {
           textContent = '';
         }
 
-        if (line instanceof this.editor.registry.get('format/preformatted')) {
+        if (line instanceof this.editor.registry.get('format/preformatted') && textContent.endsWith('\n')) {
           textContent = textContent.slice(0, -1);
         }
 
@@ -242,13 +244,10 @@ class Paper {
     const lines = this.getLines(start, end);
 
     const children = [];
-    lines.forEach(line => line.children.find((child) => {
+    lines.forEach(line => line.children.forEach((child) => {
       if ((child.end > start) && (child.start < end)) {
         children.push(child);
       }
-      // Buraya bak
-      
-      return false;
     }));
 
     return children;
