@@ -8,11 +8,6 @@
     "dist/",
     "src/scss/"
   ],
-  "exports": {
-    ".": "./dist/yazman.min.js",
-    "./scss/*": "./src/scss/*",
-    "./dist/*": "./dist/*"
-  },
   "style": "dist/yazman.min.css",
   "sass": "src/scss/main.scss",
   "scripts": {
