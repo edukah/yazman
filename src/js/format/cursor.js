@@ -58,7 +58,7 @@ class Cursor extends Inline {
     console.log(this);
     console.log(caretEnd && this.domNode.__detail.end !== caretEnd); */
 
-    if (caretEnd && this.domNode.__detail.end !== caretEnd) {
+    if (caretEnd != null && this.domNode.__detail.end !== caretEnd) {
       if (caretEnd >= this.domNode.__detail.start) {
         this.editor.selection.setMemCaretPosition(caretPosition.map(value => value - 1));
       } else {

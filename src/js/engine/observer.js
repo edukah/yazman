@@ -152,7 +152,7 @@ class Observer {
             domNode.parentNode.removeChild(domNode);
           } else {
             while (domNode.childNodes.length) {
-              domNode.parentNode.appendChild(domNode.childNodes[0]);
+              domNode.parentNode.insertBefore(domNode.childNodes[0], domNode);
             }
 
             domNode.remove();

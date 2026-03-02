@@ -31,8 +31,8 @@ All edit operations use `[start, end]` character indices, not DOM nodes. `Paper.
 ```
 Parent (pattern/parent.js) — base interface for all formats
 ├── Block (pattern/block.js) — one element per line (p, h2, h3, pre, blockquote, li)
-│   ├── Container (pattern/container.js) — wraps blocks (ul, ol)
 │   └── BlockEmbed — non-text block (figure image)
+├── Container (pattern/container.js) — wraps blocks (ul, ol)
 ├── Inline (pattern/inline.js) — spans within a block (strong, em, a, sup, sub)
 │   └── InlineEmbed — non-text inline (img)
 └── Text (format/text.js) — wraps native TextNode
