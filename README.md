@@ -1,5 +1,9 @@
 # Yazman
 
+[![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub](https://img.shields.io/badge/View_on_GitHub-blue?logo=github)](https://github.com/edukah/yazman)
+[![Live Demo](https://img.shields.io/badge/Demo-View%20Live-orange?logo=google-chrome)](https://edukah.github.io/yazman/)
+
 A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.
 
 ## Features
