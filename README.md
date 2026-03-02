@@ -194,12 +194,12 @@ editor.deleteContent(5, 15);
 
 ### Content Import/Export
 
-#### `editor.paper.exportContent(start?, end?)`
+#### `editor.getContent(start?, end?)`
 
 Export editor content as a structured array. Each element represents a line with its format and children.
 
 ```javascript
-const content = editor.paper.exportContent();
+const content = editor.getContent();
 // Returns:
 // [
 //   {
@@ -213,15 +213,15 @@ const content = editor.paper.exportContent();
 // ]
 
 // Export a specific range
-const partial = editor.paper.exportContent(0, 50);
+const partial = editor.getContent(0, 50);
 ```
 
-#### `editor.paper.importContent(contentArray)`
+#### `editor.setContent(contentArray)`
 
-Import content from a structured array (same format as `exportContent`).
+Import content from a structured array (same format as `getContent`).
 
 ```javascript
-editor.paper.importContent([
+editor.setContent([
   {
     format: { paragraph: true },
     children: [
@@ -229,6 +229,22 @@ editor.paper.importContent([
     ]
   }
 ]);
+```
+
+#### `editor.getText()`
+
+Get the plain text content of the editor (no formatting).
+
+```javascript
+const text = editor.getText();
+```
+
+#### `editor.getLength()`
+
+Get the total character length of the editor content.
+
+```javascript
+const length = editor.getLength();
 ```
 
 ### Querying Content
@@ -279,14 +295,6 @@ Get all inline nodes in a range.
 
 ```javascript
 const nodes = editor.paper.getNodes(0, 50);
-```
-
-#### `editor.paper.getLength()`
-
-Get the total character length of the editor content.
-
-```javascript
-const length = editor.paper.getLength();
 ```
 
 ### Selection / Caret
@@ -391,6 +399,34 @@ Scroll the editor viewport so the current caret position is visible.
 
 ```javascript
 editor.scrollIntoView();
+```
+
+### Enable / Disable
+
+#### `editor.enable()`
+
+Enable editing (set `contenteditable` to true).
+
+```javascript
+editor.enable();
+```
+
+#### `editor.disable()`
+
+Disable editing (set `contenteditable` to false). The editor becomes read-only.
+
+```javascript
+editor.disable();
+```
+
+### Lifecycle
+
+#### `editor.destroy()`
+
+Destroy the editor instance. Disconnects the MutationObserver, removes all event listeners, clears timers (autosave, history), and removes the editor DOM from the container.
+
+```javascript
+editor.destroy();
 ```
 
 ### UI

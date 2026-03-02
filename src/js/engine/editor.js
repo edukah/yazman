@@ -1260,6 +1260,51 @@ class Editor {
     console.log(messages.join(''), ...styles);
   }
 
+  getContent (start, end) {
+    return this.paper.exportContent(start, end);
+  }
+
+  setContent (contentArray) {
+    this.paper.importContent(contentArray);
+  }
+
+  getText () {
+    return this.root.textContent;
+  }
+
+  getLength () {
+    return this.paper.getLength();
+  }
+
+  enable () {
+    this.root.setAttribute('contenteditable', 'true');
+  }
+
+  disable () {
+    this.root.setAttribute('contenteditable', 'false');
+  }
+
+  destroy () {
+    this.observer.disconnect();
+    this.event.destroy();
+
+    if (this.variables.get('autosaveTimeoutID')) {
+      globalThis.clearTimeout(this.variables.get('autosaveTimeoutID'));
+    }
+
+    if (this.variables.get('historyTimeoutID')) {
+      globalThis.clearTimeout(this.variables.get('historyTimeoutID'));
+    }
+
+    this.variables.clear();
+
+    this.container.removeChild(this.toolbar.container);
+    this.container.removeChild(this.root);
+    this.container.classList.remove('yazman-container');
+    delete this.container.__yazman;
+    delete this.container.wysiwyg;
+  }
+
   contains (parent, descendant) {
     try {
       // Firefox inserts inaccessible nodes around video elements

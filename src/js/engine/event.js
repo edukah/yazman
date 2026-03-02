@@ -26,31 +26,44 @@ class Event {
   constructor (editor) {
     this.editor = editor;
     this.eventForTrigger = new Map();
+    this._listeners = [];
 
-    document.addEventListener('selectionchange', (event) => {
+    this._selectionChangeHandler = (event) => {
       if (!this.editor.root.contains(event.target.activeElement)) {
         return;
       }
 
       this.selectionChange(event);
-    });
+    };
+    document.addEventListener('selectionchange', this._selectionChangeHandler);
 
     // For unique we use new Set();
     // const allEvent = [...new Set([...SELECTION_CHANGE_EVENT, ...TEXT_CHANGE_EVENT])];
     SELECTION_CHANGE_EVENT.forEach((eventName) => {
-      this.editor.root.addEventListener(eventName, (event) => {
-        this.selectionChange(event);
-      });
+      const handler = (event) => this.selectionChange(event);
+      this.editor.root.addEventListener(eventName, handler);
+      this._listeners.push({ target: this.editor.root, type: eventName, handler });
     });
 
     TEXT_CHANGE_EVENT.forEach((value) => {
-      this.editor.root.addEventListener(value, (event) => this.textChange(event));
+      const handler = (event) => this.textChange(event);
+      this.editor.root.addEventListener(value, handler);
+      this._listeners.push({ target: this.editor.root, type: value, handler });
     });
 
-    this.editor.root.addEventListener('scroll', () => {
+    this._scrollHandler = () => {
       this.editor.variables.set('editorScrollTopPosition', this.editor.root.scrollTop);
       this.editor.variables.set('editorScrollLeftPosition', this.editor.root.scrollLeft);
-    });
+    };
+    this.editor.root.addEventListener('scroll', this._scrollHandler);
+    this._listeners.push({ target: this.editor.root, type: 'scroll', handler: this._scrollHandler });
+  }
+
+  destroy () {
+    document.removeEventListener('selectionchange', this._selectionChangeHandler);
+    this._listeners.forEach(({ target, type, handler }) => target.removeEventListener(type, handler));
+    this._listeners = [];
+    this.eventForTrigger.clear();
   }
 
   textChange (event) {
