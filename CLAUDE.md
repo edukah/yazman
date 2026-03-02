@@ -79,7 +79,7 @@ Formats are classified into `CONTAINER_LEVEL_ELEMENT`, `BLOCK_LEVEL_ELEMENT`, `I
 
 - `src/scss/main.scss` — all editor styles (~450 lines)
 - `src/scss/_variables.scss` — CSS custom properties, theme colors, breakpoint (667px)
-- BEM-ish naming: `.yazman-container`, `.yazman`, `.yazman__toolbar`
+- BEM-ish naming: `.yazman-container`, `.yazman`, `.yazman-toolbar`
 - Dark mode via `.dark-mode` class
 - Placeholder text via `data-yazman-placeholder` attribute + CSS `::before`
 

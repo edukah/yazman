@@ -2,7 +2,6 @@
 
 .yazman-container {
   position: relative;
-  scroll-behavior: smooth;
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -23,6 +22,7 @@
     max-height: 20vh; */
   overflow: hidden;
   overflow-y: auto;
+  scroll-behavior: smooth;
   white-space: pre-wrap;
   word-wrap: break-word;
   word-break: break-word;
