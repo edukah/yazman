@@ -38,6 +38,7 @@ class Editor {
     this.container.__yazman = this;
     this.container.wysiwyg = this;
     this.onError = typeof config.onError === 'function' ? config.onError : null;
+    this._events = new Map();
 
     this.root = document.createElement('div');
     this.root.className = 'yazman';
@@ -115,6 +116,16 @@ class Editor {
 
     this.observer.complete();
     this.history.save();
+
+    this._pluginInstances = [];
+    Editor._plugins.forEach(({ name, fn }) => {
+      try {
+        const instance = fn(this);
+        this._pluginInstances.push({ name, instance });
+      } catch (error) {
+        this.handleError(error, { module: 'plugin', operation: 'init', pluginName: name });
+      }
+    });
   }
 
   set isSaved (value) {
@@ -125,12 +136,18 @@ class Editor {
     return this.autosave.saved;
   }
 
+  static _plugins = [];
+
   static register (key, value) {
     RegistryInstance.set(key, value);
   }
 
   static addFormatSet (formatSet) {
     formatSets.push(formatSet);
+  }
+
+  static plugin (name, fn) {
+    Editor._plugins.push({ name, fn });
   }
 
   update () {
@@ -1284,6 +1301,17 @@ class Editor {
   }
 
   destroy () {
+    this._pluginInstances.forEach(({ name, instance }) => {
+      try {
+        if (instance && typeof instance.destroy === 'function') {
+          instance.destroy();
+        }
+      } catch (error) {
+        this.handleError(error, { module: 'plugin', operation: 'destroy', pluginName: name });
+      }
+    });
+    this._pluginInstances = [];
+
     this.observer.disconnect();
     this.event.destroy();
 
@@ -1296,12 +1324,46 @@ class Editor {
     }
 
     this.variables.clear();
+    this._events.clear();
 
     this.container.removeChild(this.toolbar.container);
     this.container.removeChild(this.root);
     this.container.classList.remove('yazman-container');
     delete this.container.__yazman;
     delete this.container.wysiwyg;
+  }
+
+  on (event, handler) {
+    if (!this._events.has(event)) {
+      this._events.set(event, []);
+    }
+    this._events.get(event).push(handler);
+
+    return this;
+  }
+
+  off (event, handler) {
+    if (!this._events.has(event)) return this;
+
+    if (handler) {
+      this._events.set(event, this._events.get(event).filter(h => h !== handler));
+    } else {
+      this._events.delete(event);
+    }
+
+    return this;
+  }
+
+  emit (event, ...args) {
+    if (!this._events.has(event)) return;
+
+    this._events.get(event).forEach(handler => {
+      try {
+        handler(...args);
+      } catch (error) {
+        this.handleError(error, { module: 'emitter', operation: event });
+      }
+    });
   }
 
   handleError (error, context = {}) {

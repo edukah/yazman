@@ -111,7 +111,19 @@ editor.focus();                        // Focus the editor
 - **Public API methods** (`format`, `formatLine`, `formatText`, `insertNode`, `deleteContent`, `update`, `setContent`, `getContent`) are wrapped via prototype-level error boundaries
 - **Observer callback** wrapped with try-catch — catches DOM mutation errors from user interaction
 - **Toolbar** routes unregistered format errors through `handleError`
-- **Context object**: `{ module: 'editor'|'observer'|'toolbar', operation: string }`
+- **Context object**: `{ module: 'editor'|'observer'|'toolbar'|'emitter'|'plugin', operation: string }`
+
+## Event Emitter
+
+- `editor.on(event, handler)` / `editor.off(event, handler)` / `editor.emit(event, ...args)`
+- Built-in events: `text-change`, `selection-change` (`{ start, end }`), `focus`, `blur`
+- Handler errors caught by `handleError` — buggy handlers don't crash the editor
+
+## Plugin API
+
+- `Yazman.plugin(name, fn)` — register before instantiation, `fn(editor)` called in constructor
+- Plugin may return `{ destroy() }` — called automatically in `editor.destroy()`
+- Plugin init errors caught by `handleError`
 
 ## Conventions
 

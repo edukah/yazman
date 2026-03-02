@@ -78,6 +78,7 @@ class Event {
 
     // this.editor.observer.complete();
     this.editor.update();
+    this.editor.emit('text-change');
     /* if (event.type === 'input' || event.type === 'paste') {
       this.editor.history.save();
       this.editor.autosave.save();
@@ -122,6 +123,10 @@ class Event {
 
     // this.editor.observer.complete();
     this.editor.update();
+
+    this.editor.emit('selection-change', { start: startIndex, end: endIndex });
+    if (event.type === 'focus') this.editor.emit('focus');
+    if (event.type === 'blur') this.editor.emit('blur');
 
     // this.update();
     // console.log('memCaretPos:', this.editor.selection.getMemCaretPosition());

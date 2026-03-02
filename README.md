@@ -458,7 +458,7 @@ editor.disable();
 
 #### `editor.destroy()`
 
-Destroy the editor instance. Disconnects the MutationObserver, removes all event listeners, clears timers (autosave, history), and removes the editor DOM from the container.
+Destroy the editor instance. Disconnects the MutationObserver, removes all event listeners, destroys plugins, clears timers (autosave, history), and removes the editor DOM from the container.
 
 ```javascript
 editor.destroy();
@@ -499,6 +499,44 @@ Close the currently open modal.
 editor.dialog.closeModal();
 ```
 
+### Events
+
+#### `editor.on(event, handler)`
+
+Listen to editor events. Returns the editor instance for chaining.
+
+```javascript
+editor.on('text-change', () => {
+  console.log('Content changed');
+});
+
+editor.on('selection-change', ({ start, end }) => {
+  console.log('Caret position:', start, end);
+});
+
+editor.on('focus', () => console.log('Editor focused'));
+editor.on('blur', () => console.log('Editor blurred'));
+```
+
+**Available events:**
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `text-change` | — | Content was modified (typing, paste, etc.) |
+| `selection-change` | `{ start, end }` | Caret position or selection range changed |
+| `focus` | — | Editor received focus |
+| `blur` | — | Editor lost focus |
+
+#### `editor.off(event, handler?)`
+
+Remove an event listener. If no handler is provided, removes all listeners for that event.
+
+```javascript
+const onChange = () => console.log('changed');
+editor.on('text-change', onChange);
+editor.off('text-change', onChange);
+```
+
 ### Static Methods
 
 #### `Yazman.register(key, FormatClass)`
@@ -516,6 +554,29 @@ Register a format set (group of mutually exclusive formats).
 ```javascript
 Yazman.addFormatSet(['headerTwo', 'headerThree', 'preformatted', 'blockquote']);
 ```
+
+#### `Yazman.plugin(name, fn)`
+
+Register a plugin. The function receives the editor instance and may return an object with a `destroy()` method for cleanup.
+
+```javascript
+Yazman.plugin('word-count', (editor) => {
+  const counter = document.createElement('span');
+
+  editor.on('text-change', () => {
+    counter.textContent = editor.getLength() + ' chars';
+    editor.status(counter, 10000);
+  });
+
+  return {
+    destroy () {
+      editor.off('text-change');
+    }
+  };
+});
+```
+
+Plugins are initialized automatically when a new editor instance is created. If a plugin throws during init, it's caught by `handleError` and doesn't prevent the editor from working.
 
 #### `Yazman.help()`
 
