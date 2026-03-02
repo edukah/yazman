@@ -21,9 +21,7 @@ class Editor {
     if (!globalThis.__yazman) globalThis.__yazman = {};
 
     if (!(container instanceof globalThis.Element)) {
-      console.warn('Please provide valid selector for Editor.');
-      
-      return;
+      throw new Error('Yazman: "container" parameter must be a valid DOM element.');
     }
 
     if (exampleContent) {
@@ -39,6 +37,7 @@ class Editor {
     this.container.innerHTML = '';
     this.container.__yazman = this;
     this.container.wysiwyg = this;
+    this.onError = typeof config.onError === 'function' ? config.onError : null;
 
     this.root = document.createElement('div');
     this.root.className = 'yazman';
@@ -1305,6 +1304,18 @@ class Editor {
     delete this.container.wysiwyg;
   }
 
+  handleError (error, context = {}) {
+    if (typeof this.onError === 'function') {
+      try {
+        this.onError(error, context);
+      } catch (callbackError) {
+        console.error('Yazman: onError callback threw an error.', callbackError);
+      }
+    } else {
+      console.error('Yazman:', error.message || error, context);
+    }
+  }
+
   contains (parent, descendant) {
     try {
       // Firefox inserts inaccessible nodes around video elements
@@ -1316,5 +1327,17 @@ class Editor {
     return parent.contains(descendant);
   }
 }
+
+// Error boundary wrapper for public API methods
+['format', 'formatLine', 'formatText', 'insertNode', 'deleteContent', 'update', 'setContent', 'getContent'].forEach(method => {
+  const original = Editor.prototype[method];
+  Editor.prototype[method] = function (...args) {
+    try {
+      return original.apply(this, args);
+    } catch (error) {
+      this.handleError(error, { module: 'editor', operation: method });
+    }
+  };
+});
 
 export default Editor;

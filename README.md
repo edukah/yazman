@@ -64,6 +64,37 @@ const editor = new Yazman(container, options);
 | `history` | `Object` | See below | Undo/redo settings |
 | `autosave` | `Object` | See below | Auto-save settings |
 | `ImageUploader` | `Class` | `null` | Custom image uploader class for figure images |
+| `onError` | `Function` | `null` | Error callback: `(error, context) => {}` |
+
+### Error Handling
+
+Yazman provides a centralized error handling mechanism via the `onError` callback. All recoverable errors in public API methods (`format`, `insertNode`, `deleteContent`, etc.) and the internal MutationObserver are routed through this callback.
+
+```javascript
+const editor = new Yazman(document.getElementById('editor'), {
+  placeholder: 'Start typing...',
+  onError: (error, context) => {
+    // context: { module, operation, ... }
+    console.log(error.message, context);
+  }
+});
+```
+
+If `onError` is not provided, errors are logged to `console.error` by default. If the callback itself throws, the editor remains stable.
+
+**Error context structure:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `module` | `string` | Source module (`'editor'`, `'observer'`, `'toolbar'`) |
+| `operation` | `string` | Operation that failed (`'format'`, `'insertNode'`, `'callback'`, etc.) |
+
+**Unrecoverable errors** (invalid constructor arguments) throw immediately:
+
+```javascript
+// Throws: 'Yazman: "container" parameter must be a valid DOM element.'
+new Yazman(null);
+```
 
 ### Toolbar
 

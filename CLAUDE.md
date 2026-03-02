@@ -91,7 +91,8 @@ const editor = new Yazman(containerElement, {
   toolbar: { /* button config */ },
   history: { counterTiming: 2000, saveCoefficient: 6 },
   autosave: { enable: true, counterTiming: 5000, adaptor: fn, preventUnload: true },
-  ImageUploader: CustomUploaderClass
+  ImageUploader: CustomUploaderClass,
+  onError: (error, context) => { /* { module, operation } */ }
 });
 
 editor.format(start, end, formatObj);  // Apply formatting
@@ -101,6 +102,16 @@ editor.update();                       // Regenerate Paper + update UI
 editor.isEmpty();                      // Check if editor has content
 editor.focus();                        // Focus the editor
 ```
+
+## Error Handling
+
+- **Centralized `handleError(error, context)`** method on Editor — same pattern as Kaysa/Minyatur
+- **`onError` config callback** — consumer-provided, wrapped in try-catch to prevent callback errors from crashing the editor
+- **Constructor throws** on invalid container (unrecoverable)
+- **Public API methods** (`format`, `formatLine`, `formatText`, `insertNode`, `deleteContent`, `update`, `setContent`, `getContent`) are wrapped via prototype-level error boundaries
+- **Observer callback** wrapped with try-catch — catches DOM mutation errors from user interaction
+- **Toolbar** routes unregistered format errors through `handleError`
+- **Context object**: `{ module: 'editor'|'observer'|'toolbar', operation: string }`
 
 ## Conventions
 

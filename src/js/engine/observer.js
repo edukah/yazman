@@ -223,4 +223,14 @@ class Observer {
 
 Observer.config = { attributes: true, attributeOldValue: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true };
 
+// Error boundary for MutationObserver callback
+const _observerCallback = Observer.prototype.callback;
+Observer.prototype.callback = function (...args) {
+  try {
+    return _observerCallback.apply(this, args);
+  } catch (error) {
+    this.editor.handleError(error, { module: 'observer', operation: 'callback' });
+  }
+};
+
 export default Observer;

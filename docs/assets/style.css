@@ -49,14 +49,16 @@ h1 {
   margin-bottom: 10px;
 }
 
-p {
+.content-header p,
+.feature-card p,
+footer p {
   color: var(--text-color);
   max-width: 600px;
   margin: 0 auto 2rem;
   text-align: center;
 }
 
-code {
+.content > code {
   background: var(--card-bg);
   border: 1px solid var(--shadow-color);
   border-radius: 4px;
@@ -109,7 +111,7 @@ footer p {
   margin-bottom: 0.5rem;
 }
 
-.content p {
+.content > p {
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
