@@ -86,8 +86,8 @@ If `onError` is not provided, errors are logged to `console.error` by default. I
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `module` | `string` | Source module (`'editor'`, `'observer'`, `'toolbar'`) |
-| `operation` | `string` | Operation that failed (`'format'`, `'insertNode'`, `'callback'`, etc.) |
+| `module` | `string` | Source module (`'editor'`, `'observer'`, `'toolbar'`, `'emitter'`, `'plugin'`) |
+| `operation` | `string` | Operation that failed (`'format'`, `'insertNode'`, `'init'`, `'callback'`, etc.) |
 
 **Unrecoverable errors** (invalid constructor arguments) throw immediately:
 
