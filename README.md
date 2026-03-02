@@ -1,4 +1,4 @@
-# Yazman
+# ✏️ Yazman
 
 [![MIT License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub](https://img.shields.io/badge/View_on_GitHub-blue?logo=github)](https://github.com/edukah/yazman)
@@ -6,7 +6,7 @@
 
 A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.
 
-## Features
+## ✨ Features
 
 - **Block formats**: paragraph, headings (H2, H3), preformatted code, blockquote, ordered/unordered lists
 - **Inline formats**: bold, italic, subscript, superscript, hyperlinks
@@ -18,7 +18,7 @@ A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Z
 - **Dark mode**: toggle via `.dark-mode` CSS class
 - **i18n ready**: Turkish included by default
 
-## Installation
+## 📦 Installation
 
 ### CDN / Script Tag
 
@@ -49,7 +49,7 @@ import Yazman from 'yazman';
 </script>
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 ```javascript
 const editor = new Yazman(container, options);
@@ -132,7 +132,7 @@ autosave: {
 | `editor.autosave.setBlock(false)` | Resume auto-save |
 | `editor.autosave.setGlobalUnLoad(false)` | Disable page unload warning |
 
-## API
+## 🔧 API
 
 ### Content Operations
 
@@ -494,7 +494,7 @@ Display an interactive configuration guide in the browser console.
 Yazman.help();
 ```
 
-## Custom Formats
+## 🧩 Custom Formats
 
 To create a custom inline format:
 
@@ -541,6 +541,6 @@ npm run build     # Production build -> dist/
 npm run release   # Build + copy to docs/assets/
 ```
 
-## License
+## 📜 License
 
 [MIT](LICENSE)
