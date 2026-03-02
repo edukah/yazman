@@ -106,7 +106,11 @@ class Toolbar {
       const activeNode = this.editor.paper.getActiveNode();
       const line = this.editor.paper.getLine(caretPos[0]);
 
-      rangeFormat = { ...line.format, ...activeNode.__detail.format };
+      if (line && activeNode && activeNode.__detail) {
+        rangeFormat = { ...line.format, ...activeNode.__detail.format };
+      } else {
+        rangeFormat = this.editor.paper.getFormat(...caretPos);
+      }
     } else {
       rangeFormat = this.editor.paper.getFormat(...caretPos);
     }

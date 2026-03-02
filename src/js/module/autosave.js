@@ -56,11 +56,13 @@ class Autosave {
   }
 
   setBlock (value = false) {
-    this.editor.registry.set('autosaveIsBlocked', Boolean(value));
+    this.editor.variables.set('autosaveIsBlocked', Boolean(value));
   }
 
   save () {
-    let autosaveCounter = this.editor.registry.get('autosaveCounter') || 0;
+    if (this.editor.variables.get('autosaveIsBlocked')) return;
+
+    let autosaveCounter = this.editor.variables.get('autosaveCounter') || 0;
     this.saved = false;
 
     // belirli sayıda değişiklik sonrası kaydet.
@@ -68,27 +70,27 @@ class Autosave {
       this.adaptor();
 
       this.saved = true;
-      this.editor.registry.set('autosaveCounter', 0);
+      this.editor.variables.set('autosaveCounter', 0);
 
-      if (this.editor.registry.get('autosaveTimeoutID')) {
-        globalThis.clearTimeout(this.editor.registry.get('autosaveTimeoutID'));
-        this.editor.registry.delete('autosaveTimeoutID');
+      if (this.editor.variables.get('autosaveTimeoutID')) {
+        globalThis.clearTimeout(this.editor.variables.get('autosaveTimeoutID'));
+        this.editor.variables.delete('autosaveTimeoutID');
       }
     } else {
-      this.editor.registry.set('autosaveCounter', ++autosaveCounter);
+      this.editor.variables.set('autosaveCounter', ++autosaveCounter);
     }
 
     // değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
-    if (!this.editor.registry.has('autosaveTimeoutID')) {
+    if (!this.editor.variables.has('autosaveTimeoutID')) {
       const autosaveTimeoutID = globalThis.setTimeout(() => {
         this.adaptor();
 
         this.saved = true;
-        this.editor.registry.set('autosaveCounter', 0);
-        this.editor.registry.delete('autosaveTimeoutID');
+        this.editor.variables.set('autosaveCounter', 0);
+        this.editor.variables.delete('autosaveTimeoutID');
       }, this.counterTiming);
 
-      this.editor.registry.set('autosaveTimeoutID', autosaveTimeoutID);
+      this.editor.variables.set('autosaveTimeoutID', autosaveTimeoutID);
     }
   }
 }

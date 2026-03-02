@@ -26,43 +26,43 @@ class History {
 
   save () {
     // daha önce hiç sayaç çalışıtırılmamış ise aktif içerik boş olucaktır. önce bunu doldur.
-    if (!this.editor.registry.has('historyCounter')) {
+    if (!this.editor.variables.has('historyCounter')) {
       this.data.active = { content: this.editor.paper.exportContent(), caretPos: this.editor.selection.getCaretPosition() };
     }
 
-    let historyCounter = this.editor.registry.get('historyCounter') || 0;
+    let historyCounter = this.editor.variables.get('historyCounter') || 0;
 
     // belirli sayıda değişiklik sonrası kaydet.
     if (historyCounter > this.saveCoefficient) {
       this.record();
     } else {
-      this.editor.registry.set('historyCounter', ++historyCounter);
+      this.editor.variables.set('historyCounter', ++historyCounter);
     }
 
     // değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
-    if (this.editor.registry.get('historyTimeoutID')) {
-      globalThis.clearTimeout(this.editor.registry.get('historyTimeoutID'));
+    if (this.editor.variables.get('historyTimeoutID')) {
+      globalThis.clearTimeout(this.editor.variables.get('historyTimeoutID'));
     }
 
     const historyTimeoutID = globalThis.setTimeout(() => {
       this.record();
     }, this.counterTiming);
 
-    this.editor.registry.set('historyTimeoutID', historyTimeoutID);
+    this.editor.variables.set('historyTimeoutID', historyTimeoutID);
   }
 
   record () {
-    if (this.editor.registry.get('historyCounter') === 0) {
+    if (this.editor.variables.get('historyCounter') === 0) {
       return;
     }
 
     this.data.reverse.push(this.data.active);
     this.data.active = { content: this.editor.paper.exportContent(), caretPos: this.editor.selection.getCaretPosition() };
 
-    this.editor.registry.set('historyCounter', 0);
+    this.editor.variables.set('historyCounter', 0);
 
-    if (this.editor.registry.get('historyTimeoutID')) {
-      globalThis.clearTimeout(this.editor.registry.get('historyTimeoutID'));
+    if (this.editor.variables.get('historyTimeoutID')) {
+      globalThis.clearTimeout(this.editor.variables.get('historyTimeoutID'));
     }
   }
 
