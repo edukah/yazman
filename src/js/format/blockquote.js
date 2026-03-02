@@ -10,7 +10,7 @@ class Blockquote extends Block {
     if (!lines.length) return;
 
     if (lines[0] instanceof Blockquote) {
-      if (lines[0].length <= 2 && !lines[0].domNode.textContent.trim(Cursor.content).length) {
+      if (lines[0].length <= 2 && !lines[0].domNode.textContent.replace(Cursor.content, '').trim().length) {
         const caretPos = [lines[0].start, lines[0].start];
 
         editor.insertNode({ format: { paragraph: true } }, lines[0].end);

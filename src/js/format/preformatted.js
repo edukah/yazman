@@ -21,7 +21,7 @@ class Preformatted extends Block {
         this.domNode.removeChild(this.domNode.childNodes[0]);
       }
 
-      const textInstance = new this.editor.TEXT_NODE(this.editor, { text: textContent.trim('\n') + '\n' });
+      const textInstance = new this.editor.TEXT_NODE(this.editor, { text: textContent.replace(/^\n+|\n+$/g, '') + '\n' });
       this.domNode.appendChild(textInstance.domNode);
       this.update();
 

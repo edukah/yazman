@@ -55,7 +55,7 @@ class Text {
 
   get parent () {
     // editor.js içinde deleteNode ve insertNode içerisinde kullanılıyor.
-    return (this.domNode.parentNode.__detail) ? this.domNode.parentNode.__detail : null;
+    return (this.domNode.parentNode && this.domNode.parentNode.__detail) ? this.domNode.parentNode.__detail : null;
   }
 
   get line () {

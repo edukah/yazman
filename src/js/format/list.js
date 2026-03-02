@@ -10,7 +10,7 @@ class OrderedList extends Container {
     // taşıyıcı element (ul) içinde li ve p ler karışık var ise onları dışarı taşıyor.
     const nextSibling = this.domNode.nextSibling;
     Array.from(this.domNode.childNodes).reduce((data, child) => {
-      if (!OrderedList.allowedChildren.some(value => child.__detail instanceof value)) {
+      if (!child.__detail || !OrderedList.allowedChildren.some(value => child.__detail instanceof value)) {
         this.domNode.parentNode.insertBefore(child, nextSibling);
         data.lastChildNotList = true;
       } else if (data.lastChildNotList) {
@@ -62,7 +62,7 @@ class UnorderedList extends Container {
     // taşıyıcı element (ul) içinde li ve p ler karışık var ise onları dışarı taşıyor.
     const nextSibling = this.domNode.nextSibling;
     Array.from(this.domNode.childNodes).reduce((data, child) => {
-      if (!UnorderedList.allowedChildren.some(value => child.__detail instanceof value)) {
+      if (!child.__detail || !UnorderedList.allowedChildren.some(value => child.__detail instanceof value)) {
         this.domNode.parentNode.insertBefore(child, nextSibling);
         data.lastChildNotList = true;
       } else if (data.lastChildNotList) {

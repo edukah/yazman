@@ -12,7 +12,7 @@ class Hyperlink extends Inline {
   }
 
   optimize () {
-    const caretRange = this.editor.selection.getCaretPosition();
+    const caretRange = this.editor.selection.getMemCaretPosition();
     // console.log('optimieze');
     // console.trace(caretRange);
 
@@ -52,7 +52,7 @@ class Hyperlink extends Inline {
   }
 
   static urlValidate (url) {
-    const regex = new RegExp(`^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}\\.?`);
+    const regex = new RegExp(`^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,5}\\.?$`);
     if (!regex.test(url)) {
       return false;
     }
