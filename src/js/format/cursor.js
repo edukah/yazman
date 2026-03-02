@@ -102,12 +102,12 @@ class Cursor extends Inline {
 
       editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(value => value - node.length));
 
-      let rootParent = node.domNode;
-      while (rootParent.parentNode.textContent.length < 2) {
-        rootParent = rootParent.parentNode;
+      let rootParent = node;
+      while (rootParent.parent && rootParent.parent.textContent.length < 2 && rootParent.parent instanceof editor.registry.get('pattern/inline')) {
+        rootParent = rootParent.parent;
       }
 
-      rootParent.parentNode.removeChild(rootParent);
+      rootParent.domNode.parentNode.removeChild(rootParent.domNode);
     }
   }
 }
