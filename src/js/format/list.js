@@ -106,7 +106,7 @@ UnorderedList.tagName = 'UL';
 UnorderedList.formatName = 'unorderedList';
 
 class ListItem extends Block {
-  constructor (editor, { listItem = null, domNode = null }) {
+  constructor (editor, { listItem = null, domNode = null } = {}) {
     super(editor, { tagName: ListItem.tagName, domNode });
 
     if (!listItem && domNode != null) {

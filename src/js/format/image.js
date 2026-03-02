@@ -1,7 +1,7 @@
 import { InlineEmbed } from '../pattern/inline.js';
 
 class Image extends InlineEmbed {
-  constructor (editor, { image = '#src_must_send', domNode = null }) {
+  constructor (editor, { image = '#src_must_send', domNode = null } = {}) {
     super(editor, { tagName: Image.tagName, domNode });
 
     this.domNode.setAttribute('src', image);

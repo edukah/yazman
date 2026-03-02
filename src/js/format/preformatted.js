@@ -306,8 +306,8 @@ class Preformatted extends Block {
   }
 
   static tabKeyHandler (event, editor, { lines, startIndex, endIndex }) {
-    // console.log(startIndex);
-    // console.log(endIndex);
+    if (!lines.length || !(lines[0] instanceof Preformatted)) return;
+
     /*  Seçili Text varsa sil */
     if (startIndex !== endIndex) {
       editor.deleteContent(startIndex, endIndex);

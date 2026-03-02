@@ -1,7 +1,7 @@
 import Inline from '../pattern/inline.js';
 
 class Hyperlink extends Inline {
-  constructor (editor, { hyperlink = '#location_must_send', domNode = null }) {
+  constructor (editor, { hyperlink = '#location_must_send', domNode = null } = {}) {
     super(editor, { tagName: Hyperlink.tagName, domNode });
 
     if (domNode != null) {
