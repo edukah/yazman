@@ -1,67 +1,45 @@
-/* COLORS */
-/** Theme Colors **/
-$color-primary-base: rgba(10, 150, 183, 1);
-
-$color-secondary-base: rgba(254, 163, 96, 1);
-/** End of Theme Colors **/
-
-/** Grey Scale **/
-$color-grey-zero: rgba(255, 255, 255, 1);
-$color-grey-100: rgba(245, 245, 245, 1);
-$color-grey-200: rgba(235, 235, 235, 1);
-$color-grey-400: rgba(204, 204, 204, 1);
-$color-grey-700: rgba(90, 90, 90, 1);
-/** End of Grey Scale **/
-
-/** Text Colors **/
-$color-text-dark-1: rgba(23, 23, 23, 1);
-$color-text-dark-2: rgba(80, 80, 80, 1);
-$color-text-dark-3: rgba(132, 132, 132, 1);
-$color-text-light-1: rgba(235, 231, 222, 1);
-$color-text-light-3: rgba(165, 158, 165, 1);
-/** End of Text Colors **/
-
-/** Other Variables **/
-$toolbar-active-button-lt: rgba(47, 96, 229, 1);
-$toolbar-active-button-dt: rgba(125, 155, 238, 1);
-/** End of Other Variables **/
-
 $breakpoint-md: 667px;
 
-:root {
-  --color-primary-base: #{$color-primary-base};
-  --color-secondary-base: #{$color-secondary-base};
+.yazman-container,
+.yazman {
+	// Base colors (Sadrazam-compatible naming)
+	--color-black--f: rgba(0, 0, 0, 1);
+	--color-primary-base: rgba(10, 150, 183, 1);
+	--color-secondary-base: rgba(254, 163, 96, 1);
 
-  --color-grey-zero: #{$color-grey-zero};
-  --color-grey-100: #{$color-grey-100};
-  --color-grey-200: #{$color-grey-200};
-  --color-grey-400: #{$color-grey-400};
-  --color-grey-700--f: #{$color-grey-700};
+	--color-grey-zero: rgba(255, 255, 255, 1);
+	--color-grey-100: rgba(245, 245, 245, 1);
+	--color-grey-200: rgba(235, 235, 235, 1);
+	--color-grey-400: rgba(204, 204, 204, 1);
+	--color-grey-700--f: rgba(90, 90, 90, 1);
 
-  --color-text-dark-1: #{$color-text-dark-1};
-  --color-text-dark-2: #{$color-text-dark-2};
-  --color-text-dark-3: #{$color-text-dark-3};
-  --color-text-light-1: #{$color-text-light-1};
-  --color-text-light-3: #{$color-text-light-3};
+	--color-text-dark-1: rgba(23, 23, 23, 1);
+	--color-text-dark-2: rgba(80, 80, 80, 1);
+	--color-text-dark-3: rgba(132, 132, 132, 1);
+	--color-text-light-1: rgba(235, 231, 222, 1);
+	--color-text-light-3: rgba(165, 158, 165, 1);
 
-  --radius-sm: 0.2rem;
-  --radius-pill: 9999px;
+	// Utility tokens
+	--radius-sm: 0.2rem;
+	--radius-pill: 9999px;
 
-  --toolbar-active-button: #{$toolbar-active-button-lt};
-  --toolbar-height: 52px;
+	// Component tokens
+	--toolbar-active-button: rgba(47, 96, 229, 1);
+	--toolbar-height: 52px;
+}
 
-  body.dark-mode {
-    --color-grey-zero: #{$color-text-dark-1};
-    --color-grey-100: rgba(50, 50, 50, 1);
-    --color-grey-200: rgba(60, 60, 60, 1);
-    --color-grey-400: rgba(100, 100, 100, 1);
+body.dark-mode .yazman-container,
+body.dark-mode .yazman {
+	--color-grey-zero: rgba(23, 23, 23, 1);
+	--color-grey-100: rgba(50, 50, 50, 1);
+	--color-grey-200: rgba(60, 60, 60, 1);
+	--color-grey-400: rgba(100, 100, 100, 1);
 
-    --color-text-dark-1: #{$color-grey-zero};
-    --color-text-dark-2: rgba(180, 180, 180, 1);
-    --color-text-dark-3: #{$color-text-light-3};
-    --color-text-light-1: #{$color-text-dark-1};
-    --color-text-light-3: #{$color-text-dark-3};
+	--color-text-dark-1: rgba(255, 255, 255, 1);
+	--color-text-dark-2: rgba(180, 180, 180, 1);
+	--color-text-dark-3: rgba(165, 158, 165, 1);
+	--color-text-light-1: rgba(23, 23, 23, 1);
+	--color-text-light-3: rgba(132, 132, 132, 1);
 
-    --toolbar-active-button: #{$toolbar-active-button-dt};
-  }
+	--toolbar-active-button: rgba(125, 155, 238, 1);
 }
