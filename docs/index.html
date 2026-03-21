@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yazman – WYSIWYG Editor</title>
   <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
   <script src="assets/script.js"></script>
   <!-- --- -->
   <link rel="stylesheet" href="assets/yazman.min.css">
@@ -68,6 +69,22 @@
   <footer>
     <p>Yazman &copy; <span id="currentYear"></span> | MIT License</p>
   </footer>
+  <nav class="bottom-tab">
+    <div class="bottom-tab__bar">
+      <a href="index.html" class="bottom-tab__item is-active">
+        <i class="ph-fill ph-house"></i>
+        <span>Home</span>
+      </a>
+      <button class="bottom-tab__item" onclick="toggleMode()">
+        <i class="ph-fill ph-moon"></i>
+        <span>Theme</span>
+      </button>
+      <a href="https://github.com/edukah/yazman" target="_blank" class="bottom-tab__item">
+        <i class="ph-fill ph-github-logo"></i>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </nav>
   <script>
     // Full editor with sample content
     const fullEditor = new Yazman(document.getElementById('editor-full'), {
