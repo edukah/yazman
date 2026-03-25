@@ -121,7 +121,7 @@ class Hyperlink extends Inline {
     buttonContainer.style.marginTop = '10px';
     formContainer.appendChild(buttonContainer);
 
-    const buttonData = [{ type: 'submit', className: 'bttn bttn--sm color-text-primary-base fsi-14 fwe-semibold yazman-modal-close', value: Language.get('buttonCancel'), onclick: () => editor.dialog.closeModal() }, { type: 'submit', className: 'bttn bttn--sm bttn--theme-1 fsi-14 fwe-semibold ffa-sans ', value: Language.get('buttonContinue'), onclick: () => this.toolbarFormListener(editor) }];
+    const buttonData = [{ type: 'submit', className: 'bttn--sm color-text-primary-base fsi-14 fwe-semibold yazman-modal-close', value: Language.get('buttonCancel'), onclick: () => editor.dialog.closeModal() }, { type: 'submit', className: 'bttn--sm bttn--theme-1 fsi-14 fwe-semibold ffa-sans', value: Language.get('buttonContinue'), onclick: () => this.toolbarFormListener(editor) }];
     buttonData.forEach(buttonDataObj => {
       const button = document.createElement('input');
       Object.entries(buttonDataObj).forEach(([key, value]) => {
