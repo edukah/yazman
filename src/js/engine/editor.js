@@ -1128,7 +1128,7 @@ class Editor {
     const messages = lines.map(([text]) => text);
     const styles = lines.flatMap(([_, style]) => style || '');
 
-    console.log(messages.join(''), ...styles);
+    console.info(messages.join(''), ...styles);
   }
 
   /**
@@ -1276,10 +1276,10 @@ class Editor {
       try {
         this.onError(error, context);
       } catch (callbackError) {
-        console.error('Yazman: onError callback threw an error.', callbackError);
+        console.error('[Yazman|Editor] onError callback threw an error.', callbackError);
       }
     } else {
-      console.error('Yazman:', error.message || error, context);
+      console.error('[Yazman|Editor]', error.message || error, context);
     }
   }
 

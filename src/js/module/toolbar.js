@@ -13,6 +13,7 @@ class Toolbar {
 
     this.buttonContainer = document.createElement('div');
     this.buttonContainer.className = 'button-container';
+    this.buttonContainer.setAttribute('role', 'toolbar');
     this.container.appendChild(this.buttonContainer);
 
     this.buttons.forEach((buttonGroup) => {
@@ -36,6 +37,8 @@ class Toolbar {
         }
 
         const buttonElem = document.createElement('span');
+        buttonElem.setAttribute('role', 'button');
+        buttonElem.setAttribute('tabindex', '0');
         const buttonFormat = this.editor.registry.get('format/' + button);
         buttonElem.__detail = { format: buttonFormat, formatValue: buttonValue };
 
@@ -56,6 +59,12 @@ class Toolbar {
         };
 
         buttonElem.addEventListener('click', listener);
+        buttonElem.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            buttonElem.click();
+          }
+        });
         buttonGroupElem.appendChild(buttonElem);
       });
 
