@@ -15,7 +15,6 @@
     max-height: 50vh; */
   padding: 10px;
   font-size: 17px;
-  outline: none;
   /* overflow: auto;
     overflow-y: auto; */
   /* min-height: 15px;
@@ -27,6 +26,11 @@
   word-wrap: break-word;
   word-break: break-word;
   color: var(--color-text-dark-1);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary-base);
+  }
 }
 
 .yazman-container .yazman {
@@ -379,6 +383,15 @@ body.dark-mode .yazman-toolbar.is-scrolling::after {
   font-weight: 600;
   margin: 4px;
   cursor: pointer;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-base);
+    outline-offset: 1px;
+  }
 }
 
 .yazman-toolbar .button-group span.active {
@@ -425,6 +438,24 @@ body.dark-mode .yazman-toolbar.is-scrolling::after {
 
 .yazman-form label {
   margin-bottom: 10px;
+}
+
+.yazman-form input[type="text"] {
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary-base);
+  }
+}
+
+.yazman-form input[type="submit"] {
+  &:focus {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-base);
+    outline-offset: 1px;
+  }
 }
 
 /* YAZMAN FORM */
