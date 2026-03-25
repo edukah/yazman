@@ -376,33 +376,24 @@ body.dark-mode .yazman-toolbar.is-scrolling::after {
   margin-right: 8px;
 }
 
-.yazman-toolbar .button-group span {
+.yazman-toolbar .button-group button {
   display: inline-block;
   height: 32px;
   width: 32px;
   font-weight: 600;
   margin: 4px;
   cursor: pointer;
-
-  &:focus {
-    outline: 0;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-primary-base);
-    outline-offset: 1px;
-  }
 }
 
-.yazman-toolbar .button-group span.active {
+.yazman-toolbar .button-group button.active {
   color: var(--toolbar-active-button);
 }
 
-.yazman-toolbar .button-group span svg {
+.yazman-toolbar .button-group button svg {
   fill: var(--color-text-dark-1);
 }
 
-.yazman-toolbar .button-group span.active svg {
+.yazman-toolbar .button-group button.active svg {
   fill: var(--toolbar-active-button);
 }
 

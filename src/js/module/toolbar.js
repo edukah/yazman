@@ -36,9 +36,8 @@ class Toolbar {
           return;
         }
 
-        const buttonElem = document.createElement('span');
-        buttonElem.setAttribute('role', 'button');
-        buttonElem.setAttribute('tabindex', '0');
+        const buttonElem = document.createElement('button');
+        buttonElem.type = 'button';
         const buttonFormat = this.editor.registry.get('format/' + button);
         buttonElem.__detail = { format: buttonFormat, formatValue: buttonValue };
 
@@ -59,12 +58,6 @@ class Toolbar {
         };
 
         buttonElem.addEventListener('click', listener);
-        buttonElem.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            buttonElem.click();
-          }
-        });
         buttonGroupElem.appendChild(buttonElem);
       });
 
@@ -112,7 +105,7 @@ class Toolbar {
       rangeFormat = this.editor.paper.getFormat(...caretPos);
     }
 
-    const buttons = this.container.querySelectorAll('span');
+    const buttons = this.container.querySelectorAll('button');
     buttons.forEach((button) => {
       if (button.__detail) {
         const formatCheck = Object.entries(rangeFormat).filter(([key, value]) => {
@@ -138,7 +131,7 @@ class Toolbar {
 
   listener (event) {
     let target = event.target;
-    while (target && target.tagName !== 'SPAN') {
+    while (target && target.tagName !== 'BUTTON') {
       target = target.parentNode;
     }
 
