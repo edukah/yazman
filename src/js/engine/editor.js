@@ -39,6 +39,8 @@ class Editor {
       throw new Error('Yazman: "container" parameter must be a valid DOM element.');
     }
 
+    if (container.__yazman) return container.__yazman;
+
     if (exampleContent) {
       container.innerHTML = '<p>123456789</p><pre>kod satırı örneği\n\n112345678\n212345678\n312345678\n412345678\n</pre><p>Birinci satır <a href="https://example.com">örnek</a></p><p>İkinci satır <strong>kalın <em></em><em>kalın italik</em></strong> Örnek</p><p>Üçünci satır örnek</p><figure><img src="example.jpg" /><figcaption data-yazman-placeholder="Yazı Gir"><br></figcaption></figure><p>Beşinci satır örnek</p><p>Altıncı satır örnek</p><ol><li>Yedinci satır liste örnek</li><li>Sekizinci satır <strong>kalın <em></em><em>kalın italik</em></strong> örnek</li></ol><p>Dokuzuncu satır örnek</p><p>Onuncu satır örnek</p><p>Onbirinci satır örnek</p><p>Onikinci satır örnek</p>';
     }
