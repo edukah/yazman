@@ -12,12 +12,19 @@
     "src/scss/",
     "CHANGELOG.md"
   ],
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
   "exports": {
     ".": {
+      "types": "./dist/yazman.d.ts",
       "sass": "./src/scss/main.scss",
       "style": "./dist/yazman.min.css",
+      "import": "./dist/yazman.esm.js",
       "default": "./dist/yazman.esm.js"
     },
+    "./package.json": "./package.json",
     "./js/*": "./src/js/*",
     "./scss/*": "./src/scss/*"
   },
