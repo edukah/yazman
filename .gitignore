@@ -32,3 +32,6 @@ Thumbs.db
 /archive
 
 .gelistirme_notlari.md
+
+# Local-only Turkish comment archive (developer aid, not shipped)
+/comments/
