@@ -1,0 +1,22 @@
+Source: src/js/format/list.js
+================================
+
+[LIST-1]
+---
+Taşıyıcı element (ul) içinde li ve p'ler karışık var ise onları dışarı taşıyor.
+===
+
+[LIST-2]
+---
+Aynı container'lar ise birleştir
+===
+
+[LIST-3]
+---
+Taşıyıcı element (ul) içinde li ve p'ler karışık var ise onları dışarı taşıyor.
+===
+
+[LIST-4]
+---
+Aynı container'lar ise birleştir
+===

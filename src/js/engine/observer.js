@@ -56,7 +56,7 @@ class Observer {
 
     let lastTopParentElem;
     this.changedElems.forEach(elem => {
-      // En önce child'lar geliyor. Bu sebeple child parent'leri de while içinde yapıldığından, tekrar yapmamak adına bunu yaptık.
+      // [OBSERVER-1] Children come first. Because of this, since the parents of children are also processed inside the while loop, we did this to avoid repeating the work.
       if (lastTopParentElem && lastTopParentElem.isSameNode(elem)) {
         return;
       } else {
@@ -77,11 +77,11 @@ class Observer {
         _parent.__detail.update();
       }
 
-      // En sona new line ekleyince öncekinin length'i değişmiyor.
+      // [OBSERVER-2] When a new line is added at the very end, the length of the previous one does not change.
       if (lastTopParentElem.__detail && lastTopParentElem.__detail.prev) {
         lastTopParentElem.__detail.prev.update();
         lastTopParentElem.__detail.prev.optimize();
-        // optimize içerisinde (preformatted) nextSibling silinince prev kaybolabiliyor.
+        // [OBSERVER-3] Inside optimize (preformatted), when nextSibling is removed prev can disappear.
         if (lastTopParentElem.__detail.prev) {
           lastTopParentElem.__detail.prev.domNode.normalize();
           lastTopParentElem.__detail.prev.update();
@@ -110,7 +110,7 @@ class Observer {
             newDom.appendChild(domNode);
           }
         } else {
-          // FormatClassPrototype olmayan element eklenince hata veriyor. Hemen alttaki satır.
+          // [OBSERVER-4] When an element without a FormatClassPrototype is added it throws an error. The line right below.
           if (domNode.parentNode.isSameNode(this.editor.root)) {
             const FormatClassPrototype = this.editor.BLOCK_LEVEL_ELEMENT.get('paragraph');
             const formatClassInstance = new FormatClassPrototype(this.editor);
@@ -147,7 +147,7 @@ class Observer {
 
 Observer.config = { attributes: true, attributeOldValue: true, childList: true, subtree: true, characterData: true, characterDataOldValue: true };
 
-// Error boundary for MutationObserver callback
+// [OBSERVER-5] Error boundary for MutationObserver callback
 const _observerCallback = Observer.prototype.callback;
 Observer.prototype.callback = function (...args) {
   try {

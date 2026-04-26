@@ -58,14 +58,14 @@ class Event {
   }
 
   textChange (event) {
-    // TRIGGER FORMAT EVENTS
+    // [EVENT-1] TRIGGER FORMAT EVENTS
     const filteredTriggerEvent = [...this.eventForTrigger.values()].filter(this.useConditions(event));
 
     const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
     const rangeLines = this.editor.paper.getLines(startIndex, endIndex);
 
     filteredTriggerEvent.forEach(triggerEvent => triggerEvent.function(event, this.editor, { lines: rangeLines, startIndex, endIndex }));
-    /* END OF FORMAT EVENTS */
+    /* [EVENT-2] END OF FORMAT EVENTS */
 
     this.editor.update();
     this.editor.emit('text-change');
@@ -74,17 +74,17 @@ class Event {
   selectionChange (event) {
     const caretPos = this.editor.selection.getCaretPosition();
 
-    /* INDEX BOUNDARY */
+    /* [EVENT-3] INDEX BOUNDARY */
     this.editor.selection.setMemCaretPosition(caretPos, 'trusted');
 
-    // TRIGGER FORMAT EVENTS
+    // [EVENT-4] TRIGGER FORMAT EVENTS
     const filteredTriggerEvent = [...this.eventForTrigger.values()].filter(this.useConditions(event));
 
     const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
     const rangeLines = this.editor.paper.getLines(startIndex, endIndex);
 
     filteredTriggerEvent.forEach(triggerEvent => triggerEvent.function(event, this.editor, { lines: rangeLines, startIndex, endIndex }));
-    /* END OF FORMAT EVENTS */
+    /* [EVENT-5] END OF FORMAT EVENTS */
 
     this.editor.update();
 
@@ -97,7 +97,7 @@ class Event {
     const newCaretRange = this.editor.selection.getMemCaretPosition();
     const oldCaretRange = this.editor.variables.get('rangeMem') || [0, 0];
     if (!newCaretRange.every((caretIndex, index) => oldCaretRange[index] === caretIndex)) {
-      // newlines'ın old lines'tan önce yapılması gerekiyor. Old'da cursor var ise caret range değiştiğinden, paragraf olarak önü ya da arkayı alabiliyor.
+      // [EVENT-6] newlines must be processed before old lines. If the cursor is in old, since the caret range changes, it can take the front or the back as the paragraph.
       const newLines = this.editor.paper.getLines(...newCaretRange);
       newLines.forEach(line => {
         this.editor.paper.optimize(line.domNode);
@@ -115,7 +115,7 @@ class Event {
     } else if (!isEmpty && this.editor.root.classList.contains('is-empty')) {
       this.editor.root.classList.remove('is-empty');
     }
-    /* END OF INDEX BOUNDARY */
+    /* [EVENT-7] END OF INDEX BOUNDARY */
   }
 
   useConditions (eventData) {

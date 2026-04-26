@@ -35,7 +35,7 @@ class Range {
       this.nativeRange.setEndAfter(endNode);
     }
 
-    // İki node'un arasında kalırsa geliş yönüne göre start, end veriyordu. Örneğin <p><b>örnek</b><i>naber</i></p> startNode: b, startOffset: 5; startNode: i, startOffset: 0. Biz her zaman ilk seçeneğin gelmesini sağladık.
+    // [RANGE-1] When it stays between two nodes, it used to give start/end based on the direction of arrival. For example <p><b>ornek</b><i>naber</i></p> startNode: b, startOffset: 5; startNode: i, startOffset: 0. We made sure the first option is always returned.
 
     if (this.nativeRange.collapsed && this.nativeRange.startContainer.isSameNode(this.nativeRange.endContainer) && this.nativeRange.startOffset === 0 && (this.nativeRange.startContainer.__detail instanceof this.editor.registry.get('format/text') || this.nativeRange.startContainer.__detail instanceof this.editor.registry.get('pattern/inline'))) {
       let parent = this.nativeRange.startContainer;
@@ -64,7 +64,7 @@ class Range {
   }
 
   nativeToNormal () {
-    // Range'nin başladığı line ve node tespit ediliyor. Tag içindeki node'larda en üst tag'a çıkıyor, aşağıda line'ın child node'larından kontrol yaptığımız için.
+    // [RANGE-2] The line and node where the Range starts are detected. For nodes inside a tag, it walks up to the topmost tag, because below we perform the check from the line's child nodes.
     let start;
 
     if (!this.nativeRange.startContainer.__detail) {
@@ -99,7 +99,7 @@ class Range {
           this.editor.observer.complete();
         }
 
-        end = (this.nativeRange.endContainer.childNodes[0]) ? this.nativeRange.endContainer.childNodes[0].__detail.start : 0; // Backspace ile hızlıca silinince error veriyor, (this.nativeRange.endContainer.childNodes[0]) bu koşul olmazsa.
+        end = (this.nativeRange.endContainer.childNodes[0]) ? this.nativeRange.endContainer.childNodes[0].__detail.start : 0; // [RANGE-3] When deleted quickly with Backspace it throws an error if the (this.nativeRange.endContainer.childNodes[0]) condition is not present.
       } else {
         end = this.nativeRange.endContainer.childNodes[this.nativeRange.endOffset - 1].__detail.end;
       }

@@ -1,0 +1,7 @@
+Source: src/js/module/toolbar.js
+================================
+
+[TOOLBAR-1]
+---
+-1 çıkardık, çünkü getComputedStyle küsuratlı sayıları bir üstüne yuvarlıyor. Bu da hataya sebep olabiliyor.
+===

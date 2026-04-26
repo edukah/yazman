@@ -1,0 +1,12 @@
+Source: src/js/module/autosave.js
+=================================
+
+[AUTOSAVE-1]
+---
+Belirli sayıda değişiklik sonrası kaydet.
+===
+
+[AUTOSAVE-2]
+---
+Değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
+===

@@ -54,7 +54,7 @@ class Text {
   }
 
   get parent () {
-    // Editor.js içinde deleteNode ve insertNode içerisinde kullanılıyor.
+    // [TEXT-1] Used inside deleteNode and insertNode within Editor.js.
     return (this.domNode.parentNode && this.domNode.parentNode.__detail) ? this.domNode.parentNode.__detail : null;
   }
 
@@ -79,7 +79,7 @@ class Text {
 
   insertText (text, index = -1) {
     let textContent = this.domNode.textContent;
-    if (index < 0) { // is integer koşulu ekle
+    if (index < 0) { // [TEXT-2] add is integer condition
       textContent = textContent + text;
     } else {
       textContent = textContent.slice(0, index) + text + textContent.slice(index);

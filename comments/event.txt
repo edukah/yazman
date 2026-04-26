@@ -1,0 +1,37 @@
+Source: src/js/engine/event.js
+================================
+
+[EVENT-1]
+---
+FORMAT EVENT'LERİNİ TETİKLE
+===
+
+[EVENT-2]
+---
+FORMAT EVENT'LERİNİN SONU
+===
+
+[EVENT-3]
+---
+INDEX SINIRI
+===
+
+[EVENT-4]
+---
+FORMAT EVENT'LERİNİ TETİKLE
+===
+
+[EVENT-5]
+---
+FORMAT EVENT'LERİNİN SONU
+===
+
+[EVENT-6]
+---
+newlines'ın old lines'tan önce yapılması gerekiyor. Old'da cursor var ise caret range değiştiğinden, paragraf olarak önü ya da arkayı alabiliyor.
+===
+
+[EVENT-7]
+---
+INDEX SINIRININ SONU
+===

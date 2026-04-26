@@ -9,7 +9,7 @@ class Preformatted extends Block {
   optimize () {
     super.optimize();
 
-    // getMemCaretPosition() değil, çünkü burası böyle olmazsa enterle son line oluştur, pre içinde karakter girince girilen karakterin başına atıyor.
+    // [PREFORMATTED-1] Not getMemCaretPosition(), because if this is not done, after creating the last line with enter, when a character is typed in pre it jumps to the beginning of the typed character.
     let caretPos = this.editor.selection.getMemCaretPosition();
 
     const regex = new RegExp(`(\r?\n)$`);
@@ -24,7 +24,7 @@ class Preformatted extends Block {
       this.domNode.appendChild(textInstance.domNode);
       this.update();
 
-      // Chrome backspace tuşu düzeltme, normal paragraftan gelirken
+      // [PREFORMATTED-2] Chrome backspace key fix, when coming from a normal paragraph
       caretPos = this.editor.selection.setMemCaretPosition(caretPos.map(value => {
         if (this.end + 1 === value) {
           return value - 1;
@@ -34,7 +34,7 @@ class Preformatted extends Block {
       }));
     }
 
-    // Firefox backspace tuşuyla paragraftan preformatted'e geri geldiğinde en sona geliyor; biz scroll'un \n karakterinden önce durmasını istediğimizden bunu yapıyoruz.
+    // [PREFORMATTED-3] In Firefox, when coming back from a paragraph to preformatted with the backspace key, it goes to the very end; we want the scroll to stop before the \n character, so we do this.
     if (caretPos[1] === this.end) {
       this.editor.selection.setMemCaretPosition(caretPos.map(value => {
         if (this.end === value) {
@@ -52,7 +52,7 @@ class Preformatted extends Block {
     if (this.domNode.nextSibling && this.domNode.nextSibling.__detail && this.domNode.nextSibling.__detail instanceof this.domNode.__detail.constructor) {
       const nextSiblingTextContent = this.domNode.nextSibling.textContent ? this.domNode.nextSibling.textContent : '\n';
 
-      // Line sonunda pre-paragraf arası yap, o yüzden bunu koyduk.
+      // [PREFORMATTED-4] At the end of the line make a pre-paragraph gap, that is why we put this.
       this.domNode.firstChild.__detail.insertText(nextSiblingTextContent);
       this.domNode.nextSibling.remove();
     }
@@ -75,25 +75,25 @@ class Preformatted extends Block {
     const onFormatResult = super.onFormat({ blockFormat, inlineFormat }, caretRange);
     const [startIndex, endIndex] = onFormatResult.caretRange;
 
-    // Pre => başka format olurken pre'den sonraki satır farklı bir format ise, satır arası farkı azalacağından ('pre sonundaki \n karakteri budanıyor'), caret range'yi 1 azaltıyoruz.
+    // [PREFORMATTED-5] Pre => when transitioning to another format, if the line after pre is a different format, since the inter-line gap will decrease ('the \n character at the end of pre is trimmed'), we decrease the caret range by 1.
     if (this.next && Object.keys(this.next.format)[0] !== Preformatted.formatName && this.end <= endIndex) {
       this.editor.selection.setMemCaretPosition(this.editor.selection.getMemCaretPosition().map((v, i) => i === 1 ? v - 1 : v));
     }
 
-    // Başka formata dönüşmüyorsa buradan dön.
+    // [PREFORMATTED-6] If it is not transforming to another format, return from here.
     if (!Object.keys(onFormatResult.format.blockFormat).length || (Object.keys(onFormatResult.format.blockFormat).includes(Preformatted.formatName) && onFormatResult.format.blockFormat[Preformatted.formatName])) {
       return onFormatResult;
     }
 
-    /* --------------------- CURSOR REGENERATE ------------------------- */
-    // İlk satır dönüşmüyorsa bundan sonra gelen index 1 artacak. İlk satırdan sonra \n var new line yok, dolayısıyla newline geleceği için bunu yapıyoruz.
+    /* [PREFORMATTED-7] --------------------- CURSOR REGENERATE ------------------------- */
+    // [PREFORMATTED-8] If the first line is not transforming, the index after it will increase by 1. After the first line there is \n but no new line, so since a newline will come, we do this.
     const firstLineBreakIndex = this.start + this.textContent.indexOf('\n');
     const firstLineWillFormat = firstLineBreakIndex >= startIndex;
 
     if (!firstLineWillFormat) {
       this.editor.selection.setMemCaretPosition(this.editor.selection.getMemCaretPosition().map((v, i) => v + 1));
     }
-    /* --------------------- END OF CURSOR REGENERATE ------------------------- */
+    /* [PREFORMATTED-9] --------------------- END OF CURSOR REGENERATE ------------------------- */
 
     delete onFormatResult.format.blockFormat[Preformatted.formatName];
     if (!Object.keys(onFormatResult.format.blockFormat).length) {
@@ -106,7 +106,7 @@ class Preformatted extends Block {
     let relStartBorder = 0;
     if (startIndex > this.domNode.firstChild.__detail.start) {
       const relStart = Math.abs(startIndex - this.domNode.firstChild.__detail.start);
-      relStartBorder = lineText.lastIndexOf('\n', (relStart < 1) ? 0 : relStart - 1); // -1 yapıyoruz, çünkü \n karakterinin üzerinde yaparsak relEnd ve relStart aynı çıkıyor.
+      relStartBorder = lineText.lastIndexOf('\n', (relStart < 1) ? 0 : relStart - 1); // [PREFORMATTED-10] We do -1, because if we do it on the \n character, relEnd and relStart turn out to be the same.
       relStartBorder = (relStartBorder <= 0) ? 0 : relStartBorder + 1;
       absStartBorder = this.domNode.__detail.start + relStartBorder;
     }
@@ -121,7 +121,7 @@ class Preformatted extends Block {
 
     let rangeText = lineText.slice(relStartBorder, relEndBorder);
 
-    // Text başındaki ve sonundaki çift \n karakterlerini alıp tek \n karakterine dönüştürüyoruz. Satırlar sabit kalıyor böylece. [:linebreak] ile değiştiriyoruz, çünkü trim ile tek \n karakterlerini buduyoruz.
+    // [PREFORMATTED-11] We take the double \n characters at the beginning and end of the text and convert them to a single \n character. Lines stay fixed this way. We replace with [:linebreak], because with trim we trim the single \n characters.
 
     rangeText = rangeText.replace(/^\n+|\n+$/g, function (match) {
       return match.replace(/\n{2}/mg, '[:linebreak]').trim();
@@ -138,11 +138,11 @@ class Preformatted extends Block {
       return v;
     });
 
-    // Caret position olduğu gibi kaldığından ve bu pozisyonda delete-optimize yapıldığından, preformatted optimize'si koşula denk gelen caret scroll'u değiştiriyordu. Bunu önlemek için caret'i hafızaya alıp 0'ladık. Delete'den sonra tekrar eski haline döndürdük.
+    // [PREFORMATTED-12] Since the caret position stayed as it was and delete-optimize is done at this position, the preformatted optimize was changing the caret scroll that matched the condition. To prevent this, we stored the caret in memory and zeroed it. After delete, we restored it to its old state.
     const caretPos = this.editor.selection.getMemCaretPosition();
-    this.editor.selection.setMemCaretPosition([0, 0]); // line break lenfgth;
+    this.editor.selection.setMemCaretPosition([0, 0]); // [PREFORMATTED-13] line break lenfgth;
 
-    this.editor.deleteContent(absStartBorder, absEndBorder, true); // lineCleaner
+    this.editor.deleteContent(absStartBorder, absEndBorder, true); // [PREFORMATTED-14] lineCleaner
     this.editor.selection.setMemCaretPosition(caretPos.map((v, i) => i === 1 ? v - lengthDiff : v));
 
     let border = absStartBorder;
@@ -155,7 +155,7 @@ class Preformatted extends Block {
   }
 
   static toolbarListener (event, editor) {
-    // Pre'nin en son line'ını ve ondan sonra gelen paragrafı seçince ve pre style'ı uygulayınca paragraf 1 karakter kayıyor, orası burayla ilgili. Burası şu an seçili alan içinde line olmadığını varsayıyor.
+    // [PREFORMATTED-15] When you select pre's last line and the paragraph that comes after it and apply pre style, the paragraph shifts by 1 character; that issue is related to here. This currently assumes there is no line within the selected area.
     const rangeFormat = editor.paper.getFormat(...editor.selection.getMemCaretPosition());
 
     const [startIndex, endIndex] = editor.selection.getMemCaretPosition();
@@ -165,25 +165,25 @@ class Preformatted extends Block {
     const startLine = lines[0];
     const startLinePreviousSiblingIsPre = (startLine.domNode.previousSibling && startLine.domNode.previousSibling.__detail instanceof Preformatted);
 
-    // caretPos'u önceden değişkene aldık, çünkü formatladıktan sonra optimize'de değiştiriyordu.
+    // [PREFORMATTED-16] We took caretPos into a variable beforehand, because after formatting it was being changed in optimize.
 
     editor.toolbar.listener(event);
 
     const caretPos = editor.selection.getMemCaretPosition();
 
     if (!Object.keys(rangeFormat).includes(Preformatted.formatName)) {
-      // preformata dönüşücek;
+      // [PREFORMATTED-17] will transform to preformat;
       if (startLinePreviousSiblingIsPre) {
         editor.selection.setMemCaretPosition(caretPos.map((v, i) => v - 1));
       }
     }
 
-    // İlk koşul: eğer üstteki pre ise satır arası length'i gidiyor. Onun yerine hiçbir şey eklenmiyor, o yüzden pre yaparken üstteki pre ise 1 azalttık.
+    // [PREFORMATTED-18] First condition: if the one above is pre, the inter-line length goes away. Nothing is added in its place, so when making pre, if the one above is pre, we decreased by 1.
   }
 
   static enterKeyHandler (event, editor, { lines, startIndex, endIndex }) {
     if (lines[0] instanceof Preformatted) {
-      /* ARD ARDA 4 VE UZERI ENTER GELIRSE BUNU DUZELTIYOR */
+      /* [PREFORMATTED-19] FIXES THIS WHEN 4 OR MORE CONSECUTIVE ENTERS COME */
       const regex = new RegExp(`(\r?\n){3,}$`);
       if (regex.test(lines[0].textContent)) {
         const textContent = lines[0].textContent;
@@ -199,17 +199,17 @@ class Preformatted extends Block {
         return false;
       }
 
-      /*  Seçili Text varsa sil */
+      /* [PREFORMATTED-20] If there is selected text, delete it */
       if (startIndex !== endIndex) {
         editor.deleteContent(startIndex, endIndex);
         editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(value => startIndex));
       }
-      /* */
+      /* [PREFORMATTED-21] */
 
-      /* ENTER KARATERINI EKLIYOR YENI BIR SATIRA GEÇMEK YERINE */
+      /* [PREFORMATTED-22] INSERTS THE ENTER CHARACTER INSTEAD OF MOVING TO A NEW LINE */
       editor.insertNode({ textContent: '\n' }, startIndex);
       editor.selection.setMemCaretPosition(editor.selection.getMemCaretPosition().map(value => value + '\n'.length));
-      /* SON */
+      /* [PREFORMATTED-23] END */
 
       event.preventDefault();
 
@@ -220,18 +220,18 @@ class Preformatted extends Block {
   static tabKeyHandler (event, editor, { lines, startIndex, endIndex }) {
     if (!lines.length || !(lines[0] instanceof Preformatted)) return;
 
-    /*  Seçili Text varsa sil */
+    /* [PREFORMATTED-24] If there is selected text, delete it */
     if (startIndex !== endIndex) {
       editor.deleteContent(startIndex, endIndex);
       editor.selection.setMemCaretPosition([startIndex, startIndex]);
     }
-    /* */
+    /* [PREFORMATTED-25] */
 
-    /* ENTER KARATERINI EKLIYOR YENI BIR SATIRA GEÇMEK YERINE */
+    /* [PREFORMATTED-26] INSERTS THE ENTER CHARACTER INSTEAD OF MOVING TO A NEW LINE */
     const tabChar = `${editor.TEXT_NODE.spaceChar}${editor.TEXT_NODE.spaceChar}`;
     editor.insertNode({ textContent: tabChar }, startIndex);
     editor.selection.setMemCaretPosition([startIndex + tabChar.length, startIndex + tabChar.length]);
-    /* SON */
+    /* [PREFORMATTED-27] END */
 
     event.preventDefault();
 

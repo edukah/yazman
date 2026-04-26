@@ -1,0 +1,62 @@
+Source: src/js/engine/paper.js
+================================
+
+[PAPER-1]
+---
+Alttaki satırı kaydırınca preformatted'de bozulmalar meydana geliyor. İmleç en başta iken paragraf<>pre yaparsan imleç kayıyor, çünkü en başta cursor optimize yapıyor. Remove fonksiyonu yapıldığında bu düzelir. Ara satır sonunda paragraf<>pre yapınca imleç alta kayıyor. Pre içerisinde son paragrafı ve sonraki paragraf olan paragrafı seçip pre<>paragraf yapınca end 1 kayıyor. Bu alttaki hepsini engelliyor.
+===
+
+[PAPER-2]
+---
+preformatted
+===
+
+[PAPER-3]
+---
+Child komple sınırın dışında kalırsa
+===
+
+[PAPER-4]
+---
+Child sınırın içinde komple kalırsa
+===
+
+[PAPER-5]
+---
+textContent olduğu gibi kalır
+===
+
+[PAPER-6]
+---
+sınır child'in içinden başlar ve biterse
+===
+
+[PAPER-7]
+---
+sınır child'in içinden başlarsa
+===
+
+[PAPER-8]
+---
+sınır child'in içinde sonlanırsa
+===
+
+[PAPER-9]
+---
+[{textContent: '\n', format: {paragraph: true}}, {textContent: 'asdas', format: {bold: true}}]
+===
+
+[PAPER-10]
+---
+O range'in arasında kalan elementleri filtreliyor.
+===
+
+[PAPER-11]
+---
+Embed elementler farklı kaynaklardan gelen elementler olduğundan, içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eğer line Embed formatı içeriyorsa devam etmiyoruz.
+===
+
+[PAPER-12]
+---
+Tekrarlayan formatlar engelleniyor.
+===

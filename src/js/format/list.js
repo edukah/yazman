@@ -7,7 +7,7 @@ class OrderedList extends Container {
   }
 
   optimize () {
-    // Taşıyıcı element (ul) içinde li ve p'ler karışık var ise onları dışarı taşıyor.
+    // [LIST-1] If the carrier element (ul) contains a mix of li and p, it moves them outside.
     const nextSibling = this.domNode.nextSibling;
     Array.from(this.domNode.childNodes).reduce((data, child) => {
       if (!child.__detail || !OrderedList.allowedChildren.some(value => child.__detail instanceof value)) {
@@ -31,7 +31,7 @@ class OrderedList extends Container {
       this.domNode.parentNode.removeChild(this.domNode);
     }
 
-    // Merge if same containers
+    // [LIST-2] Merge if same containers
     if (this.next instanceof OrderedList) {
       while (this.next.domNode.childNodes.length) {
         this.domNode.appendChild(this.next.domNode.childNodes[0]);
@@ -59,7 +59,7 @@ class UnorderedList extends Container {
   }
 
   optimize () {
-    // Taşıyıcı element (ul) içinde li ve p'ler karışık var ise onları dışarı taşıyor.
+    // [LIST-3] If the carrier element (ul) contains a mix of li and p, it moves them outside.
     const nextSibling = this.domNode.nextSibling;
     Array.from(this.domNode.childNodes).reduce((data, child) => {
       if (!child.__detail || !UnorderedList.allowedChildren.some(value => child.__detail instanceof value)) {
@@ -83,7 +83,7 @@ class UnorderedList extends Container {
       this.domNode.parentNode.removeChild(this.domNode);
     }
 
-    // Merge if same containers
+    // [LIST-4] Merge if same containers
     if (this.next instanceof UnorderedList) {
       while (this.next.domNode.childNodes.length) {
         this.domNode.appendChild(this.next.domNode.childNodes[0]);

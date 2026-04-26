@@ -1,0 +1,7 @@
+Source: src/js/engine/selection.js
+================================
+
+[SELECTION-1]
+---
+Bu sonda olursa event setSelection'dan sonra event tetiklendiğinden ve eventin içinde caretPositionFocusOn olduğundan ve bu değer önceki değer olduğundan, selection'ı bir öncekine göre ayarlayarak hataya sebep oluyor.
+===

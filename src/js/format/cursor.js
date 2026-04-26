@@ -13,7 +13,7 @@ class Cursor extends Inline {
   optimize () {
     const caretPosition = this.editor.selection.getMemCaretPosition();
     if (this.parent instanceof this.editor.registry.get('format/preformatted')) {
-      // Preformatted cursor'u kendi içerisinde gömüyor.
+      // [CURSOR-1] Preformatted embeds the cursor within itself.
       return;
     }
 
@@ -32,15 +32,15 @@ class Cursor extends Inline {
       textInstance.update();
 
       this.editor.selection.setMemCaretPosition(caretPosition.map(value => value + textContentFitered.length - 1));
-      // Trimliyoruz, çünkü space'leri kendimiz ekliyoruz ve cursor'un içinde bunu yaparsak cursor indexi problem yapıyor.
-      // Problemi görmek için trim()'i kaldır, herhangi bir caret (collapsed iken yani range 0) pozisyonunda inline biçim ver. Space tuşuna bas.
+      // [CURSOR-2] We trim, because we add the spaces ourselves and if we do this inside the cursor the cursor index causes a problem.
+      // [CURSOR-3] To see the problem, remove trim(), apply inline format at any caret position (when collapsed, i.e. range 0). Press the space key.
       this.domNode.parentNode.removeChild(this.domNode);
 
       return;
     }
 
     const caretEnd = this.editor.selection.getMemCaretPosition()[1];
-    // Her şey tanımlı ise ve index cursor'la alakalı değilse cursor'u sildik.
+    // [CURSOR-4] If everything is defined and the index is not related to the cursor, we deleted the cursor.
 
     if (caretEnd != null && this.domNode.__detail.end !== caretEnd) {
       if (caretEnd >= this.domNode.__detail.start) {
@@ -95,6 +95,6 @@ class Cursor extends Inline {
 Cursor.tagName = 'SPAN';
 Cursor.formatName = 'cursor';
 Cursor.EVENT = [{ type: 'keydown', keyCode: 37, function: Cursor.leftArrowHandler }, { type: 'keydown', keyCode: 13, function: Cursor.enterKeyHandler }];
-Cursor.content = '\uFEFF'; // Zero width no break space
+Cursor.content = '\uFEFF'; // [CURSOR-5] Zero width no break space
 
 export default Cursor;

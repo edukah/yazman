@@ -1,0 +1,27 @@
+Source: src/js/engine/observer.js
+================================
+
+[OBSERVER-1]
+---
+En önce child'lar geliyor. Bu sebeple child parent'leri de while içinde yapıldığından, tekrar yapmamak adına bunu yaptık.
+===
+
+[OBSERVER-2]
+---
+En sona new line ekleyince öncekinin length'i değişmiyor.
+===
+
+[OBSERVER-3]
+---
+optimize içerisinde (preformatted) nextSibling silinince prev kaybolabiliyor.
+===
+
+[OBSERVER-4]
+---
+FormatClassPrototype olmayan element eklenince hata veriyor. Hemen alttaki satır.
+===
+
+[OBSERVER-5]
+---
+MutationObserver callback'i için error boundary
+===

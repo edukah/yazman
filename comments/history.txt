@@ -1,0 +1,42 @@
+Source: src/js/module/history.js
+================================
+
+[HISTORY-1]
+---
+reverse geçmiş içerik
+===
+
+[HISTORY-2]
+---
+active güncel içerik
+===
+
+[HISTORY-3]
+---
+forward ileriki içerikler
+===
+
+[HISTORY-4]
+---
+Daha önce hiç sayaç çalıştırılmamış ise aktif içerik boş olacaktır. Önce bunu doldur.
+===
+
+[HISTORY-5]
+---
+Belirli sayıda değişiklik sonrası kaydet.
+===
+
+[HISTORY-6]
+---
+Değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
+===
+
+[HISTORY-7]
+---
+herhangi bir işlem yapılmadan x milisaniye sonra kaydet;
+===
+
+[HISTORY-8]
+---
+arka arkaya x işlem sonrası kaydet;
+===

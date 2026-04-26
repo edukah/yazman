@@ -11,9 +11,9 @@ class History {
 
     this.editor.event.add({ type: ['input', 'paste'], function: () => this.save() });
 
-    // reverse geçmiş içerik
-    // active güncel içerik
-    // forward ileriki içerikler
+    // [HISTORY-1] reverse: past content
+    // [HISTORY-2] active: current content
+    // [HISTORY-3] forward: upcoming contents
     this.data = { reverse: [], active: null, forward: [] };
 
     const keyboardEvent = [
@@ -25,21 +25,21 @@ class History {
   }
 
   save () {
-    // Daha önce hiç sayaç çalıştırılmamış ise aktif içerik boş olacaktır. Önce bunu doldur.
+    // [HISTORY-4] If the counter has never been started before, the active content will be empty. Fill it first.
     if (!this.editor.variables.has('historyCounter')) {
       this.data.active = { content: this.editor.paper.exportContent(), caretPos: this.editor.selection.getCaretPosition() };
     }
 
     const historyCounter = this.editor.variables.get('historyCounter') || 0;
 
-    // Belirli sayıda değişiklik sonrası kaydet.
+    // [HISTORY-5] Save after a certain number of changes.
     if (historyCounter > this.saveCoefficient) {
       this.record();
     } else {
       this.editor.variables.set('historyCounter', historyCounter + 1);
     }
 
-    // Değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
+    // [HISTORY-6] If a change was made but the threshold was not exceeded within the time window, save this content as well.
     if (this.editor.variables.get('historyTimeoutID')) {
       globalThis.clearTimeout(this.editor.variables.get('historyTimeoutID'));
     }
@@ -97,7 +97,7 @@ class History {
   }
 }
 
-History.counterTiming = 2000; // save after x miliseconds without action;
-History.saveCoefficient = 6; // save after x consecutive actions;
+History.counterTiming = 2000; // [HISTORY-7] save after x miliseconds without action;
+History.saveCoefficient = 6; // [HISTORY-8] save after x consecutive actions;
 
 export default History;

@@ -1,0 +1,27 @@
+Source: src/js/format/cursor.js
+================================
+
+[CURSOR-1]
+---
+Preformatted cursor'u kendi içerisinde gömüyor.
+===
+
+[CURSOR-2]
+---
+Trimliyoruz, çünkü space'leri kendimiz ekliyoruz ve cursor'un içinde bunu yaparsak cursor indexi problem yapıyor.
+===
+
+[CURSOR-3]
+---
+Problemi görmek için trim()'i kaldır, herhangi bir caret (collapsed iken yani range 0) pozisyonunda inline biçim ver. Space tuşuna bas.
+===
+
+[CURSOR-4]
+---
+Her şey tanımlı ise ve index cursor'la alakalı değilse cursor'u sildik.
+===
+
+[CURSOR-5]
+---
+Sıfır genişlikte bölünmez boşluk
+===

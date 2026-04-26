@@ -76,7 +76,7 @@ class Toolbar {
     const containerDim = globalThis.getComputedStyle(this.container, null);
     const containerBlankSpace = parseFloat(containerDim.getPropertyValue('margin-left')) + parseFloat(containerDim.getPropertyValue('margin-right')) + parseFloat(containerDim.getPropertyValue('padding-left')) + parseFloat(containerDim.getPropertyValue('padding-right'));
 
-    if ((this.container.clientWidth - containerBlankSpace) < this.buttonContainer.scrollWidth - 1) { // -1 çıkardık, çünkü getComputedStyle küsuratlı sayıları bir üstüne yuvarlıyor. Bu da hataya sebep olabiliyor.
+    if ((this.container.clientWidth - containerBlankSpace) < this.buttonContainer.scrollWidth - 1) { // [TOOLBAR-1] We subtracted -1, because getComputedStyle rounds fractional numbers up to the next integer. This can cause errors.
       if (!this.container.classList.contains('is-scrolling')) {
         this.container.classList.add('is-scrolling');
       }

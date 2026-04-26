@@ -86,7 +86,7 @@ class Editor {
     this.EMBED_ELEMENT = new Map();
     this.registry.map().forEach((value, key) => {
       if (key.search('format/') !== -1) {
-        // Classification
+        // [EDITOR-1] Classification
         if (value.prototype instanceof this.registry.get('pattern/container')) {
           this.CONTAINER_LEVEL_ELEMENT.set(value.formatName, value);
         }
@@ -99,18 +99,18 @@ class Editor {
         if (value.prototype instanceof this.registry.get('pattern/inlineEmbed') || value.prototype instanceof this.registry.get('pattern/blockEmbed')) {
           this.EMBED_ELEMENT.set(value.formatName, value);
         }
-        // End of Classification
+        // [EDITOR-2] End of Classification
 
-        // Events
+        // [EDITOR-3] Events
         if (Array.isArray(value.EVENT)) {
           value.EVENT.forEach(event => this.event.add(event));
         }
-        // End of Events
+        // [EDITOR-4] End of Events
       }
     });
 
     this.FORMAT_SETS = new Map();
-    // Format sets, biri varken diğeri aktif olamayan tag'lar için kullanılır.
+    // [EDITOR-5] Format sets, used for tags that cannot be active when another is active.
     formatSets.forEach((formatSet) => {
       formatSet.forEach((format) => {
         const formatSetDifference = formatSet.filter(value => format !== value);
@@ -299,10 +299,10 @@ class Editor {
    * @param {boolean} [preventScroll=true] - Whether to prevent scroll jump on focus.
    */
   focus (preventScroll = true) {
-    /* focus yapıldığında scroll en tepeye kayıyor bunu önlemek için preventScroll koyduk. aslında false olması iyi bir şey fakat hedef nodeye focus yapılmadığı için false olunca editor root'unu referans aldığı için scrollu en tepeye çekiyor. ileride get node kısmından node çekilir ona scroll yapılırsa belki değişik birşeyler oratay çıkabilir. */
+    /* [EDITOR-6] When focus is applied the scroll jumps to the very top; we added preventScroll to avoid this. Actually false would be a good thing, but since focus is not applied to the target node, when it is false it takes the editor root as reference and pulls the scroll to the very top. In the future, if the node is fetched from the get node section and scroll is applied to it, perhaps something different may emerge. */
     this.root.focus({ preventScroll });
 
-    // editorScrollTopTanımlı değilse focus durumunda carete gitmiyor carete gitmesi için scrollToptan sonra scrollIntoView koyduk.
+    // [EDITOR-7] If editorScrollTop is not defined, on focus it does not go to the caret; to make it go to the caret we added scrollIntoView after scrollTop.
     this.root.scrollTop = this.variables.get('editorScrollTopPosition') || 0;
     this.scrollIntoView();
 
@@ -356,8 +356,8 @@ class Editor {
     if (Object.keys(blockFormat).length && generateBlock) {
       let referenceLine = currentLine;
 
-      // Liste içerikte sondan önceki paragraflara resim ekleme sırasında resimleri listenin sonrasına eklediği için (referansı container alıyor) bunu buradan kaldırdık. ileride bi sorun çıkartır mı? neden referenceline yapmışısız şu an hatırlamadığım için bunu buraya not düşüyorum.
-      // Hatırladım, imageden önce block değşikliği yaparken (preformatted => paragraph) paragrafı en sona ekliyordu.
+      // [EDITOR-8] In list content, when inserting images into paragraphs before the last one, it was inserting the images after the list (taking the container as reference), so we removed this from here. Will it cause an issue in the future? Since I don't remember right now why we used referenceLine, I'm leaving this note here.
+      // [EDITOR-9] I remembered: while changing the block before an image (preformatted => paragraph), it was appending the paragraph at the very end.
       while (referenceLine.parent) {
         referenceLine = referenceLine.parent;
       }
@@ -365,7 +365,7 @@ class Editor {
       const referenceLineDom = referenceLine.domNode;
       const currentLineDom = currentLine.domNode;
 
-      // Listelerde yukarıda anlatılan problemi çözmek için container içindeki currentLineden sonra gelen tüm çocukları contaier dışına taşıyor.
+      // [EDITOR-10] To solve the problem described above in lists, it moves all children inside the container that come after currentLine outside the container.
       if (referenceLine instanceof this.registry.get('pattern/container')) {
         while (currentLineDom.nextElementSibling) {
           referenceLineDom.parentNode.insertBefore(currentLineDom.nextElementSibling, referenceLineDom.nextElementSibling);
@@ -375,8 +375,8 @@ class Editor {
       const newLineDom = document.createElement('p');
       const newLine = { domNode: newLineDom, format: blockFormat, children: [], changeStatus: true };
 
-      // Sadece BR var ise başlangıca ekliyor. currentLine.start !== currentLine.end bu koşulu ekledik bu yüzden.
-      // preformatted onFormat reverse newLines yüzünden burayı iptal ettik. boşluk olunca boşluk en başta kalıyordu.
+      // [EDITOR-11] If only BR exists, it inserts at the start. That's why we added the currentLine.start !== currentLine.end condition.
+      // [EDITOR-12] We disabled this because of preformatted onFormat reverse newLines. When there was a space, the space was staying at the very beginning.
       if (currentLine.start === index && currentLine.start !== currentLine.end) {
         this.paper.lines.splice(this.paper.lines.indexOf(currentLine), 0, newLine);
         referenceLineDom.parentNode.insertBefore(newLineDom, referenceLineDom);
@@ -503,9 +503,9 @@ class Editor {
    * @param {object} format - Format object with format names as keys.
    */
   format (start, end, format) {
-    // format parametresini kayıtlı parametrelerin dışında kalanları çıkartıcak şekilde filtreliyor.
+    // [EDITOR-13] Filters the format parameter to remove anything outside the registered parameters.
 
-    // o rangenin arasında kalan elementleri filtreliyor.
+    // [EDITOR-14] Filters the elements that fall within that range.
     const linesInRange = this.paper.getLines(start, end);
     const rangeFormat = this.paper.getFormat(start, end);
 
@@ -523,9 +523,9 @@ class Editor {
       return arr;
     }, []);
 
-    // elementin etkilenen kısımlarını tespit edit stillendiriyor.
+    // [EDITOR-15] Detects the affected parts of the element and styles them.
     linesInRange.forEach((line) => {
-      // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
+      // [EDITOR-16] Since Embed elements come from different sources, modifying their text content ourselves is meaningless. Therefore, if the line contains an Embed format, we do not continue.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
         return this.EMBED_ELEMENT.has(key);
       });
@@ -542,18 +542,18 @@ class Editor {
       if (!Object.keys(blockFormat).length && !Object.keys(inlineFormat).length) {
         return;
       }
-      // getInRangeTextWithFormat line'ın textlerini parçalıyor. textler style'ına göre parçalanıyor. örneğin 'bu gece hava soğuk' tek parça gelirken 'bu gece <strong>hava</strong> soğuk' 3 parça halinde geliyor. parçalar array için obje halinde geliyor. [{'textContent': textcontent, 'format': ['bold', 'italic']}] gibi.
+      // [EDITOR-17] getInRangeTextWithFormat splits the line's texts. Texts are split according to their style. For example 'tonight the weather is cold' comes as a single piece, while 'tonight the weather <strong>is</strong> cold' comes in 3 pieces. The pieces come as objects inside an array, like [{'textContent': textcontent, 'format': ['bold', 'italic']}].
 
-      // yukarıdan gelen array döngüye sokuluyor.
+      // [EDITOR-18] The array coming from above is run through a loop.
       let offsetLocation = 0;
       const lineChildNodesWithNewFormat = [];
       line.children.forEach((child, i) => {
-        // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
+        // [EDITOR-19] Since Embed elements come from different sources, modifying their text content ourselves is meaningless. Therefore, if the line contains an Embed format, we do not continue.
         const isEmbed = Object.keys(child.format).some(v => {
           return this.EMBED_ELEMENT.has(v);
         });
 
-        // tekrarlayan formatlar engelleniyor. birde zaten for olan format tekrar uygulanırsa onu siliyor.
+        // [EDITOR-20] Repeated formats are prevented. Also, if a format that is already applied is reapplied, it removes it.
         let newInlineFormat = { ...child.format, ...inlineFormat };
         Object.entries(newInlineFormat).forEach(([key, value]) => {
           if (value === false || !this.INLINE_ELEMENT.has(key) || blockedFormat.includes(key) || this.EMBED_ELEMENT.has(key)) {
@@ -561,16 +561,16 @@ class Editor {
           }
         });
 
-        // her textContent'ın range içinde olup olmadığı kontrol ediliyor. rangenin başladığı konum textContent'i etkiliyorsa bağıl index hesaplanıyor. etkilenmiyorsa borderStart buradan false olarak geliyor.
-        // start: seçili rangenin başlangıç konumu
-        // line.start: ait olduğu line'nin başlangıç konumu
-        // offsetLocation döngüden şimdiye kadar geçen textContent'lerin lenght'lerinin toplamı.
+        // [EDITOR-21] Each textContent is checked whether it is within the range. If the position where the range starts affects the textContent, the relative index is calculated. If it is not affected, borderStart comes from here as false.
+        // [EDITOR-22] start: starting position of the selected range
+        // [EDITOR-23] line.start: starting position of the line it belongs to
+        // [EDITOR-24] offsetLocation: the sum of the lengths of textContents that have passed in the loop until now.
         let borderStart = start - (line.start + offsetLocation + child.length);
-        // borderStart'ın sıfırdan küçük olması demek bu textContent içerisinde bir sınır bulunuyor anlamına geliyor. 0'dan büyük olması ise range'nin daha ileride başladığı anlamına geliyor.
+        // [EDITOR-25] borderStart being less than zero means that there is a boundary inside this textContent. Being greater than 0 means that the range starts further ahead.
         borderStart = (borderStart < 0) ? start - (line.start + offsetLocation) : false;
-        // yine borderStart'ın sıfırdan küçük çıkmış olması başlangıç noktasının bundan daha önceki bir textContent'in içinde yer aldığını gösteriyor.
+        // [EDITOR-26] Again, borderStart having come out less than zero shows that the start point lies inside an earlier textContent.
         if (borderStart < 0) {
-          // end buranın öncesinde bitmesi rangenin bittiği anlamına geliyor. end'i kontrol etmemizin nedeni yukarıdaki mantıksal hesaplamanın sadece başlangıçı kontrol ediyor olması. yani rangenin sonu gelsede start noktasının ilerisinde yer alan bir index'i formatlanıcak olarak kabul ediyor. Onu aşağıdaki koşulda düzeltiyoruz. Range (yani formatlandırma için seçili alan) bitmediyse başlangıç noktasını geçerli textContent için 0 olarak alıyor.
+          // [EDITOR-27] end ending before this point means the range has ended. The reason we check end is that the logical calculation above only checks the start. That is, even if the range ends, it accepts an index further than the start point as one to be formatted. We correct that in the condition below. If the range (i.e. the area selected for formatting) has not ended, it takes the start point as 0 for the current textContent.
           if (end <= line.start + offsetLocation) {
             borderStart = false;
           } else {
@@ -578,45 +578,45 @@ class Editor {
           }
         }
 
-        // her textContent'ın range içinde olup olmadığı kontrol ediliyor. rangenin başladığı konum textContent'i etkiliyorsa bağıl index hesaplanıyor. Etkilenmiyorsa borderEnd buradan false olarak geliyor.
-        // end: seçili rangenin başlangıç konumu
-        // line.start: ait olduğu line'nin başlangıç konumu
-        // offsetLocation döngüden şimdiye kadar geçen textContent'lerin lenght'lerinin toplamı.
+        // [EDITOR-28] Each textContent is checked whether it is within the range. If the position where the range starts affects the textContent, the relative index is calculated. If it is not affected, borderEnd comes from here as false.
+        // [EDITOR-29] end: starting position of the selected range
+        // [EDITOR-30] line.start: starting position of the line it belongs to
+        // [EDITOR-31] offsetLocation: the sum of the lengths of textContents that have passed in the loop until now.
         let borderEnd = end - (line.start + offsetLocation + child.length);
-        // borderEnd'ın sıfırdan küçük olması demek bu textContent içerisinde bir sınır bulunuyor anlamına geliyor. 0'dan büyük olması ise range'nin daha ileride son bulduğu anlamına geliyor.
+        // [EDITOR-32] borderEnd being less than zero means that there is a boundary inside this textContent. Being greater than 0 means that the range ends further ahead.
         borderEnd = (borderEnd < 0) ? end - (line.start + offsetLocation) : child.length;
-        // Yukarıdan ne gelirse gelsin format false olursa end'te false olur. Başlangıçı olmayan bir olgunun bitişide olmaz. FormatStarts'ın neden false olduğu yukarıda yazıldı. borderEnd'te yukarıda mantıksal hesaplama borderStart'tan bağımsız olarak kontrol yapıyor. Alttaki koşullamayla bunu borderStart'la ilişkilendirdik. Bu olmazsa line'nin başında range'in dışında yer alan bir textContent formatlınıcakmış gibi gözüküyor.
+        // [EDITOR-33] Whatever comes from above, if format is false then end is also false. Something that has no beginning has no end either. Why FormatStarts is false was written above. The logical calculation above for borderEnd checks independently from borderStart. We tied this to borderStart with the condition below. Without this, a textContent at the beginning of the line that lies outside the range looked as if it would be formatted.
         if (borderStart === false || (borderStart === 0 && borderEnd === 0) || isEmbed || child.textContent == null) {
           borderStart = false;
           borderEnd = false;
         }
 
-        // CURSOR
+        // [EDITOR-34] CURSOR
         let cursorChildBorderControl = false;
         let isChildCursor = false;
 
         Object.entries(newInlineFormat).forEach(([key, value]) => {
           if (key === this.registry.get('format/cursor').formatName) {
-            // range startını cursor lengthi (1) kadar küçülterek rangenin aralığını cursora göre doğru ayarlıyoruz. bunu yapmamız hemen altındaki koşulunda false dönmesine sebep oluyor.
+            // [EDITOR-35] By shrinking the range start by the cursor length (1), we adjust the range correctly with respect to the cursor. Doing this causes the condition just below to return false.
             start--;
-            // bu gelen child zaten crusor ise ona göre muamele yapıyoruz. burada onu belirledik aşşağıda yakalayacağız.
+            // [EDITOR-36] If this incoming child is already a cursor, we treat it accordingly. We marked it here, we will catch it below.
             isChildCursor = true;
           }
         });
 
-        // yukarıda start pozisyonu değişmedi ise burada cursor yok manasına geliyor. bu yüzden bu child'i kontrol ediyoruz bu child'in sınırları içerisinde crusor koyucaksa koyuyoruz.
+        // [EDITOR-37] If the start position did not change above, it means there is no cursor here. Therefore we check this child; if a cursor is to be placed within the bounds of this child, we place it.
         if (start === end && child.start <= start && child.end >= end) {
           cursorChildBorderControl = true;
-          // childden önceki ya da sonraki eleman crusorsa kontrol ediyoruz. sınır değerlerde (index'in en başta ya da en sonda olması durumunda iki defa cursor eklenmesine sebep olabiliyor.)
+          // [EDITOR-38] We check whether the element before or after the child is a cursor. At boundary values (when the index is at the very start or the very end), it can cause two cursors to be added.
           if (line.children[i + 1]) {
-            // bu child'den sonraki eleman cursor mu değil mi? onu kontrol ediyoruz.
+            // [EDITOR-39] We check whether the element after this child is a cursor or not.
             if (Object.keys(line.children[i + 1].format).includes(this.registry.get('format/cursor').formatName)) {
               cursorChildBorderControl = false;
             }
           }
 
           if (lineChildNodesWithNewFormat[lineChildNodesWithNewFormat.length - 1]) {
-            // childen önceki eleman crusor mu değil mi kontrol ediyoruz.
+            // [EDITOR-40] We check whether the element before the child is a cursor or not.
             if (Object.keys(lineChildNodesWithNewFormat[lineChildNodesWithNewFormat.length - 1].format).includes(this.registry.get('format/cursor').formatName)) {
               cursorChildBorderControl = false;
             }
@@ -628,12 +628,12 @@ class Editor {
             lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
           }
 
-          // Önceki ya da sonraki eleman cursor değilse cursor ekliyoruz.
+          // [EDITOR-41] If the previous or next element is not a cursor, we add a cursor.
           if (cursorChildBorderControl) {
             newInlineFormat = { ...newInlineFormat, cursor: true };
-            // Child'in sınırlarında index'in bulunması durumu.
+            // [EDITOR-42] The case where the index is on the boundaries of the child.
             if (child.end === end || child.start === start) {
-              // End'in yukarıda olma sebebi child'ten sonraya eklemek crusoru.
+              // [EDITOR-43] The reason End is at the top is to insert the cursor after the child.
               if (child.end === end) {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
               }
@@ -644,7 +644,7 @@ class Editor {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
               }
             } else {
-              // Crusor sınır değerlerde değilse child'i bölüp cursor'u yerleştiriyoruz.
+              // [EDITOR-44] If the cursor is not on the boundary values, we split the child and place the cursor.
               const part1 = child.textContent.slice(0, borderStart);
               const part2 = '';
               const part3 = child.textContent.slice(borderEnd);
@@ -654,7 +654,7 @@ class Editor {
               lineChildNodesWithNewFormat.push({ textContent: part3, format: child.format });
             }
 
-            // Cursor eklenirse cursorun length'i kadar child.length'i arrtırmak gerekiyor. cursor 1 karakter olduğundan bunu bu şekilde yaptık. Cursor sınıfından Cursor.Content.length çekilip bu ekleme yapılabilir.
+            // [EDITOR-45] When a cursor is added, child.length needs to be increased by the cursor's length. Since the cursor is 1 character, we did it this way. Cursor.Content.length could be pulled from the Cursor class to perform this addition.
             child.length++;
           }
 
@@ -662,7 +662,7 @@ class Editor {
 
           return;
         }
-        // CURSOR END
+        // [EDITOR-46] CURSOR END
 
         if (borderStart === false && borderEnd === false) {
           lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
@@ -710,7 +710,7 @@ class Editor {
           delete newBlockFormat[key];
         }
 
-        // line.format sıralamada ilk geldiğinden ve block formatta ilk gelen key alındığındığından, blockFormat var ise ve içersinden aynı style yoksa line.formatın stylını geçersiz kılıyoruz.
+        // [EDITOR-47] Since line.format comes first in the order and the first incoming key is taken in the block format, if blockFormat exists and does not contain the same style, we override line.format's style.
         if (Object.keys(blockFormat).length && line.format[key] != null && blockFormat[key] == null) {
           delete newBlockFormat[key];
         }
@@ -745,9 +745,9 @@ class Editor {
       return obj;
     }, {});
 
-    // elementin etkilenen kısımlarını tespit edit stillendiriyor.
+    // [EDITOR-48] Detects the affected parts of the element and styles them.
     linesInRange.forEach((line) => {
-      // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
+      // [EDITOR-49] Since Embed elements come from different sources, modifying their text content ourselves is meaningless. Therefore, if the line contains an Embed format, we do not continue.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
         return this.EMBED_ELEMENT.has(key);
       });
@@ -773,7 +773,7 @@ class Editor {
           delete newBlockFormat[key];
         }
 
-        // line.format sıralamada ilk geldiğinden ve block formatta ilk gelen key alındığındığından, blockFormat var ise ve içersinden aynı style yoksa line.formatın stylını geçersiz kılıyoruz.
+        // [EDITOR-50] Since line.format comes first in the order and the first incoming key is taken in the block format, if blockFormat exists and does not contain the same style, we override line.format's style.
         if (Object.keys(blockFormat).length && line.format[key] != null && blockFormat[key] == null) {
           delete newBlockFormat[key];
         }
@@ -791,9 +791,9 @@ class Editor {
    * @param {object} format - Inline format object.
    */
   formatText (start, end, format) {
-    // format parametresini kayıtlı parametrelerin dışında kalanları çıkartıcak şekilde filtreliyor.
+    // [EDITOR-51] Filters the format parameter to remove anything outside the registered parameters.
 
-    // o rangenin arasında kalan elementleri filtreliyor.
+    // [EDITOR-52] Filters the elements that fall within that range.
     const linesInRange = this.paper.getLines(start, end);
     const rangeFormat = this.paper.getFormat(start, end);
 
@@ -815,9 +815,9 @@ class Editor {
       return arr;
     }, []);
 
-    // elementin etkilenen kısımlarını tespit edit stillendiriyor.
+    // [EDITOR-53] Detects the affected parts of the element and styles them.
     linesInRange.forEach((line) => {
-      // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
+      // [EDITOR-54] Since Embed elements come from different sources, modifying their text content ourselves is meaningless. Therefore, if the line contains an Embed format, we do not continue.
       const isContainEmbed = Object.entries(line.format).some(([key, value]) => {
         return this.EMBED_ELEMENT.has(key);
       });
@@ -834,18 +834,18 @@ class Editor {
       if (!Object.keys(inlineFormat).length) {
         return;
       }
-      // getInRangeTextWithFormat line'ın textlerini parçalıyor. textler style'ına göre parçalanıyor. örneğin 'bu gece hava soğuk' tek parça gelirken 'bu gece <strong>hava</strong> soğuk' 3 parça halinde geliyor. parçalar array için obje halinde geliyor. [{'textContent': textcontent, 'format': ['bold', 'italic']}] gibi.
+      // [EDITOR-55] getInRangeTextWithFormat splits the line's texts. Texts are split according to their style. For example 'tonight the weather is cold' comes as a single piece, while 'tonight the weather <strong>is</strong> cold' comes in 3 pieces. The pieces come as objects inside an array, like [{'textContent': textcontent, 'format': ['bold', 'italic']}].
 
-      // yukarıdan gelen array döngüye sokuluyor.
+      // [EDITOR-56] The array coming from above is run through a loop.
       let offsetLocation = 0;
       const lineChildNodesWithNewFormat = [];
       line.children.forEach((child, i) => {
-        // Embed elementler farklı kaynaklardan gelen elementler olduğundan içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eyer line Embed formatı içeriyorsa devam etmiyoruz.
+        // [EDITOR-57] Since Embed elements come from different sources, modifying their text content ourselves is meaningless. Therefore, if the line contains an Embed format, we do not continue.
         const isEmbed = Object.keys(child.format).some(v => {
           return this.EMBED_ELEMENT.has(v);
         });
 
-        // tekrarlayan formatlar engelleniyor. birde zaten for olan format tekrar uygulanırsa onu siliyor.
+        // [EDITOR-58] Repeated formats are prevented. Also, if a format that is already applied is reapplied, it removes it.
         let newInlineFormat = { ...child.format, ...inlineFormat };
         Object.entries(newInlineFormat).forEach(([key, value]) => {
           if (value === false || !this.INLINE_ELEMENT.has(key) || blockedFormat.includes(key) || this.EMBED_ELEMENT.has(key)) {
@@ -853,16 +853,16 @@ class Editor {
           }
         });
 
-        // her textContent'ın range içinde olup olmadığı kontrol ediliyor. rangenin başladığı konum textContent'i etkiliyorsa bağıl index hesaplanıyor. etkilenmiyorsa borderStart buradan false olarak geliyor.
-        // start: seçili rangenin başlangıç konumu
-        // line.start: ait olduğu line'nin başlangıç konumu
-        // offsetLocation döngüden şimdiye kadar geçen textContent'lerin lenght'lerinin toplamı.
+        // [EDITOR-59] Each textContent is checked whether it is within the range. If the position where the range starts affects the textContent, the relative index is calculated. If it is not affected, borderStart comes from here as false.
+        // [EDITOR-60] start: starting position of the selected range
+        // [EDITOR-61] line.start: starting position of the line it belongs to
+        // [EDITOR-62] offsetLocation: the sum of the lengths of textContents that have passed in the loop until now.
         let borderStart = start - (line.start + offsetLocation + child.length);
-        // borderStart'ın sıfırdan küçük olması demek bu textContent içerisinde bir sınır bulunuyor anlamına geliyor. 0'dan büyük olması ise range'nin daha ileride başladığı anlamına geliyor.
+        // [EDITOR-63] borderStart being less than zero means that there is a boundary inside this textContent. Being greater than 0 means that the range starts further ahead.
         borderStart = (borderStart < 0) ? start - (line.start + offsetLocation) : false;
-        // yine borderStart'ın sıfırdan küçük çıkmış olması başlangıç noktasının bundan daha önceki bir textContent'in içinde yer aldığını gösteriyor.
+        // [EDITOR-64] Again, borderStart having come out less than zero shows that the start point lies inside an earlier textContent.
         if (borderStart < 0) {
-          // end buranın öncesinde bitmesi rangenin bittiği anlamına geliyor. end'i kontrol etmemizin nedeni yukarıdaki mantıksal hesaplamanın sadece başlangıçı kontrol ediyor olması. yani rangenin sonu gelsede start noktasının ilerisinde yer alan bir index'i formatlanıcak olarak kabul ediyor. Onu aşağıdaki koşulda düzeltiyoruz. Range (yani formatlandırma için seçili alan) bitmediyse başlangıç noktasını geçerli textContent için 0 olarak alıyor.
+          // [EDITOR-65] end ending before this point means the range has ended. The reason we check end is that the logical calculation above only checks the start. That is, even if the range ends, it accepts an index further than the start point as one to be formatted. We correct that in the condition below. If the range (i.e. the area selected for formatting) has not ended, it takes the start point as 0 for the current textContent.
           if (end <= line.start + offsetLocation) {
             borderStart = false;
           } else {
@@ -870,45 +870,45 @@ class Editor {
           }
         }
 
-        // her textContent'ın range içinde olup olmadığı kontrol ediliyor. rangenin başladığı konum textContent'i etkiliyorsa bağıl index hesaplanıyor. Etkilenmiyorsa borderEnd buradan false olarak geliyor.
-        // end: seçili rangenin başlangıç konumu
-        // line.start: ait olduğu line'nin başlangıç konumu
-        // offsetLocation döngüden şimdiye kadar geçen textContent'lerin lenght'lerinin toplamı.
+        // [EDITOR-66] Each textContent is checked whether it is within the range. If the position where the range starts affects the textContent, the relative index is calculated. If it is not affected, borderEnd comes from here as false.
+        // [EDITOR-67] end: starting position of the selected range
+        // [EDITOR-68] line.start: starting position of the line it belongs to
+        // [EDITOR-69] offsetLocation: the sum of the lengths of textContents that have passed in the loop until now.
         let borderEnd = end - (line.start + offsetLocation + child.length);
-        // borderEnd'ın sıfırdan küçük olması demek bu textContent içerisinde bir sınır bulunuyor anlamına geliyor. 0'dan büyük olması ise range'nin daha ileride son bulduğu anlamına geliyor.
+        // [EDITOR-70] borderEnd being less than zero means that there is a boundary inside this textContent. Being greater than 0 means that the range ends further ahead.
         borderEnd = (borderEnd < 0) ? end - (line.start + offsetLocation) : child.length;
-        // Yukarıdan ne gelirse gelsin format false olursa end'te false olur. Başlangıçı olmayan bir olgunun bitişide olmaz. FormatStarts'ın neden false olduğu yukarıda yazıldı. borderEnd'te yukarıda mantıksal hesaplama borderStart'tan bağımsız olarak kontrol yapıyor. Alttaki koşullamayla bunu borderStart'la ilişkilendirdik. Bu olmazsa line'nin başında range'in dışında yer alan bir textContent formatlınıcakmış gibi gözüküyor.
+        // [EDITOR-71] Whatever comes from above, if format is false then end is also false. Something that has no beginning has no end either. Why FormatStarts is false was written above. The logical calculation above for borderEnd checks independently from borderStart. We tied this to borderStart with the condition below. Without this, a textContent at the beginning of the line that lies outside the range looked as if it would be formatted.
         if (borderStart === false || (borderStart === 0 && borderEnd === 0) || isEmbed || child.textContent == null) {
           borderStart = false;
           borderEnd = false;
         }
 
-        // CURSOR
+        // [EDITOR-72] CURSOR
         let cursorChildBorderControl = false;
         let isChildCursor = false;
 
         Object.entries(newInlineFormat).forEach(([key, value]) => {
           if (key === this.registry.get('format/cursor').formatName) {
-            // range startını cursor lengthi (1) kadar küçülterek rangenin aralığını cursora göre doğru ayarlıyoruz. bunu yapmamız hemen altındaki koşulunda false dönmesine sebep oluyor.
+            // [EDITOR-73] By shrinking the range start by the cursor length (1), we adjust the range correctly with respect to the cursor. Doing this causes the condition just below to return false.
             start--;
-            // bu gelen child zaten crusor ise ona göre muamele yapıyoruz. burada onu belirledik aşşağıda yakalayacağız.
+            // [EDITOR-74] If this incoming child is already a cursor, we treat it accordingly. We marked it here, we will catch it below.
             isChildCursor = true;
           }
         });
 
-        // yukarıda start pozisyonu değişmedi ise burada cursor yok manasına geliyor. bu yüzden bu child'i kontrol ediyoruz bu child'in sınırları içerisinde crusor koyucaksa koyuyoruz.
+        // [EDITOR-75] If the start position did not change above, it means there is no cursor here. Therefore we check this child; if a cursor is to be placed within the bounds of this child, we place it.
         if (start === end && child.start <= start && child.end >= end) {
           cursorChildBorderControl = true;
-          // childden önceki ya da sonraki eleman crusorsa kontrol ediyoruz. sınır değerlerde (index'in en başta ya da en sonda olması durumunda iki defa cursor eklenmesine sebep olabiliyor.)
+          // [EDITOR-76] We check whether the element before or after the child is a cursor. At boundary values (when the index is at the very start or the very end), it can cause two cursors to be added.
           if (line.children[i + 1]) {
-            // bu child'den sonraki eleman cursor mu değil mi? onu kontrol ediyoruz.
+            // [EDITOR-77] We check whether the element after this child is a cursor or not.
             if (Object.keys(line.children[i + 1].format).includes(this.registry.get('format/cursor').formatName)) {
               cursorChildBorderControl = false;
             }
           }
 
           if (lineChildNodesWithNewFormat[lineChildNodesWithNewFormat.length - 1]) {
-            // childen önceki eleman crusor mu değil mi kontrol ediyoruz.
+            // [EDITOR-78] We check whether the element before the child is a cursor or not.
             if (Object.keys(lineChildNodesWithNewFormat[lineChildNodesWithNewFormat.length - 1].format).includes(this.registry.get('format/cursor').formatName)) {
               cursorChildBorderControl = false;
             }
@@ -920,12 +920,12 @@ class Editor {
             lineChildNodesWithNewFormat.push({ textContent: '', format: newInlineFormat });
           }
 
-          // Önceki ya da sonraki eleman cursor değilse cursor ekliyoruz.
+          // [EDITOR-79] If the previous or next element is not a cursor, we add a cursor.
           if (cursorChildBorderControl) {
             newInlineFormat = { ...newInlineFormat, cursor: true };
-            // Child'in sınırlarında index'in bulunması durumu.
+            // [EDITOR-80] The case where the index is on the boundaries of the child.
             if (child.end === end || child.start === start) {
-              // End'in yukarıda olma sebebi child'ten sonraya eklemek crusoru.
+              // [EDITOR-81] The reason End is at the top is to insert the cursor after the child.
               if (child.end === end) {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
               }
@@ -936,7 +936,7 @@ class Editor {
                 lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
               }
             } else {
-              // Crusor sınır değerlerde değilse child'i bölüp cursor'u yerleştiriyoruz.
+              // [EDITOR-82] If the cursor is not on the boundary values, we split the child and place the cursor.
               const part1 = child.textContent.slice(0, borderStart);
               const part2 = '';
               const part3 = child.textContent.slice(borderEnd);
@@ -946,7 +946,7 @@ class Editor {
               lineChildNodesWithNewFormat.push({ textContent: part3, format: child.format });
             }
 
-            // Cursor eklenirse cursorun length'i kadar child.length'i arrtırmak gerekiyor. cursor 1 karakter olduğundan bunu bu şekilde yaptık. Cursor sınıfından Cursor.Content.length çekilip bu ekleme yapılabilir.
+            // [EDITOR-83] When a cursor is added, child.length needs to be increased by the cursor's length. Since the cursor is 1 character, we did it this way. Cursor.Content.length could be pulled from the Cursor class to perform this addition.
             child.length++;
           }
 
@@ -954,7 +954,7 @@ class Editor {
 
           return;
         }
-        // CURSOR END
+        // [EDITOR-84] CURSOR END
 
         if (borderStart === false && borderEnd === false) {
           lineChildNodesWithNewFormat.push({ textContent: child.textContent, format: child.format });
@@ -1010,14 +1010,14 @@ class Editor {
     const exportedContent = this.paper.exportContent(start, end);
 
     const borderLines = linesInRange.filter((line) => {
-      // start !== line.start bu koşul en baştaki line'nin sadece çocuklarının silinmesini sağlıyor. eğer bütün lineleri kkomple silersek normal akışa ters oluyor.
+      // [EDITOR-85] start !== line.start: this condition makes sure only the children of the first line are deleted. If we delete all lines completely, it goes against the normal flow.
       if ((line.start > start && line.end <= end) || (line.start >= start && line.end < end) || (line.start >= start && line.end <= end && cleanLine)) {
         const lineIndex = this.paper.lines.indexOf(line);
 
         this.paper.lines.splice(lineIndex, 1);
         line.domNode.parentNode.removeChild(line.domNode);
 
-        // Bunu yapmamazın nedeni updatenin en baş/parent elemente yapılması lazım yoksa sayıları doğru güncellemiyor.
+        // [EDITOR-86] The reason we do this is that the update needs to be applied to the topmost/parent element; otherwise it does not update the numbers correctly.
         if (this.paper.lines[lineIndex]) {
           let referenceLine = this.paper.lines[lineIndex];
 
@@ -1037,11 +1037,11 @@ class Editor {
     borderLines.forEach((line) => {
       const remainingChildren = [];
       line.children.forEach((child) => {
-        if (child.end <= start || child.start >= end) { // child komple  sınırın dışında kalırsa
+        if (child.end <= start || child.start >= end) { // [EDITOR-87] if the child stays completely outside the boundary
           remainingChildren.push(child);
-        } else if (child.start >= start && child.end <= end) { // child sınırın içinde komple kalırsa
-          // siliniyor
-        } else if (child.start <= start && child.end >= end) { // sınır child'in içinden başlar ve biterse
+        } else if (child.start >= start && child.end <= end) { // [EDITOR-88] if the child stays completely inside the boundary
+          // [EDITOR-89] gets deleted
+        } else if (child.start <= start && child.end >= end) { // [EDITOR-90] if the boundary starts and ends inside the child
           const remainingText1 = child.textContent.slice(0, start - child.start);
           remainingChildren.push({ textContent: remainingText1, format: child.format });
 
@@ -1049,12 +1049,12 @@ class Editor {
             const remainingText2 = child.textContent.slice(end - child.end);
             remainingChildren.push({ textContent: remainingText2, format: child.format });
           }
-        } else if (child.start <= start) { // sınır child'in içinden başlarsa
+        } else if (child.start <= start) { // [EDITOR-91] if the boundary starts inside the child
           if (Math.abs(start - child.start)) {
             const remainingText = child.textContent.slice(0, start - child.start);
             remainingChildren.push({ textContent: remainingText, format: child.format });
           }
-        } else if (child.end >= end) { // sınır child'in içinde sonlanırsa
+        } else if (child.end >= end) { // [EDITOR-92] if the boundary ends inside the child
           if (Math.abs(end - child.end)) {
             const remainingText2 = child.textContent.slice(end - child.end);
             remainingChildren.push({ textContent: remainingText2, format: child.format });
@@ -1083,7 +1083,7 @@ class Editor {
       borderLines[0].changeStatus = true;
     }
 
-    // line aralarındaki boşlukları kesiyor. lineları birleştiriyor.
+    // [EDITOR-93] Cuts the gaps between lines. Merges the lines.
 
     this.paper.initialize();
     this.history.save({ action: 'delete', caret: [start, end], content: exportedContent });
@@ -1287,7 +1287,7 @@ class Editor {
 
   contains (parent, descendant) {
     try {
-      // Firefox inserts inaccessible nodes around video elements
+      // [EDITOR-94] Firefox inserts inaccessible nodes around video elements
       descendant.parentNode;
     } catch (e) {
       return false;
@@ -1297,7 +1297,7 @@ class Editor {
   }
 }
 
-// Error boundary wrapper for public API methods
+// [EDITOR-95] Error boundary wrapper for public API methods
 ['format', 'formatLine', 'formatText', 'insertNode', 'deleteContent', 'update', 'setContent', 'getContent'].forEach(method => {
   const original = Editor.prototype[method];
   Editor.prototype[method] = function (...args) {

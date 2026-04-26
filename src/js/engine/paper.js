@@ -98,7 +98,7 @@ class Paper {
           line.domNode.appendChild(parentFormat || textNode);
         }
       });
-      // Alttaki satırı kaydırınca preformatted'de bozulmalar meydana geliyor. İmleç en başta iken paragraf<>pre yaparsan imleç kayıyor, çünkü en başta cursor optimize yapıyor. Remove fonksiyonu yapıldığında bu düzelir. Ara satır sonunda paragraf<>pre yapınca imleç alta kayıyor. Pre içerisinde son paragrafı ve sonraki paragraf olan paragrafı seçip pre<>paragraf yapınca end 1 kayıyor. Bu alttaki hepsini engelliyor.
+      // [PAPER-1] When the line below is shifted, preformatted blocks get corrupted. If the caret is at the very start and you toggle paragraph<>pre, the caret shifts because optimize runs at the very start. This will be fixed when the remove function is implemented. When you toggle paragraph<>pre at the end of an intermediate line, the caret shifts down. When you select the last paragraph inside pre together with the next paragraph and toggle pre<>paragraph, end shifts by 1. This block prevents all of the above.
     });
 
     this.editor.observer.complete();
@@ -110,7 +110,7 @@ class Paper {
 
     let first = false;
     contentArray.forEach(content => {
-      this.editor.insertNode({ format: content.format, generateBlock: first }, -1); // preformatted
+      this.editor.insertNode({ format: content.format, generateBlock: first }, -1); // [PAPER-2] preformatted
       content.children.forEach(child => {
         this.editor.insertNode({ ...child }, -1);
       });
@@ -142,15 +142,15 @@ class Paper {
           textContent = textContent.slice(0, -1);
         }
 
-        if (child.end <= start || child.start >= end) { // Child komple sınırın dışında kalırsa
+        if (child.end <= start || child.start >= end) { // [PAPER-3] If the child stays entirely outside the boundary
           return;
-        } else if (child.start >= start && child.end <= end) { // Child sınırın içinde komple kalırsa
-          // textContent olduğu gibi kalır
-        } else if (child.start <= start && child.end >= end) { // sınır child'in içinden başlar ve biterse
+        } else if (child.start >= start && child.end <= end) { // [PAPER-4] If the child stays entirely inside the boundary
+          // [PAPER-5] textContent stays as is
+        } else if (child.start <= start && child.end >= end) { // [PAPER-6] If the boundary starts and ends inside the child
           textContent = textContent.slice(start - child.start, end - child.start);
-        } else if (child.start <= start) { // sınır child'in içinden başlarsa
+        } else if (child.start <= start) { // [PAPER-7] If the boundary starts inside the child
           textContent = textContent.slice(start - child.start);
-        } else if (child.end >= end) { // sınır child'in içinde sonlanırsa
+        } else if (child.end >= end) { // [PAPER-8] If the boundary ends inside the child
           textContent = textContent.slice(0, end - child.start);
         }
 
@@ -171,7 +171,7 @@ class Paper {
     }, []);
 
     return exportedContent;
-    // [{textContent: '\n', format: {paragraph: true}}, {textContent: 'asdas', format: {bold: true}}]
+    // [PAPER-9] [{textContent: '\n', format: {paragraph: true}}, {textContent: 'asdas', format: {bold: true}}]
   }
 
   /* *************************** to paper ****************************** */
@@ -267,13 +267,13 @@ class Paper {
   }
 
   getFormat (start, end) {
-    // O range'in arasında kalan elementleri filtreliyor.
+    // [PAPER-10] Filters the elements that fall within that range.
     const linesInRange = this.getLines(start, end);
 
     let blockFormat;
     let inlineFormat;
     linesInRange.forEach((line) => {
-      // Embed elementler farklı kaynaklardan gelen elementler olduğundan, içlerinde text içeriğini bizim değiştirmemiz anlamsız oluyor. Bu yüzden eğer line Embed formatı içeriyorsa devam etmiyoruz.
+      // [PAPER-11] Since embed elements come from different sources, modifying their text content does not make sense for us. Therefore, if the line contains an Embed format, we do not continue.
       const isLineEmbed = Object.entries(line.format).some(([key, value]) => {
         return this.editor.EMBED_ELEMENT.has(key);
       });
@@ -282,7 +282,7 @@ class Paper {
         blockFormat = line.format;
       }
 
-      // Tekrarlayan formatlar engelleniyor.
+      // [PAPER-12] Duplicate formats are prevented.
       if (Object.keys(blockFormat).length > 0) {
         const newBlockFormat = {};
 

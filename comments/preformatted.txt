@@ -1,0 +1,137 @@
+Source: src/js/format/preformatted.js
+================================
+
+[PREFORMATTED-1]
+---
+getMemCaretPosition() değil, çünkü burası böyle olmazsa enterle son line oluştur, pre içinde karakter girince girilen karakterin başına atıyor.
+===
+
+[PREFORMATTED-2]
+---
+Chrome backspace tuşu düzeltme, normal paragraftan gelirken
+===
+
+[PREFORMATTED-3]
+---
+Firefox backspace tuşuyla paragraftan preformatted'e geri geldiğinde en sona geliyor; biz scroll'un \n karakterinden önce durmasını istediğimizden bunu yapıyoruz.
+===
+
+[PREFORMATTED-4]
+---
+Line sonunda pre-paragraf arası yap, o yüzden bunu koyduk.
+===
+
+[PREFORMATTED-5]
+---
+Pre => başka format olurken pre'den sonraki satır farklı bir format ise, satır arası farkı azalacağından ('pre sonundaki \n karakteri budanıyor'), caret range'yi 1 azaltıyoruz.
+===
+
+[PREFORMATTED-6]
+---
+Başka formata dönüşmüyorsa buradan dön.
+===
+
+[PREFORMATTED-7]
+---
+--------------------- CURSOR REGENERATE -------------------------
+===
+
+[PREFORMATTED-8]
+---
+İlk satır dönüşmüyorsa bundan sonra gelen index 1 artacak. İlk satırdan sonra \n var new line yok, dolayısıyla newline geleceği için bunu yapıyoruz.
+===
+
+[PREFORMATTED-9]
+---
+--------------------- END OF CURSOR REGENERATE -------------------------
+===
+
+[PREFORMATTED-10]
+---
+-1 yapıyoruz, çünkü \n karakterinin üzerinde yaparsak relEnd ve relStart aynı çıkıyor.
+===
+
+[PREFORMATTED-11]
+---
+Text başındaki ve sonundaki çift \n karakterlerini alıp tek \n karakterine dönüştürüyoruz. Satırlar sabit kalıyor böylece. [:linebreak] ile değiştiriyoruz, çünkü trim ile tek \n karakterlerini buduyoruz.
+===
+
+[PREFORMATTED-12]
+---
+Caret position olduğu gibi kaldığından ve bu pozisyonda delete-optimize yapıldığından, preformatted optimize'si koşula denk gelen caret scroll'u değiştiriyordu. Bunu önlemek için caret'i hafızaya alıp 0'ladık. Delete'den sonra tekrar eski haline döndürdük.
+===
+
+[PREFORMATTED-13]
+---
+line break lenfgth;
+===
+
+[PREFORMATTED-14]
+---
+lineCleaner
+===
+
+[PREFORMATTED-15]
+---
+Pre'nin en son line'ını ve ondan sonra gelen paragrafı seçince ve pre style'ı uygulayınca paragraf 1 karakter kayıyor, orası burayla ilgili. Burası şu an seçili alan içinde line olmadığını varsayıyor.
+===
+
+[PREFORMATTED-16]
+---
+caretPos'u önceden değişkene aldık, çünkü formatladıktan sonra optimize'de değiştiriyordu.
+===
+
+[PREFORMATTED-17]
+---
+preformata dönüşücek;
+===
+
+[PREFORMATTED-18]
+---
+İlk koşul: eğer üstteki pre ise satır arası length'i gidiyor. Onun yerine hiçbir şey eklenmiyor, o yüzden pre yaparken üstteki pre ise 1 azalttık.
+===
+
+[PREFORMATTED-19]
+---
+ARD ARDA 4 VE UZERI ENTER GELIRSE BUNU DUZELTIYOR
+===
+
+[PREFORMATTED-20]
+---
+Seçili Text varsa sil
+===
+
+[PREFORMATTED-21]
+---
+
+===
+
+[PREFORMATTED-22]
+---
+ENTER KARATERINI EKLIYOR YENI BIR SATIRA GEÇMEK YERINE
+===
+
+[PREFORMATTED-23]
+---
+SON
+===
+
+[PREFORMATTED-24]
+---
+Seçili Text varsa sil
+===
+
+[PREFORMATTED-25]
+---
+
+===
+
+[PREFORMATTED-26]
+---
+ENTER KARATERINI EKLIYOR YENI BIR SATIRA GEÇMEK YERINE
+===
+
+[PREFORMATTED-27]
+---
+SON
+===

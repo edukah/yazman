@@ -91,7 +91,7 @@ class Selection {
   }
 
   setCaretPosition (caretPosition) {
-    // Bu sonda olursa event setSelection'dan sonra event tetiklendiğinden ve eventin içinde caretPositionFocusOn olduğundan ve bu değer önceki değer olduğundan, selection'ı bir öncekine göre ayarlayarak hataya sebep oluyor.
+    // [SELECTION-1] If this is at the end, since the event is triggered after setSelection and since caretPositionFocusOn is inside the event and this value is the previous value, it causes an error by adjusting the selection according to the previous one.
     this.editor.variables.set('rangeMem', this.getMemCaretPosition('trusted'));
     this.setMemCaretPosition(caretPosition, 'trusted');
 

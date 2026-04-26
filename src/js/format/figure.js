@@ -165,7 +165,7 @@ class FigureImage extends BlockEmbed {
         editor.insertNode({ format: { paragraph: true } }, 0);
         editor.selection.setMemCaretPosition([0, 0]);
       } else {
-        editor.insertNode({ format: { paragraph: true } }, lines[0].parent.end + 1); // +1 for line break
+        editor.insertNode({ format: { paragraph: true } }, lines[0].parent.end + 1); // [FIGURE-1] +1 for line break
         editor.selection.setMemCaretPosition([lines[0].parent.next.start, lines[0].parent.next.start]);
       }
 
@@ -261,7 +261,7 @@ class Figcaption extends Block {
 
     const [startIndex, endIndex] = this.editor.selection.getMemCaretPosition();
 
-    /* Önünde arkasında figcaption var ise textleri birleştirip tag'ları siliyor */
+    /* [FIGURE-2] If there is a figcaption in front of or behind it, combines the texts and deletes the tags */
     if (this.prev && this.prev instanceof Figcaption) {
       if (this.prev.textContent && this.prev.textContent.length) {
         this.domNode.textContent = this.prev.textContent + this.textContent;
@@ -277,9 +277,9 @@ class Figcaption extends Block {
 
       this.next.domNode.remove();
     }
-    /* ---------------------------------------------------------------- */
+    /* [FIGURE-3] ---------------------------------------------------------------- */
 
-    /* Döngüyü Bozuyor */
+    /* [FIGURE-4] Breaks the loop */
     if (this.domNode.textContent.length || (startIndex <= this.domNode.__detail.start && endIndex >= this.domNode.__detail.start)) {
       if (this.domNode.classList.contains('is-empty')) {
         this.domNode.classList.remove('is-empty');
@@ -337,7 +337,7 @@ class Figcaption extends Block {
 Figcaption.tagName = 'FIGCAPTION';
 Figcaption.formatName = 'figcaption';
 Figcaption.RequiredContainer = Figure;
-Figcaption.EVENT = [{ type: 'keydown', keyCode: /* Backspace */ 8, function: Figcaption.backspaceKeyHandler }, { type: 'keydown', keyCode: /* Delete */ 46, function: Figcaption.deleteKeyHandler }, { type: 'keydown', keyCode: 13, function: Figcaption.enterKeyHandler }];
+Figcaption.EVENT = [{ type: 'keydown', keyCode: /* [FIGURE-5] Backspace */ 8, function: Figcaption.backspaceKeyHandler }, { type: 'keydown', keyCode: /* [FIGURE-6] Delete */ 46, function: Figcaption.deleteKeyHandler }, { type: 'keydown', keyCode: 13, function: Figcaption.enterKeyHandler }];
 Figcaption.allowedBlockFormat = [];
 
 Figure.requiredChildren = [FigureImage, Figcaption];

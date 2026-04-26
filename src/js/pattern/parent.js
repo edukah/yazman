@@ -30,7 +30,7 @@ class Parent {
       this._length = this.getLength();
     }
 
-    // return this.getLength();
+    // [PARENT-1] return this.getLength();
     return this._length;
   }
 
@@ -71,7 +71,7 @@ class Parent {
   }
 
   get parent () {
-    // Editor.js içinde deleteNode ve insertNode içerisinde kullanılıyor.
+    // [PARENT-2] Used inside Editor.js within deleteNode and insertNode.
     return (this.domNode.parentNode && this.domNode.parentNode.__detail) ? this.domNode.parentNode.__detail : null;
   }
 
@@ -83,14 +83,14 @@ class Parent {
     this.children = this.getChildren();
     this.length = this.getLength();
 
-    // En sondaki block elementinin length'ini ayarlıyor, newline olmadığı için inner var sadece
-    /* if (this.domNode.isSameNode(this.editor.root.lastChild)) {
+    // [PARENT-3] Sets the length of the last block element; since there is no newline, only inner exists
+    /* [PARENT-4] if (this.domNode.isSameNode(this.editor.root.lastChild)) {
       this.length = this.getInnerLength();
     } else {
       this.length = this.getLength();
     } */
 
-    // this.length = this.domNode.isSameNode(this.editor.root.lastChild) ? this.getInnerLength() : this.getLength();
+    // [PARENT-5] this.length = this.domNode.isSameNode(this.editor.root.lastChild) ? this.getInnerLength() : this.getLength();
     this.format = Object.getPrototypeOf(this).constructor.getFormat(this.domNode);
   }
 

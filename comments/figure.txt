@@ -1,0 +1,32 @@
+Source: src/js/format/figure.js
+================================
+
+[FIGURE-1]
+---
+satır arası için +1
+===
+
+[FIGURE-2]
+---
+Önünde arkasında figcaption var ise textleri birleştirip tag'ları siliyor
+===
+
+[FIGURE-3]
+---
+----------------------------------------------------------------
+===
+
+[FIGURE-4]
+---
+Döngüyü Bozuyor
+===
+
+[FIGURE-5]
+---
+Backspace
+===
+
+[FIGURE-6]
+---
+Delete
+===

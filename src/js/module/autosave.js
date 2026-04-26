@@ -55,7 +55,7 @@ class Autosave {
     const autosaveCounter = this.editor.variables.get('autosaveCounter') || 0;
     this.saved = false;
 
-    // Belirli sayıda değişiklik sonrası kaydet.
+    // [AUTOSAVE-1] Save after a certain number of changes.
     if (autosaveCounter > this.saveCoefficient) {
       this.adaptor();
 
@@ -70,7 +70,7 @@ class Autosave {
       this.editor.variables.set('autosaveCounter', autosaveCounter + 1);
     }
 
-    // Değişiklik yapılmış fakat süre içerisinde sınır aşılmamış ise bu içeriği de kaydet.
+    // [AUTOSAVE-2] If a change was made but the threshold was not exceeded within the time window, save this content as well.
     if (!this.editor.variables.has('autosaveTimeoutID')) {
       const autosaveTimeoutID = globalThis.setTimeout(() => {
         this.adaptor();
