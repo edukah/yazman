@@ -6,6 +6,8 @@
 
 A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.
 
+> Maintained on best-effort basis. Issues welcome but not guaranteed to be addressed.
+
 ## Features
 
 - **Block formats**: paragraph, headings (H2, H3), preformatted code, blockquote, ordered/unordered lists
