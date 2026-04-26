@@ -34,10 +34,32 @@ import Yazman from 'yazman';
 
 ### Browser (no bundler)
 
+**unpkg**
+
 ```html
 <link rel="stylesheet" href="https://unpkg.com/yazman/dist/yazman.min.css">
 <script type="module">
   import Yazman from 'https://unpkg.com/yazman/dist/yazman.esm.js';
+  const editor = new Yazman(document.getElementById('editor'));
+</script>
+```
+
+**jsDelivr (npm)**
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/yazman/dist/yazman.min.css">
+<script type="module">
+  import Yazman from 'https://cdn.jsdelivr.net/npm/yazman/dist/yazman.esm.js';
+  const editor = new Yazman(document.getElementById('editor'));
+</script>
+```
+
+**jsDelivr (GitHub — works without npm publish)**
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/edukah/yazman/dist/yazman.min.css">
+<script type="module">
+  import Yazman from 'https://cdn.jsdelivr.net/gh/edukah/yazman/dist/yazman.esm.js';
   const editor = new Yazman(document.getElementById('editor'));
 </script>
 ```
