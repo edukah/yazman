@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.",
   "type": "module",
-  "main": "dist/yazman.min.js",
+  "main": "dist/yazman.esm.js",
   "module": "dist/yazman.esm.js",
   "types": "dist/yazman.d.ts",
   "files": [

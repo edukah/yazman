@@ -26,17 +26,20 @@ A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Z
 npm install yazman
 ```
 
-### Script Tag
-
-```html
-<link rel="stylesheet" href="dist/yazman.min.css">
-<script src="dist/yazman.min.js"></script>
-```
-
 ### Module Import
 
 ```js
 import Yazman from 'yazman';
+```
+
+### Browser (no bundler)
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/yazman/dist/yazman.min.css">
+<script type="module">
+  import Yazman from 'https://unpkg.com/yazman/dist/yazman.esm.js';
+  const editor = new Yazman(document.getElementById('editor'));
+</script>
 ```
 
 ### Styles
