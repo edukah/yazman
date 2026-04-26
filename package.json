@@ -1,6 +1,6 @@
 {
   "name": "yazman",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A modular, lightweight WYSIWYG rich text editor built with vanilla JavaScript. Zero dependencies.",
   "type": "module",
   "main": "dist/yazman.esm.js",
